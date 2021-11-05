@@ -22,12 +22,12 @@
 #include "generated/osmformat.pb.h"
 
 namespace XOptimizer::PBFParser {
-        class PBFParser {
-            std::shared_ptr<std::istream> inputStream;
-        public:
-            explicit PBFParser(std::shared_ptr<std::istream> inputStream);
-            [[nodiscard]] std::shared_ptr<std::istream> getInputStream() const;
-        };
-    }
+    class PBFParser {
+        std::shared_ptr<std::istream> inputStream;
+    public:
+        explicit PBFParser(std::shared_ptr<std::istream> inputStream);
+        [[nodiscard]] std::shared_ptr<std::istream> getInputStream() const;
+    };
+}
 
 #endif //XOPTIMIZER_PBF_PARSER_H
