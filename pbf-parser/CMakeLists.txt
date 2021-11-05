@@ -128,13 +128,12 @@ add_custom_command(
             "${CMAKE_CURRENT_LIST_DIR}/prototypes/osmformat.proto"
 )
 set(PROTO_LIBRARIES
-        "${PROTOC_INSTALL_PATH}/include"
         "${CMAKE_CURRENT_LIST_DIR}/generated"
         "${LIBPROTOBUF_PATH}/src"
 )
 add_library(pbf_parser_generated ${GENERATED_PARSER_FILES})
 target_include_directories(pbf_parser_generated PUBLIC ${PROTO_LIBRARIES})
-target_link_libraries(pbf_parser_generated libprotobuf zlibstatic)
+target_link_libraries(pbf_parser_generated libprotobuf)
 add_library(pbf_parser "${CMAKE_CURRENT_LIST_DIR}/pbf-parser.h" "${CMAKE_CURRENT_LIST_DIR}/pbf-parser.cpp")
-target_include_directories(pbf_parser PUBLIC ${PROTO_LIBRARIES})
-target_link_libraries(pbf_parser pbf_parser_generated)
+target_include_directories(pbf_parser PUBLIC ${PROTO_LIBRARIES} "${ZLIB_PATH}")
+target_link_libraries(pbf_parser pbf_parser_generated zlibstatic)

@@ -7,7 +7,7 @@
 
 #define XOPTIMIZER_PBF_PARSER_DEBUG
 #ifdef XOPTIMIZER_PBF_PARSER_DEBUG
-#define XOPTIMIZER_PBF_PARSER_ASSERT(x) if (!(x)) throw std::runtime_error(#x "is not true");
+#define XOPTIMIZER_PBF_PARSER_ASSERT(x) if (!(x)) throw std::runtime_error(#x " is not true");
 #else
 #define XOPTIMIZER_PBF_PARSER_ASSERT(x)
 #endif
@@ -27,6 +27,7 @@ namespace XOptimizer::PBFParser {
     public:
         explicit PBFParser(std::shared_ptr<std::istream> inputStream);
         [[nodiscard]] std::shared_ptr<std::istream> getInputStream() const;
+        void parse();
     };
 }
 
