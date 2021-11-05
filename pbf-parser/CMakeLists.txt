@@ -110,7 +110,11 @@ set(protobuf_BUILD_LIBPROTOC ON)
 set(protobuf_BUILD_SHARED_LIBS FALSE)
 add_subdirectory("${LIBPROTOBUF_PATH}/cmake")
 
+# zlib
+set(CMAKE_POLICY_DEFAULT_CMP0042 NEW)
+set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
 add_subdirectory("${ZLIB_PATH}")
+set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "" FORCE)
 
 set(GENERATED_PARSER_FILES
         "${CMAKE_CURRENT_LIST_DIR}/generated/fileformat.pb.h"
