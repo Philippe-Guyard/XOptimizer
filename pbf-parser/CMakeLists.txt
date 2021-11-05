@@ -96,7 +96,6 @@ else()
     message(FATAL_ERROR "Unknown OS")
 endif()
 
-set(PROTO_PATH "${CMAKE_CURRENT_LIST_DIR}/proto")
 set(LIBPROTOBUF_URL "https://github.com/protocolbuffers/protobuf/releases/download/v${PROTO_VERSION}/protobuf-cpp-${PROTO_VERSION}.zip")
 set(ZLIB_URL https://github.com/madler/zlib/archive/refs/tags/v${ZLIB_VERSION}.zip)
 
@@ -104,7 +103,7 @@ check_install_library(protoc ${PROTOC_URL} protoc_sanity_check FALSE PROTOC_INST
 check_install_library(libprotobuf ${LIBPROTOBUF_URL} FALSE FALSE LIBPROTOBUF_INSTALL_PATH)
 check_install_library(zlib ${ZLIB_URL} FALSE FALSE ZLIB_INSTALL_PATH)
 
-set(LIBPROTOBUF_PATH "${LIBPROTOBUF_INSTALL_PATH}/protobuf-3.19.1")
+set(LIBPROTOBUF_PATH "${LIBPROTOBUF_INSTALL_PATH}/protobuf-${PROTO_VERSION}")
 set(ZLIB_PATH "${ZLIB_INSTALL_PATH}/zlib-${ZLIB_VERSION}")
 
 # build protobuf
