@@ -3,7 +3,6 @@
 #include<vector>
 #include<cstdio>
 
-
 using EdgeWeight = long double;
 
 class Graph{
@@ -30,18 +29,31 @@ class Edge{
         EdgeWeight weight;
 
     public:
-        // WARNING 1:
-        // Pass by pointer or by reference here?
-        Edge(Vertex &v1, Vertex &v2, EdgeWeight weight);
+        Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight);
         Edge();
         void set_weight(EdgeWeight weight);
-        void set_vertices(std::pair<Vertex*, Vertex*> pair_vertices);
+        void set_vertices(std::pair<Vertex*, Vertex*> vertices);
         std::pair<Vertex*, Vertex*> get_vertices();
         EdgeWeight get_weight();
 };
 
+
+
 class VertexData{
-    VertexData();
+    private:
+        std::pair<double, double> geolocation;
+
+        // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations has to be equal
+        // TODO: think about the information we might want to hold in a vertex such as 
+        // order ids, address information, etc.
+
+    public:
+        VertexData(std::pair<double, double> geolocation);
+        VertexData();
+        std::pair<double, double> get_geolocation() const;
+        bool operator==(VertexData v_data);
+
+
 };
 
 class Vertex{
@@ -51,13 +63,10 @@ class Vertex{
 
     public:
         Vertex(VertexData v_data, int v_index);
-
+        Vertex();
         int get_index();
-
         VertexData get_data();
-        // TODO: add an overloaded equal function
-        // TODO: add an overloaded hash function --> Maybe more interesting to do this in the VertexData class
-
+        bool operator==(Vertex& v2);    
 
 };
 
