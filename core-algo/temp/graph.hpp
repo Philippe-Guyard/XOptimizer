@@ -1,7 +1,28 @@
+#include<iostream>
+#include<unordered_map>
+#include<vector>
+#include<cstdio>
 
-// EDGES[i][j] = *Edge[Vertex indiced i] and
 
-using EdgeWeight unsigned long double
+using EdgeWeight = long double;
+
+class Graph{
+
+    Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::vector<EdgeWeight>> distances);
+    Graph();
+
+    void add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances );
+    void delete_vertex(VertexData& data);
+    void update_vertex_data(VertexData& data);
+    int num_vertices;
+
+    std::vector<Vertex> vertices; 
+    std::vector<Edge> edges; 
+
+    std::vector<std::vector<Edge*>> adjacency_list; 
+
+    std::unordered_map<VertexData, int> vertex_position;
+};
 
 class Edge{
     private:
@@ -9,15 +30,19 @@ class Edge{
         EdgeWeight weight;
 
     public:
-        Edge(Vertex &v1; Vertex &v2, EdgeWeight weight);
+        // WARNING 1:
+        // Pass by pointer or by reference here?
+        Edge(Vertex &v1, Vertex &v2, EdgeWeight weight);
         Edge();
         void set_weight(EdgeWeight weight);
-        void set_vertices(std::pair<Vertex* v1, Vertex* v2>);
+        void set_vertices(std::pair<Vertex*, Vertex*> pair_vertices);
         std::pair<Vertex*, Vertex*> get_vertices();
         EdgeWeight get_weight();
-}
+};
 
-class VertexData{}
+class VertexData{
+    VertexData();
+};
 
 class Vertex{
     private:
@@ -26,10 +51,12 @@ class Vertex{
 
     public:
         Vertex(VertexData v_data, int v_index);
+
         int get_index();
+
         VertexData get_data();
         // TODO: add an overloaded equal function
-        // TODO: add an overloaded hash function
+        // TODO: add an overloaded hash function --> Maybe more interesting to do this in the VertexData class
 
 
 };
