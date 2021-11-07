@@ -1,0 +1,6 @@
+Impletemented a program to download a .pbf map of a given French department from OpenStreetMaps repo.
+
+Read documentation on built-in Qt classes: QObject, QNetworkReply, QNetworkAccessManager, QUrl, QString.
+Read documentation about signal-slot mechanism in Qt.
+Read documentation about basic HTTP processing.
+
