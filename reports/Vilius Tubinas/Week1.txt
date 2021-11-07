@@ -1,0 +1,5 @@
+This week I looked at the possible software we could use for our frontend, learnt
+QT Designer basics and created my first frontend project which you can find in the
+playground branch.
+
+Nex week I will work on the dashboard, implementing the loading bar.
