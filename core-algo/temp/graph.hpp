@@ -51,7 +51,7 @@ class VertexData{
         VertexData(std::pair<double, double> geolocation);
         VertexData();
         std::pair<double, double> get_geolocation() const;
-        bool operator==(VertexData v_data);
+        bool operator==(VertexData &v_data);
 
 
 };
