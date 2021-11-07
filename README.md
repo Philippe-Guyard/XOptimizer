@@ -5,7 +5,17 @@ XOptimizer is a software providing logistics companies a fast and reliable way t
 ## Members
 
 - Mert Unsal, AntonioDaSilva, mertunsaal, Project Leader
-- Member Name, Github Handle, Trello Handle, (title if applicable)
+- Philippe Guyard, Philippe-Guyard, philippeguyard3, Git Assistant
+- Johanna Ulin, johannaulin, johanna_ulin, Trello Assistant
+- Zarko Bulic, zarebulic, zarkobulic
+- Pedro Gomes Cabral, pedro-g-cabral, pedrocabral63
+- Doan Dai Nguyen, MegumiTadokoro, doandinguyn
+- Mark Daychman, Pylyr, user50750779
+- Marten Pallum, BeefTorpedo, martenpallum
+- Giuseppe Cognata, gcognata, giuseppecognata
+- Vilius Tubinas, villius-tubinas, viliustubinas
+- Nykyta Ostapliuk, epic-pigeon, 
+- Nossaiba Kheiri, nossaiba-kheiri, 
 
 ## Teams
 
