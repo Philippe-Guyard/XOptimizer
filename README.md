@@ -12,7 +12,7 @@ XOptimizer is a software providing logistics companies a fast and reliable way t
 - Doan Dai Nguyen, MegumiTadokoro, doandinguyn
 - Mark Daychman, Pylyr, user50750779
 - Marten Pallum, BeefTorpedo, martenpallum
-- Giuseppe Cognata, gcognata, 
+- Giuseppe Cognata, gcognata, giuseppecognata
 - Vilius Tubinas, villius-tubinas, viliustubinas
 - Nykyta Ostapliuk, epic-pigeon, 
 - Nossaiba Kheiri, nossaiba-kheiri, 
