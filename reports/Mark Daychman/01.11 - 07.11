@@ -4,3 +4,5 @@ Read documentation on built-in Qt classes: QObject, QNetworkReply, QNetworkAcces
 Read documentation about signal-slot mechanism in Qt.
 Read documentation about basic HTTP processing.
 
+Next week:
+Work on geocoding support (i.e. converting addresses to numerical coordinates).
