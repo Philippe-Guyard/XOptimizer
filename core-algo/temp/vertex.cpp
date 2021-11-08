@@ -22,6 +22,10 @@ int Vertex::get_index(){
     return this->v_index;
 }
 
+void Vertex::set_index(int new_index){
+    this->v_index = new_index;
+}
+
 VertexData Vertex::get_data(){
     return this->v_data;
 }

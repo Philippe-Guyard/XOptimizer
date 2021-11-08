@@ -28,22 +28,21 @@ class Edge{
     private:
 
         // we have to add an index to each edge too
-        int index;
+        int e_index;
         std::pair<Vertex*, Vertex*> vertices;
         EdgeWeight weight;
 
     public:
-        Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight);
+        Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight, int index);
         Edge();
         void set_weight(EdgeWeight weight);
         void set_vertices(std::pair<Vertex*, Vertex*> vertices);
         std::pair<Vertex*, Vertex*> get_vertices();
         EdgeWeight get_weight();
         int get_index();
-        int set_index();
+        void set_index(int new_index);
 
 };
-
 
 
 class VertexData{
@@ -73,7 +72,7 @@ class Vertex{
         Vertex();
 
         int get_index();
-        int set_index(int new_index);
+        void set_index(int new_index);
 
         VertexData get_data();
         bool operator==(Vertex& v2);    
