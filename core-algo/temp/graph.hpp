@@ -71,9 +71,9 @@ class Vertex{
     public:
         Vertex(VertexData v_data, int v_index);
         Vertex();
-        
+
         int get_index();
-        int set_index();
+        int set_index(int new_index);
 
         VertexData get_data();
         bool operator==(Vertex& v2);    

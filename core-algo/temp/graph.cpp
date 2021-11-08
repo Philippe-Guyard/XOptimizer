@@ -16,6 +16,11 @@ Graph::Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::v
 
     */
 
+
+   //Probably better code:
+   //TODO:  for() add_vertex();
+
+
     this->num_vertices = num_vertices;
     for(int i=0; i<num_vertices; ++i){
         vertices.push_back(Vertex(vertex_data_array[i], i));
@@ -55,6 +60,7 @@ void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeW
     if( vertex_position.count(data) ){
         // repeated vertex
         this->update_vertex_data(data);
+        return;
     }
 
     // Main code
@@ -86,12 +92,39 @@ void Graph::delete_vertex(VertexData& data){
     assert( vertex_position.count(data) );
 
     int pos = vertex_position[data];
+    Vertex *vertex_to_delete = &vertices[ vertex_position[data] ];
+    Vertex *aux_vertex = &vertices[ num_vertices-1 ];
 
     // swap vertex at positions (pos, num_vertices-1)
 
-    // delete coordinates num_vertices-1 in adjacency_list
+    aux_vertex->set_index(pos);
+    vertices[pos] = *aux_vertex;
+
+    //fixing adjacency list
+
+    std::vector<Edge*> edges_to_delete;
+
+    for(int i=0; i<num_vertices; ++i){
+        edges_to_delete.push_back(adjacency_list[i][pos]);
+
+        adjacency_list[i][pos] = adjacency_list[i][num_vertices-1];
+        adjacency_list[pos][i] = adjacency_list[num_vertices-1][i];
+    }
+
+    adjacency_list[pos][pos] = adjacency_list[num_vertices-1][num_vertices-1];
+    
+    adjacency_list.pop_back();
+    for(int i=0; i<num_vertices-1; ++i){
+        adjacency_list[i].pop_back();
+    }
 
     // delete edges that have this vertex;
+    for(auto edge_to_delete : edges_to_delete){
+        
+    }
+
+    
+
 
     num_vertices--;
 }
