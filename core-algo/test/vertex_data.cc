@@ -38,8 +38,8 @@
 
 namespace
 {
-    pair<double, double> coordinate_ecole_polytechnique = {48.71470768253242, 2.21150627670902};
-    pair<double, double> coordinate_ens_ulm = {48.84234699954427, 2.345158168906672};
+    std::pair<double, double> coordinate_ecole_polytechnique = {48.71470768253242, 2.21150627670902};
+    std::pair<double, double> coordinate_ens_ulm = {48.84234699954427, 2.345158168906672};
 
     TEST(VertexData, Constructor)
     {

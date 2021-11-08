@@ -40,8 +40,8 @@ namespace
 {
     int index-ecole_polytechnique = 1;
     int index-ens_ulm = 2;
-    pair<double, double> coordinate_ecole_polytechnique = {48.71470768253242, 2.21150627670902};
-    pair<double, double> coordinate_ens_ulm = {48.84234699954427, 2.345158168906672};
+    std::pair<double, double> coordinate_ecole_polytechnique = {48.71470768253242, 2.21150627670902};
+    std::pair<double, double> coordinate_ens_ulm = {48.84234699954427, 2.345158168906672};
     VertexData location_ecole_polytechnique = VertexData(coordinate_ecole_polytechnique);
     VertexData location_ens_ulm = VertexData(coordinate_ens_ulm);
 
