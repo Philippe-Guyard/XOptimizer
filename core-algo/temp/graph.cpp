@@ -4,50 +4,9 @@
 #include<vector>
 #include<cstdio>
 
+#include<assert.h>
+
 #include "graph.hpp"
-
-/*
-For quick reference:
-
-class Graph{
-    Graph(VertexData[], std::vector<std::vector<EdgeWeight>> distances);
-    Graph();
-    void add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances );
-    void delete_vertex(VertexData& data);
-    void update_vertex_data(VertexData& data);
-    int num_vertices;
-    std::vector<Vertex> vertices; 
-    std::vector<Edge> edges; 
-    std::vector<std::vector<Edge*>> adjacency_list; 
-    std::unordered_map<VertexData, int> vertex_position;
-};
-
-class Edge{
-    private:
-        std::pair<Vertex*, Vertex*> vertices;
-        EdgeWeight weight;
-
-    public:
-        Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight);
-        Edge();
-        void set_weight(EdgeWeight weight);
-        void set_vertices(std::pair<Vertex*, Vertex*> vertices);
-        std::pair<Vertex*, Vertex*> get_vertices();
-        EdgeWeight get_weight();
-};
-
-class VertexData{};
-
-class Vertex{
-    private:
-        int v_index;
-        VertexData v_data;
-    public:
-        Vertex(VertexData v_data, int v_index);
-        int get_index();
-        VertexData get_data();
-};
-*/
 
 //overriding stds hash function for the VertexData class
 
@@ -195,4 +154,50 @@ Graph::Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::v
     for(int i=0; i<num_vertices; ++i){
         vertex_position[vertex_data_array[i]] = i;
     }
+}
+
+void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances){
+
+    // It is necessary to try to update the vertex before just adding it
+    // e.g. repeated vertices
+
+
+    /*== Maybe unecessary ==*/
+    if( vertex_position.count(data) ){
+        // repeated vertex
+        this->update_vertex_data(data);
+    }
+
+    // Main code
+
+    Vertex *new_vertex = new Vertex(data, num_vertices);
+    
+    vertices.push_back(*new_vertex);
+
+    adjacency_list.emplace_back();
+    adjacency_list[num_vertices].resize(num_vertices);
+
+    for(int i=0; i<num_vertices; ++i){
+        int j = vertex_position[ distances[i].first ];
+        Edge *new_edge = new Edge( std::make_pair(new_vertex, &vertices[j]), distances[i].second );
+
+        adjacency_list[j].push_back(new_edge);
+        adjacency_list[num_vertices][j] = new_edge;
+
+        edges.push_back(*new_edge);
+    }
+
+    vertex_position[data] = num_vertices;
+    num_vertices++;
+}
+
+void Graph::delete_vertex(VertexData& data){
+
+    // prevent deletion of vertices that don't exist
+    assert( vertex_position.count(data) );
+
+    int pos = vertex_position[data];
+
+
+    num_vertices--;
 }
