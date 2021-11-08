@@ -13,6 +13,7 @@ class Graph{
     void add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances );
     void delete_vertex(VertexData& data);
     void update_vertex_data(VertexData& data);
+
     int num_vertices;
 
     std::vector<Vertex> vertices; 
@@ -25,6 +26,9 @@ class Graph{
 
 class Edge{
     private:
+
+        // we have to add an index to each edge too
+        int index;
         std::pair<Vertex*, Vertex*> vertices;
         EdgeWeight weight;
 
@@ -35,6 +39,9 @@ class Edge{
         void set_vertices(std::pair<Vertex*, Vertex*> vertices);
         std::pair<Vertex*, Vertex*> get_vertices();
         EdgeWeight get_weight();
+        int get_index();
+        int set_index();
+
 };
 
 
@@ -64,7 +71,10 @@ class Vertex{
     public:
         Vertex(VertexData v_data, int v_index);
         Vertex();
+        
         int get_index();
+        int set_index();
+
         VertexData get_data();
         bool operator==(Vertex& v2);    
 
