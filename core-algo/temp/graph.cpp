@@ -198,6 +198,11 @@ void Graph::delete_vertex(VertexData& data){
 
     int pos = vertex_position[data];
 
+    // swap vertex at positions (pos, num_vertices-1)
+
+    // delete coordinates num_vertices-1 in adjacency_list
+
+    // delete edges that have this vertex;
 
     num_vertices--;
 }
