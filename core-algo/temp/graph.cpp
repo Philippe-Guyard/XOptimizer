@@ -64,6 +64,24 @@ Graph::Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::v
 
 void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances){
 
+/**
+ * Adds a vertex to the graph with the corresponding edges.
+ * 
+ * PARAMETERS:
+ * VertexData& data :
+ * The data that should be stored in the vertex.
+ * 
+ * 
+ * std::vector<std::pair<VertexData, EdgeWeight>>& distances : 
+ * Contains the distances from this new vertex to all vertices already in the graph. The structure of pair<VertexData, EdgeWeight>
+ * means distances[i].second is the distance of the new vertex to the vertex with data distances[i].first
+ * 
+ *  
+ * RETURN:
+ * void
+ * 
+ */
+
     // It is necessary to try to update the vertex before just adding it
     // e.g. repeated vertices
 
@@ -102,6 +120,19 @@ void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeW
 
 void Graph::swap_vertex_indices(int pos1, int pos2){
 
+/**
+ * Swap the indices of the vertices vertices[pos1] and vertices[pos2] and the corresponding graph structure.
+ * 
+ * PARAMETERS:
+ * int pos1
+ * 
+ * int pos2
+ * 
+ * RETURN:
+ * void
+ * 
+ */
+
     if(pos1==pos2) return;
 
     Vertex *vertex_1 = &vertices[pos1];
@@ -129,10 +160,32 @@ void Graph::swap_vertex_indices(int pos1, int pos2){
 }
 
 void Graph::swap_vertex_to_last(int pos){
+    /**
+     * Swaps vertex vertices[pos] with the vertex in the last position of vertices.
+     * 
+     * PARAMETERS:
+     * int pos
+     * 
+     * RETURN:
+     * void
+     */
     swap_vertex_indices(pos, num_vertices-1);
 }
 
 void Graph::delete_vertex(VertexData& data){
+
+    /**
+     * Deletes the vertex that carries the data given as parameter. Also delete the edges connected to this vertex and
+     * mantains the graph structure.
+     * 
+     * PARAMETERS:
+     * VertexData& data :
+     * Data that specifies which vertex will be deleted.
+     * 
+     * RETURN:
+     * void
+     * 
+     */
 
     // prevent deletion of vertices that don't exist
     assert( vertex_position.count(data) );

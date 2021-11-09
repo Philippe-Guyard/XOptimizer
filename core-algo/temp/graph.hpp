@@ -59,7 +59,7 @@ class VertexData{
     private:
         std::pair<double, double> geolocation;
 
-        // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations has to be equal
+        // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations have to be equal
         // TODO: think about the information we might want to hold in a vertex such as 
         // order ids, address information, etc.
 
