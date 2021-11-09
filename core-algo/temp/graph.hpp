@@ -7,6 +7,8 @@ using EdgeWeight = long double;
 
 class Graph{
 
+public:
+
     Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::vector<EdgeWeight>> distances);
     Graph();
 
@@ -14,33 +16,41 @@ class Graph{
     void delete_vertex(VertexData& data);
     void update_vertex_data(VertexData& data);
 
+private:
+
     int num_vertices;
+    int num_edges;
 
     std::vector<Vertex> vertices; 
     std::vector<Edge> edges; 
 
     std::vector<std::vector<Edge*>> adjacency_list; 
-
     std::unordered_map<VertexData, int> vertex_position;
+
+    void swap_vertex_indices(int pos1, int pos2);
+    void swap_vertex_to_last(int pos);
 };
 
 class Edge{
-    private:
 
-        // we have to add an index to each edge too
-        int e_index;
-        std::pair<Vertex*, Vertex*> vertices;
-        EdgeWeight weight;
+public:
+    Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight, int index);
+    Edge();
+    void set_weight(EdgeWeight weight);
+    void set_vertices(std::pair<Vertex*, Vertex*> vertices);
+    std::pair<Vertex*, Vertex*> get_vertices();
 
-    public:
-        Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight, int index);
-        Edge();
-        void set_weight(EdgeWeight weight);
-        void set_vertices(std::pair<Vertex*, Vertex*> vertices);
-        std::pair<Vertex*, Vertex*> get_vertices();
-        EdgeWeight get_weight();
-        int get_index();
-        void set_index(int new_index);
+    EdgeWeight get_weight();
+
+    int get_index();
+    void set_index(int new_index);
+
+private:
+
+    // we have to add an index to each edge too
+    int e_index;
+    std::pair<Vertex*, Vertex*> vertices;
+    EdgeWeight weight;
 
 };
 
