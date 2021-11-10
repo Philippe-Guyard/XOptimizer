@@ -4,11 +4,12 @@
 #include <Utils/Downloader/Downloader.cpp>
 
 #include <QApplication>
-
+namespace XOptimiser::interaction_service{
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    Interaction_service w;
-    w.show();
+    interaction_service w;
+    //w.show();
     return a.exec();
 }
+};

@@ -1,29 +1,14 @@
 #ifndef INTERACTION_SERVICE_H
 #define INTERACTION_SERVICE_H
-
 #include <QMainWindow>
+
+#include <Utils/Parser/pbf-parser.h>
+#include <Utils/Parser/pbf-parser.cpp>
+#include <Utils/Downloader/Downloader.cpp>
 
 QT_BEGIN_NAMESPACE
 namespace XOptimiser::interaction_service{
 
-//SUB CLASSES
-
-class city_name{
-
-
-};
-
-class order_number{
-
-};
-
-class delivery_route_result{
-
-};
-
-class vehicle_id{
-
-};
 
 //GENERALFUNCTION TEMPLATES
 
@@ -31,20 +16,31 @@ class vehicle_id{
 //END GENERALFUNCTION TEMPLATES
 
 //MAIN RETURN CLASS
-class final_output{
+class interaction_service{
 
 public:
-   final_output();//CALLS DOWNLOADER AND PARSER and puts them into the arguments
-   ~final_output();
-   void get_final_output();
+   interaction_service();
+   interaction_service(const std::string Region,  const std::string Department, const QString Orders);//CALLS DOWNLOADER AND PARSER and puts them into the arguments
+   ~interaction_service();
 
+   //bool is_downloader_data_valid();
 
+   void Download_Parse();
+
+   //void get_final_output();
 
 private:
-    city_name City;
-    order_number OrderNumber;
-    delivery_route_result Deliverylist;
-    vehicle_id Vehicle;
+    const std::string Region;
+    const std::string Department;
+    //based on region and department
+    std::shared_ptr<std::istream> GraphInputStream;
+
+    //to be used later
+    std::vector<int> OrderNumbers;
+    std::vector<std::string>  Deliverylist;
+    std::string Vehicle;
+
+
 
 
 };

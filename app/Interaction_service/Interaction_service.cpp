@@ -1,13 +1,24 @@
 #include "Interaction_service.h"
-#include "ui_interaction_service.h"
 
-#include <Utils/Parser/pbf-parser.h>
-#include <Utils/Parser/pbf-parser.cpp>
-#include <Utils/Downloader/Downloader.cpp>
+#include "Utils/Parser/pbf-parser.h"
+#include "Utils/Parser/pbf-parser.cpp"
+#include "Utils/Downloader/Downloader.cpp"
 
 
+// istream constructor
+#include <iostream>     // std::ios, std::istream, std::cout
+#include <fstream>      // std::filebuf
+
+#include <algorithm>
+#include <memory>
+#include <string>
+#include <vector>
+
+
+
+namespace XOptimiser::interaction_service{
 //DOWNLOAD FUNCTIONS
-bool is_downloader_data_valid(const std::string &region, const std::string &department, const QString & filename){
+bool is_downloader_data_valid(){
     //Check that region exists:
 
     //Check that department exists
@@ -15,14 +26,46 @@ bool is_downloader_data_valid(const std::string &region, const std::string &depa
     //Check that filename is valid.
 
     };
+
 //IF TRUE ALLOWED TO CALL DOWNLOAD ELSE ERROR.
 
-
 //PARSE FUNCTIONS
-bool is_parse_data_valid(){
-    //make sure that the input stream is of a valid kid, god knows how
+
+void interaction_service::interaction_service::Download_Parse(){
+    //DOWNLOAD
+    bool validdowndata;
+    Downloader D = Downloader();
+
+    D.download(Region,Department,"map.pbf");
+
+    //if (success == true);
+
+
+    //Parse: convert pbf file
+    std::filebuf map;
+      if (map.open ("map.pbf",std::ios::in))
+      {
+        std::istream is(&map);
+
+        while (is)  {
+           std::shared_ptr<std::istream> inputStream;
+           inputStream = std::make_shared<std::istream>(&is);
+
+
+           PBFParser parsingfile = PBFParser(inputStream);
+        }
+
+        std::shared_ptr<std::istream> GraphInputStream = parsingfile.getInputStream() const;
+
+        map.close();
+      }
+
+
+
+
 };
 
+};
 
 
 
