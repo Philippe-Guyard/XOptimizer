@@ -18,7 +18,7 @@ Vertex::Vertex(VertexData v_data, int v_index){
     this->v_index = v_index;
 }
 
-int Vertex::get_index(){
+int Vertex::get_index() const{
     return this->v_index;
 }
 
@@ -26,7 +26,7 @@ void Vertex::set_index(int new_index){
     this->v_index = new_index;
 }
 
-VertexData Vertex::get_data(){
+VertexData Vertex::get_data() const{
     return this->v_data;
 }
 

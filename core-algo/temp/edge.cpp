@@ -33,14 +33,19 @@ std::pair<Vertex*, Vertex*> Edge::get_vertices(){
     return this->vertices;
 }
 
-EdgeWeight Edge::get_weight(){
+EdgeWeight Edge::get_weight() const{
     return this->weight;
 }
 
-int Edge::get_index(){
+int Edge::get_index() const{
     return this->e_index;
 }
 
 void Edge::set_index(int new_index){
     this->e_index = new_index;
+}
+
+bool Edge::operator<(const Edge& e2){
+    return get_weight() < e2.get_weight();
+
 }

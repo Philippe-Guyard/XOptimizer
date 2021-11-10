@@ -230,3 +230,104 @@ void Graph::delete_vertex(VertexData& data){
     num_vertices--;
 
 }
+
+
+// get edge member functions
+
+EdgeWeight Graph::get_edge_weight(int i, int j) const{
+/**
+ * Returns the weight of the edge between i and j.
+ * 
+ * PARAMETERS:
+ * int i
+ * 
+ * int j
+ * 
+ * RETURN:
+ * 
+ * EdgeWeight : distance between i and j
+ * 
+ */
+
+    if(i==j){
+        return (EdgeWeight) 0;
+    }
+
+    return adjacency_list[i][j]->get_weight();
+
+}
+EdgeWeight Graph::get_edge_weight(VertexData di, int j) const{
+/**
+ * Returns the weight of the edge between i and j. Here, i corresponds to the
+ * vertex with data di.
+ * 
+ * PARAMETERS:
+ * VertexData di
+ * 
+ * int j
+ * 
+ * RETURN:
+ * 
+ * EdgeWeight : distance between i and j
+ * 
+ */
+    return get_edge_weight(vertex_position[di], j);
+}
+
+EdgeWeight Graph::get_edge_weight(int i, VertexData dj) const{
+/**
+ * Returns the weight of the edge between i and j. Here, j corresponds to the
+ * vertex with data dj.
+ * 
+ * PARAMETERS:
+ * int i
+ * 
+ * VertexData dj
+ * 
+ * RETURN:
+ * 
+ * EdgeWeight : distance between i and j
+ * 
+ */
+    return get_edge_weight(i, vertex_position[dj]);
+}
+EdgeWeight Graph::get_edge_weight(VertexData di, VertexData dj) const{
+/**
+ * Returns the weight of the edge between i and j. Here, i,j correspond to the
+ * vertices with data di,dj.
+ * 
+ * PARAMETERS:
+ * VertexData di
+ * 
+ * VertexData dj
+ * 
+ * RETURN:
+ * 
+ * EdgeWeight : distance between i and j
+ * 
+ */
+
+    return get_edge_weight(vertex_position[di], vertex_position[dj]);
+}
+
+// sort edges member function
+
+void Graph::sort_edges(){
+/**
+ * Sorts the edges inside the edges data attribute in ascending weight. It makes
+ * sure that the indices of vertices are adjusted accordingly.
+ * 
+ * PARAMETERS:
+ * void
+ * 
+ * RETURN:
+ * void
+ * 
+ */
+
+    std::sort(edges.begin(), edges.end());
+    for(int i=0; i<num_edges; ++i){
+        edges[i].set_index(i);
+    }
+
+}
