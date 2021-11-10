@@ -1,5 +1,5 @@
 #include "interaction_service.h"
-#include "utils/downloader/downloader.cpp"
+#include "utils/downloader.cpp"
 
 #include <iostream> 
 #include <fstream>  

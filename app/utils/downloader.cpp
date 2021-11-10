@@ -42,4 +42,4 @@ private:
 		QNetworkAccessManager m_manager;
 };
 
-//#include "main.moc"
+#include "downloader.moc"

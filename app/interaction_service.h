@@ -4,7 +4,7 @@
 
 //#include <utils/parser/pbf-parser.h>
 //#include <utils/parser/pbf-parser.cpp>
-#include <utils/downloader/downloader.cpp>
+#include <utils/downloader.cpp>
 #include<string>
 
 class InteractionService {
