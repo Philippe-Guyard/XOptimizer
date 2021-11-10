@@ -2,9 +2,9 @@
 #define INTERACTION_SERVICE_H
 #include <QMainWindow>
 
-#include <Utils/Parser/pbf-parser.h>
-#include <Utils/Parser/pbf-parser.cpp>
-#include <Utils/Downloader/Downloader.cpp>
+//#include <utils/parser/pbf-parser.h>
+//#include <utils/parser/pbf-parser.cpp>
+#include <utils/downloader/downloader.cpp>
 
 QT_BEGIN_NAMESPACE
 namespace XOptimiser::interaction_service{

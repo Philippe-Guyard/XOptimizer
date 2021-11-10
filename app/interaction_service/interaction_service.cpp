@@ -1,8 +1,5 @@
-#include "Interaction_service.h"
-
-#include "Utils/Parser/pbf-parser.h"
-#include "Utils/Parser/pbf-parser.cpp"
-#include "Utils/Downloader/Downloader.cpp"
+#include "interaction_service.h"
+#include "utils/downloader/downloader.cpp"
 
 
 // istream constructor
@@ -13,8 +10,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-
-
 
 namespace XOptimiser::interaction_service{
 //DOWNLOAD FUNCTIONS
