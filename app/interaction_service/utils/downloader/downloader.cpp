@@ -42,22 +42,4 @@ private:
 		QNetworkAccessManager m_manager;
 };
 
-#include "main.moc"
-
-int main(int argc, char *argv[])
-{
-		QCoreApplication a(argc, argv);
-
-		Downloader downloader;
-
-		QObject::connect(&downloader, &Downloader::finished, [](bool sucess){
-				qDebug() << "download" << sucess;
-		});
-
-		std::string region = "corse";
-		std::string department = "haute_corse";
-
-		downloader.download(region, department, "map.pbf");
-
-		return a.exec();
-}
+//#include "main.moc"
