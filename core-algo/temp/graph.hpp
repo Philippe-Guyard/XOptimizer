@@ -23,6 +23,8 @@ public:
     EdgeWeight get_edge_weight(int i, VertexData dj) const;
     EdgeWeight get_edge_weight(VertexData di, VertexData dj) const;
 
+    std::vector<Edge> min_spanning();
+
 private:
 
     int num_vertices;
