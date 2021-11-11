@@ -12,24 +12,24 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)      # For Windows: Prevent overriding the parent project's compiler/linker settings
 FetchContent_MakeAvailable(googletest)
 
-# Build a library from files to be tested
-file(GLOB TEMP_SOURCES temp/*.cpp)
-file(GLOB TEMP_HEADERS temp/*.hxx)
-add_library(TempLib ${TEMP_SOURCES} ${TEMP_HEADERS})
+option(TEST "Testing: " OFF)
 
-# Build executables
-# If necessary, use the RELATIVE flag, otherwise each source file may be listed 
-# with full pathname. RELATIVE may makes it easier to extract an executable name
-# automatically.
-# file( GLOB APP_SOURCES RELATIVE app/*.cxx )
-file(GLOB APP_SOURCES app/*.cxx)
-foreach(testsourcefile ${APP_SOURCES})
-    add_executable(TempLib ${testsourcefile})
-endforeach(testsourcefile ${APP_SOURCES})
-enable_testing()
-target_link_libraries(
-    TempLib
-    gtest_main
-)
-include(GoogleTest)
-gtest_discover_tests(TempLib)
+if(TEST)                                                # In case of testing
+    add_subdirectory(test)
+
+    enable_testing()
+
+    file(GLOB_RECURSE TEMP_SOURCES "temp/*.cpp")
+    file(GLOB_RECURSE TEMP_HEADERS "temp/*.hpp")
+    add_library(TempLib ${TEMP_SOURCES} ${TEMP_HEADERS})# Temporary files
+    target_link_libraries(TempLib test)                 # Tests and test-aiding files
+    target_link_libraries(TempLib gtest_main)           # Google Test
+    
+    include(GoogleTest)
+    gtest_discover_tests(TempLib)
+else()                                                  #In case of releasing
+    add_subdirectory(src)
+    target_link_libraries(CoreAlgoLib Source)           # Main source files
+endif()
+
+unset(TEST)                                             # Reset cached variables
