@@ -28,7 +28,8 @@
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // Standard libraries
-
+#include <utility>                  // std::pair, std::make_pair
+#include <vector>                   // std::vector  
 
 // External libraries
 #include "../lib/googletest/googletest/include/gtest/internal/gtest.h"
