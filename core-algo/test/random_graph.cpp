@@ -6,7 +6,7 @@
 #include <random>
 
 // External libraries
-#include "temp/graph.hpp"
+#include "../temp/graph.hpp"
 #include "random_graph.hpp"
 
 #define random_coordinate() -180.0+360.0*rng()/rng.max()

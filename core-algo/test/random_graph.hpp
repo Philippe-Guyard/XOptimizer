@@ -4,7 +4,7 @@
 // Standard libraries
 
 // External libraries
-#include "temp/graph.hpp"
+#include "../temp/graph.hpp"
 
 class RandomGraph : public Graph
 {
