@@ -63,7 +63,7 @@ namespace
                                index_ecole_polytechnique);
         int vertex_index = vertex.index();
         EXPECT_EQ(vertex_index, index)
-            << "Initial index and stored index do not match.\n";
+            << "Initial index and stored index differ.\n";
     }
 
     TEST(Vertex, GetData)
@@ -72,7 +72,7 @@ namespace
                                index_ecole_polytechnique);
         VertexData location = vertex.get_data();
         EXPECT_EQ(location_ecole_polytechnique, location)
-            << "Initial location and stored location do not match.\n"; 
+            << "Initial location and stored location differ.\n"; 
     }
 
     TEST(Vertex, Equal)
@@ -92,7 +92,7 @@ namespace
                                   index_ecole_polytechnique);
         Vertex vertex_ens = Vertex(location_ens_ulm, 
                                    index_ens_ulm);
-        EXPECT_EQ(vertex_ep, vertex_ens)
+        EXPECT_NE(vertex_ep, vertex_ens)
             << "Comparator fails to compare different object.\n";
     }
 }

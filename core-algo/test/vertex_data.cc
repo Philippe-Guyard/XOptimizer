@@ -77,7 +77,7 @@ namespace
         VertexData location_ecole_polytechnique = VertexData(coordinate_ecole_polytechnique);
         VertexData location_ens_ulm = VertexData(coordinate_ens_ulm);
 
-        EXPECT_EQ(location_ecole_polytechnique, location_ens_ulm)
+        EXPECT_NE(location_ecole_polytechnique, location_ens_ulm)
             << "Comparator fails to compare different objects.\n";
     }
 }
