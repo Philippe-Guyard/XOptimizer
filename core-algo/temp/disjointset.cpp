@@ -9,8 +9,7 @@
 
 DisjointSet:: DisjointSet(int n){
     for (int i = 0; i < n; i++){
-        parent[i] = i;
-        rank[i] = 0;
+        parent[i] = -1;
     }
 };
 
@@ -22,13 +21,11 @@ void DisjointSet::Union(int x, int y){
     x = find(x);
     y = find(y);
     if (x != y){
-        if (rank[x] < rank[y]){
+        if (parent[x] < parent[y]){
             std::swap(x, y);
         }
-        parent[y] = x;
-        if (rank[x] == rank[y]){
-            rank[x]++
-        }
+        parent[y] += parent[x];
+        parent[x] = y;
     }
     return;
 };
