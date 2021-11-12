@@ -30,6 +30,7 @@ endfunction()
 
 function(check_install_library NAME URL SANITY_CHECK_FN INSTALL_FN INSTALL_PATH)
     set(PATH "${CMAKE_BINARY_DIR}/libs/${NAME}")
+    set(${INSTALL_PATH} "${PATH}/${NAME}" PARENT_SCOPE)
     message("Check ${NAME} installed...")
     if (SANITY_CHECK_FN)
         cmake_language(CALL ${SANITY_CHECK_FN} "${PATH}/${NAME}" SANITY_OUTPUT)
@@ -62,7 +63,6 @@ function(check_install_library NAME URL SANITY_CHECK_FN INSTALL_FN INSTALL_PATH)
             message(FATAL_ERROR "Failed to install ${NAME}")
         endif()
     endif()
-    set(${INSTALL_PATH} "${PATH}/${NAME}" PARENT_SCOPE)
 endfunction()
 
 if (CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -114,13 +114,13 @@ set(protobuf_BUILD_PROTOC_BINARIES OFF)
 set(protobuf_BUILD_LIBPROTOC ON)
 set(protobuf_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-add_subdirectory("${LIBPROTOBUF_PATH}/cmake")
+add_subdirectory("${LIBPROTOBUF_PATH}/cmake" ${CMAKE_CURRENT_BINARY_DIR}/libprotobuf_build)
 
 # zlib
 set(SKIP_INSTALL_ALL TRUE)
 set(CMAKE_POLICY_DEFAULT_CMP0042 NEW)
 set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
-add_subdirectory("${ZLIB_PATH}")
+add_subdirectory("${ZLIB_PATH}" ${CMAKE_CURRENT_BINARY_DIR}/zlib_build)
 set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "" FORCE)
 
 set(GENERATED_PARSER_FILES
