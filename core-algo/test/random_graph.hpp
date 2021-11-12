@@ -11,8 +11,7 @@ class RandomGraph : public Graph
     public:
         void random_graph(
             int number_of_vertices, 
+            double weight_limit, 
+            double density, 
             int seed);
-        void random_complete_graph(
-            int number_of_vertices, 
-            int seed);
-}
+};
