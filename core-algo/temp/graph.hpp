@@ -9,7 +9,7 @@ using EdgeWeight = long double;
 
 class VertexData{
 
-    private:
+    protected:
         std::pair<double, double> geolocation;
 
         // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations have to be equal
@@ -43,7 +43,7 @@ namespace std {
 }
 
 class Vertex{
-    private:
+    protected:
         int v_index;
         VertexData v_data;
 
@@ -75,7 +75,7 @@ public:
 
     bool operator<(const Edge& e2);
 
-private:
+protected:
 
     int e_index;
     std::pair<Vertex*, Vertex*> vertices;
@@ -101,7 +101,7 @@ public:
 
     std::vector<Edge> min_spanning();
 
-private:
+protected:
 
     int num_vertices;
     int num_edges;
