@@ -1,3 +1,0 @@
-[submodule "core-algo/lib/googletest"]
-	path = core-algo/lib/googletest
-	url = https://github.com/google/googletest.git
