@@ -11,6 +11,5 @@ public:
     int find(int x);
     void Union(int x, int y);
 private:
-    std::unordered_map<int, int> parent;
-    std::unordered_map<int, int> rank;
+    std::vector<int> parent;
 };
