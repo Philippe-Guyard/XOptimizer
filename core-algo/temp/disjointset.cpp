@@ -8,6 +8,7 @@
 #include "disjointset.hpp"
 
 DisjointSet:: DisjointSet(int n){
+    parent.resize(n);
     for (int i = 0; i < n; i++){
         parent[i] = -1;
     }
