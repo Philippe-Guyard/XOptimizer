@@ -8,6 +8,9 @@
 
 using EdgeWeight = long double;
 
+/**
+ * Generete random undirected weight.
+ */
 class RandomGraph : public Graph
 {
     public:

@@ -10,27 +10,40 @@
 #include "gtest/gtest.h"
 
 // Main files to be tested
-#include "../temp/graph.hpp"
+#include "../temp/disjointset.hpp"
 
-// Independent implementation of Disjoint Set (Union-Find), for testing purpose.
+/**
+ * Independent implementation of Disjoint Set (Union-Find), for testing purpose.
+ */
 class DisjointSetTest
 {
     std::vector<int> parents;
-
-    DisjointSetUnion(
-        int number_of_element = 0)
+    
+    /**
+     * Initialize DisjointSetTest
+     * @param  {int}     number_of_elements : Number of elements.
+     */
+    DisjointSetTest(
+        int number_of_elements = 0)
     {
-        parents = std::vector<int>(number_of_element, -1);
+        parents = std::vector<int>(number_of_elements, -1);
     }
-
-    // Find the representation of set containing the element
+    
+    /**
+     * Find the representation of the set containing an element.
+     * @param  {int}                element : Element to query.
+     */
     int find(
         int element)
     {
         return parents[element] < 0 ? element : parents[element] = find(parents[element]);
     }
 
-    // Uniting two sets containing first and second, respectively
+    /**
+     * Uniting two sets containing first and second, respectively
+     * @param  {int}                  first : First element.
+     * @param  {int}                 second : Second element. 
+     */
     void union(
         int first,
         int second)

@@ -23,6 +23,18 @@ using EdgeWeight = long double;
 class MinimumSpanningTreeTest : public RandomGraph
 {
     public:
+        /**
+         * Generate a random undirected weighted graph, and compute the cost of minimum 
+         * spanning tree using Prim's algorithm. The result is then compared with official
+         * method implemented and provided in Graph class.
+         * 
+         * @param {int}         number_of_vertices  : Number of vertices.
+         * @param {EdgeWeight}  weight_limit        : Upper limit for ranom weight. The lower bound is set by default to 0. Default set to be 6000.0
+         * @param {double}      density             : Density of random graph from 0 to 1, e.g. 0 corresponds to a tree, and 1 corresponds to complete graph. Default set to be 0.5
+         * @param {int}         seed                : Seed fed into random number generator. Default set to be the EPOCH time at runtime.
+         * 
+         * @return {pair<EdgeWeight, EdgeWeight>} A pair of EdgeWeigt {expected_total_cost, computed_total_cost}, where expected_total_cost is computed by Prim's algorithm, and the computed_total_cost is computed by official method.
+         */
         pair<EdgeWeight, EdgeWeight> minimum_spanning_tree_test
             int number_of_vertices,
             EdgeWeight weight_limit = 6000.0, 
@@ -33,6 +45,11 @@ class MinimumSpanningTreeTest : public RandomGraph
             if (seed == -1)
             {
                 seed = std::chrono::system_clock::now().time_since_epoch().count();
+            }
+
+            if (density < 0.0 || density > 1.0)
+            {
+                density = 0.5;
             }
 
             // randomly initialize the graph
