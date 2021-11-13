@@ -7,6 +7,63 @@
 
 using EdgeWeight = long double;
 
+class VertexData{
+
+    private:
+        std::pair<double, double> geolocation;
+
+        // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations have to be equal
+        // TODO: think about the information we might want to hold in a vertex such as 
+        // order ids, address information, etc.
+
+    public:
+        VertexData(std::pair<double, double> geolocation);
+        VertexData();
+        std::pair<double, double> get_geolocation() const;
+        bool operator==(VertexData &v_data);
+};
+
+class Vertex{
+    private:
+        int v_index;
+        VertexData v_data;
+
+    public:
+        Vertex(VertexData v_data, int v_index);
+        Vertex();
+
+        int get_index() const;
+        void set_index(int new_index);
+
+        VertexData get_data() const;
+        bool operator==(Vertex& v2);    
+
+};
+class Edge{
+
+public:
+    Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight, int index);
+    Edge();
+
+    void set_vertices(std::pair<Vertex*, Vertex*> vertices);
+    std::pair<Vertex*, Vertex*> get_vertices();
+
+    EdgeWeight get_weight() const;
+    void set_weight(EdgeWeight weight);
+
+    int get_index() const;
+    void set_index(int new_index);
+
+    bool operator<(const Edge& e2);
+
+private:
+
+    int e_index;
+    std::pair<Vertex*, Vertex*> vertices;
+    EdgeWeight weight;
+
+};
+
 class Graph{
 
 public:
@@ -42,65 +99,5 @@ private:
     void sort_edges();
 };
 
-class Edge{
-
-public:
-    Edge(std::pair<Vertex*, Vertex*> vertices, EdgeWeight weight, int index);
-    Edge();
-
-    void set_vertices(std::pair<Vertex*, Vertex*> vertices);
-    std::pair<Vertex*, Vertex*> get_vertices();
-
-    EdgeWeight get_weight() const;
-    void set_weight(EdgeWeight weight);
-
-    int get_index() const;
-    void set_index(int new_index);
-
-    bool operator<(const Edge& e2);
-
-private:
-
-    // we have to add an index to each edge too
-    int e_index;
-    std::pair<Vertex*, Vertex*> vertices;
-    EdgeWeight weight;
-
-};
-
-
-class VertexData{
-    private:
-        std::pair<double, double> geolocation;
-
-        // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations have to be equal
-        // TODO: think about the information we might want to hold in a vertex such as 
-        // order ids, address information, etc.
-
-    public:
-        VertexData(std::pair<double, double> geolocation);
-        VertexData();
-        std::pair<double, double> get_geolocation() const;
-        bool operator==(VertexData &v_data);
-
-
-};
-
-class Vertex{
-    private:
-        int v_index;
-        VertexData v_data;
-
-    public:
-        Vertex(VertexData v_data, int v_index);
-        Vertex();
-
-        int get_index() const;
-        void set_index(int new_index);
-
-        VertexData get_data() const;
-        bool operator==(Vertex& v2);    
-
-};
 
 
