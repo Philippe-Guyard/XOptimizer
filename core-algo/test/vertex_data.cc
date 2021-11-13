@@ -28,7 +28,7 @@ namespace
     TEST(VertexData, GetGeolocation)
     {
         VertexData location_ecole_polytechnique = VertexData(coordinate_ecole_polytechnique);
-        pair<double, double> get_ecole_polytechnique_location = location_ecole_polytechnique.get_geolocation();
+        std::pair<double, double> get_ecole_polytechnique_location = location_ecole_polytechnique.get_geolocation();
         
         EXPECT_EQ(coordinate_ecole_polytechnique.first, get_ecole_polytechnique_location.first)
             << "Initial coordinates and stored coordinates differ at the x-component.\n";

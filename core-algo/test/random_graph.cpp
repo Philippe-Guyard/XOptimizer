@@ -6,9 +6,9 @@
 #include <chrono>                   // std::chrono::system_clock::now().time_since_epoch().count()
 #include <random>                   // std::mt19937_64, std::bernoulli_distribution
 #include <algorithm>                // std::shuffle
+#include <vector>                   // std::vector
 
 // External libraries
-#include "../temp/graph.hpp"
 #include "random_graph.hpp"
 
 using EdgeWeight = long double;
@@ -32,17 +32,17 @@ void RandomGraph::random_graph(
         seed = std::chrono::system_clock::now().time_since_epoch().count();
     }
     std::mt19937_64 rng(seed);
-    std::uniform_real_distribution random_coordinate(-180.0, 180.0);
-    std::uniform_real_distribution random_weight(0.0, weight_limit);
+    std::uniform_real_distribution<double> random_coordinate(-180.0, 180.0);
+    std::uniform_real_distribution<double> random_weight(0.0, weight_limit);
 
     // Generate random vertices and construct unordered_map
     num_vertices = number_of_vertices;
-    vertices.resize(num_of_vertices);
-    for (int i = 0; i < num_of_vertices; i++)
+    vertices.resize(num_vertices);
+    for (int i = 0; i < num_vertices; i++)
     {
-        std::pair<double, double> vertex_data = {random_coordinate(rng), random_coordinate(rng)};
+        VertexData vertex_data = VertexData({random_coordinate(rng), random_coordinate(rng)});
         vertices[i] = Vertex(
-                        VertexData(vertex_data), 
+                        vertex_data, 
                         i);
         vertex_position[vertex_data] = i;
     }
@@ -51,7 +51,7 @@ void RandomGraph::random_graph(
     adjacency_list.resize(num_vertices);
     for (int i = 0; i < num_vertices; i++)
     {
-        adjacency_list[i] = vector<Edge*>(nullptr, num_vertices);
+        adjacency_list[i].resize(num_vertices, nullptr);
     }
 
     // Build underlying random spanning tree
@@ -70,13 +70,12 @@ void RandomGraph::random_graph(
         added[count++] = v;
         // Passing vertices by address
         Edge* new_edge_ptr = new Edge(
-                                    std::make_pair(
-                                        &vertices[u], 
-                                        &vertices[v]), 
+                                    {&vertices[u], 
+                                    &vertices[v]}, 
                                     random_weight(rng), 
-                                    new_edge);
+                                    num_edges);
         // Passing edge by reference
-        edges[new_edge++] = (*new_edge_ptr);
+        edges[num_edges++] = (*new_edge_ptr);
         adjacency_list[u][v] = adjacency_list[v][u] = new_edge_ptr;
     }
 
@@ -86,7 +85,7 @@ void RandomGraph::random_graph(
     {
         for (int j = i+1; j < num_vertices; j++)
         {
-            if (bern_dist(rng)) && adjacency[i][j] == nullptr)
+            if (bern_dist(rng) && adjacency_list[i][j] == nullptr)
             {
                 // Passing vertices by address
                 Edge* new_edge_ptr = new Edge(
@@ -94,9 +93,9 @@ void RandomGraph::random_graph(
                                                 &vertices[i], 
                                                 &vertices[j]), 
                                             random_weight(rng), 
-                                            new_edge);
+                                            num_edges);
                 // Passing edge by reference
-                edges[new_edge++] = (*new_edge_ptr);
+                edges[num_edges++] = (*new_edge_ptr);
                 adjacency_list[i][j] = adjacency_list[j][i] = new_edge_ptr;
             }
         }

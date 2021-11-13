@@ -15,17 +15,22 @@ namespace
 {
     int number_of_vertices = 2;
 
-    int index-ecole_polytechnique = 1;
-    int index-ens_ulm = 2;
+    int index_ecole_polytechnique = 1;
+    int index_ens_ulm = 2;
     std::pair<double, double> coordinate_ecole_polytechnique = {48.71470768253242, 2.21150627670902};
     std::pair<double, double> coordinate_ens_ulm = {48.84234699954427, 2.345158168906672};
     std::pair<double, double> coordinate_ens_saclay = {48.71321687547235, 2.166206918679105};
-    VertexData locations[2] = {VertexData(coordinate_ecole_polytechnique), 
-                                VertexData(coordinate_ens_ulm)};
+    VertexData ecole_polytechnique = VertexData(coordinate_ecole_polytechnique),
+               ens_ulm = VertexData(coordinate_ens_ulm), 
+               ens_saclay = VertexData(coordinate_ens_saclay);
+    VertexData locations[2] = {ecole_polytechnique,
+                               ens_ulm};
     
-    std::vector<std::vector<EdgeWeight> > distances(2);
-    distances[0] = {0.0, 24.8};
-    distances[1] = {22.9, 0.0};
+    std::vector<std::vector<EdgeWeight> > distances = 
+        {
+            {0.0, 24.8}, 
+            {22.9, 0.0}
+        };
 
     std::vector<std::pair<VertexData, EdgeWeight> > additional_distances = 
         {
@@ -50,7 +55,7 @@ namespace
         Graph graph = Graph(number_of_vertices,
                             locations, 
                             distances);
-        graph.add_vertex(coordinate_ens_saclay, additional_distances);
+        graph.add_vertex(ens_saclay, additional_distances);
     }
 
     TEST(Graph, DeleteVertex)
@@ -58,7 +63,7 @@ namespace
         Graph graph = Graph(number_of_vertices,
                             locations, 
                             distances);
-        graph.delete_vertex(coordinate_ens_ulm);
+        graph.delete_vertex(ens_ulm);
     }
 
     TEST(Graph, GetEdgeWeightIndexAndIndex)
@@ -89,7 +94,7 @@ namespace
         {
             for (int j = 0; j < number_of_vertices; j++)
             {
-                EXPECT_EQ(distances[i][j], graph.get_edge_weight(VertexData[i], j))
+                EXPECT_EQ(distances[i][j], graph.get_edge_weight(locations[i], j))
                     << "Initial distance and stored distance between Node " 
                     << i 
                     << " and Node " 
@@ -108,7 +113,7 @@ namespace
         {
             for (int j = 0; j < number_of_vertices; j++)
             {
-                EXPECT_EQ(distances[i][j], graph.get_edge_weight(VertexData[i], j))
+                EXPECT_EQ(distances[i][j], graph.get_edge_weight(i, locations[j]))
                     << "Initial distance and stored distance between Node " 
                     << i 
                     << " and Node " 
@@ -127,7 +132,7 @@ namespace
         {
             for (int j = 0; j < number_of_vertices; j++)
             {
-                EXPECT_EQ(distances[i][j], graph.get_edge_weight(VertexData[i], VertexData[j]))
+                EXPECT_EQ(distances[i][j], graph.get_edge_weight(locations[i], locations[j]))
                     << "Initial distance and stored distance between Node " 
                     << i 
                     << " and Node " 

@@ -8,13 +8,13 @@
 #include <queue>                    // std::priority_queue
 #include <random>                   // std::mt19937_64
 #include <chrono>                   // std::chrono::system_clock::now().time_since_epoch().count()
+#include <functional>               // std::greater
 
 // External libraries
 #include "gtest/gtest.h"
-#include "random_graph.hpp"
 
 // Main files to be tested
-#include "../temp/graph.hpp"
+#include "random_graph.hpp"
 
 using EdgeWeight = long double;
 
@@ -35,7 +35,7 @@ class MinimumSpanningTreeTest : public RandomGraph
          * 
          * @return {pair<EdgeWeight, EdgeWeight>} A pair of EdgeWeigt {expected_total_cost, computed_total_cost}, where expected_total_cost is computed by Prim's algorithm, and the computed_total_cost is computed by official method.
          */
-        pair<EdgeWeight, EdgeWeight> minimum_spanning_tree_test
+        std::pair<EdgeWeight, EdgeWeight> minimum_spanning_tree_test(
             int number_of_vertices,
             EdgeWeight weight_limit = 6000.0, 
             double density = 0.5, 
@@ -59,12 +59,12 @@ class MinimumSpanningTreeTest : public RandomGraph
                          seed);
             
             // Actual Prim's algorithm implementation
-            bool added[num_vertices];
+            bool added[number_of_vertices];
             memset(added, false, sizeof(added));
 
-            std::priority_queue<pair<EdgeWeight, int>,
-                                vector<pair<EdgeWeight, int> >,
-                                greater<pair<EdgeWeight, int> >
+            std::priority_queue<std::pair<EdgeWeight, int>,
+                                std::vector<std::pair<EdgeWeight, int> >,
+                                std::greater<std::pair<EdgeWeight, int> >
                                 > queue;
             queue.push({0, 0});
 
@@ -74,8 +74,8 @@ class MinimumSpanningTreeTest : public RandomGraph
             // If the node is node not yet added to the minimum spanning tree add it, and increment the cost.
             while(not queue.empty())
             {
-                pair<EdgeWeight, int> u = q.top();
-                q.pop();
+                std::pair<EdgeWeight, int> u = queue.top();
+                queue.pop();
                 EdgeWeight cost = u.first;
                 int index = u.second;
 
@@ -86,18 +86,18 @@ class MinimumSpanningTreeTest : public RandomGraph
 
                     // Iterate through all the nodes adjacent to the node taken out of priority queue.
                     // Push only those nodes (weight,node) that are not yet present in the minumum spanning tree.
-                    for(int i = 0; i < num_vertices; i++)
+                    for(int i = 0; i < number_of_vertices; i++)
                     {
                         if(adjacency_list[index][i] != nullptr && not added[i])
                         {
-                            q.push({(*adjacency_list[index][i]).get_weight(),
+                            queue.push({(*adjacency_list[index][i]).get_weight(),
                                      i});
                         }
                     }
                 }
             }
 
-            vector<Edge> minimum_spanning_tree_kruskal = min_spanning();
+            std::vector<Edge> minimum_spanning_tree_kruskal = min_spanning();
             for (Edge e : minimum_spanning_tree_kruskal)
             {
                 computed_total_cost += e.get_weight();
@@ -111,19 +111,19 @@ namespace
 {
     const int NUMBER_OF_TEST = 20;
     std::mt19937_64 rng(std::chrono::system_clock::now().time_since_epoch().count());
-    std::uniform_real_distribution density(0.0, 1.0);
+    std::uniform_real_distribution<double> random_density(0.0, 1.0);
 
     TEST(MinimumSpanningTree, Kruskal)
     {
-        MinimumSpanningTreeTests graph = Graph();
+        MinimumSpanningTreeTest graph = MinimumSpanningTreeTest();
         for (int i = 0; i < NUMBER_OF_TEST; i++)
         {
             int number_of_vertices = rng() % 1000 + 1;
             EdgeWeight weight_limit = 6000.0;
-            double density = density(rng);
+            double density = random_density(rng);
             long long seed = rng();
 
-            pair<EdgeWeight, EdgeWeight> result = 
+            std::pair<EdgeWeight, EdgeWeight> result = 
                 graph.minimum_spanning_tree_test(
                     number_of_vertices,
                     weight_limit,

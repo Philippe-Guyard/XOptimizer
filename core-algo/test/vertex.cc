@@ -12,8 +12,8 @@
 
 namespace
 {
-    int index-ecole_polytechnique = 1;
-    int index-ens_ulm = 2;
+    int index_ecole_polytechnique = 1;
+    int index_ens_ulm = 2;
     std::pair<double, double> coordinate_ecole_polytechnique = {48.71470768253242, 2.21150627670902};
     std::pair<double, double> coordinate_ens_ulm = {48.84234699954427, 2.345158168906672};
     VertexData location_ecole_polytechnique = VertexData(coordinate_ecole_polytechnique);
@@ -35,8 +35,8 @@ namespace
     {
         Vertex vertex = Vertex(location_ecole_polytechnique, 
                                index_ecole_polytechnique);
-        int vertex_index = vertex.index();
-        EXPECT_EQ(vertex_index, index)
+        int vertex_index = vertex.get_index();
+        EXPECT_EQ(vertex_index, index_ecole_polytechnique)
             << "Initial index and stored index differ.\n";
     }
 
