@@ -5,21 +5,21 @@ set(CMAKE_CXX_STANDARD 14)                              # Enable C++14 standard.
 
 option(TEST "Testing: " OFF)
 
+add_subdirectory(test)
+enable_testing()
+
 if(TEST)                                                # In case of testing
-    add_subdirectory(test)
-
-    enable_testing()
-
-    file(GLOB_RECURSE TEMP_SOURCES "temp/*.cpp")
-    file(GLOB_RECURSE TEMP_HEADERS "temp/*.hpp")
-    add_library(TempLib ${TEMP_SOURCES} ${TEMP_HEADERS})# Temporary files
-    target_link_libraries(TempLib Test)                 # Tests and test-aiding files
-    
-    include(GoogleTest)
-    gtest_discover_tests(TempLib)
+    file(GLOB_RECURSE SOURCES "temp/*.cpp")
+    file(GLOB_RECURSE HEADERS "temp/*.hpp")
 else()                                                  #In case of releasing
-    add_subdirectory(src)
-    target_link_libraries(CoreAlgoLib Source)           # Main source files
+    file(GLOB_RECURSE SOURCES "src/*.cpp")
+    file(GLOB_RECURSE HEADERS "src/*.hpp")
 endif()
+
+add_library(Library ${SOURCES} ${HEADERS})              # Temporary files
+target_link_libraries(Library Test)                     # Tests and test-aiding files
+
+include(GoogleTest)
+gtest_discover_tests(Library)
 
 unset(TEST)                                             # Reset cached variables
