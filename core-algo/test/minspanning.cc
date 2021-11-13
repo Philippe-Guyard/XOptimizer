@@ -6,7 +6,8 @@
 #include <vector>                   // std::vector
 #include <limits>                   // std::numeric_limits
 #include <queue>                    // std::priority_queue
-#include <random>                   // std::mt19937
+#include <random>                   // std::mt19937_64
+#include <chrono>                   // std::chrono::system_clock::now().time_since_epoch().count()
 
 // External libraries
 #include "gtest/gtest.h"
@@ -17,44 +18,7 @@
 
 using EdgeWeight = long double;
 
-// For testing Minimum Spanning Tree algorithm
-class DisjointSetUnion
-{
-    std::vector<int> parents;
-
-    DisjointSetUnion(
-        int number_of_element = 0)
-    {
-        parents = std::vector<int>(number_of_element, -1);
-    }
-
-    // Find the representation of set containing the element
-    int find(
-        int element)
-    {
-        return parents[element] < 0 ? element : parents[element] = find(parents[element]);
-    }
-
-    // Uniting two sets containing first and second, respectively
-    void union(
-        int first,
-        int second)
-    {
-        int first_root = find(first), 
-            second_root = find(second);
-        if (first_root != second_root)
-        {
-            if (parents[first_root] >= parents[second_root])
-            {
-                swap(first_root, second_root);
-            }
-            parents[first_root] += parents[second_root];
-            parents[second_root] = first_root;
-        }
-    }
-};
-
-// Independent implementation of Minimum Spanning Tree algorithm.
+// Independent implementation of Minimum Spanning Tree algorithm, for testing purpose.
 // Here, Prim's algorithm is chosen.
 class MinimumSpanningTreeTest : public RandomGraph
 {
@@ -129,7 +93,7 @@ class MinimumSpanningTreeTest : public RandomGraph
 namespace
 {
     const int NUMBER_OF_TEST = 20;
-    std::mt19937 rng(std::chrono::system_clock::now().time_since_epoch().count());
+    std::mt19937_64 rng(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_real_distribution density(0.0, 1.0);
 
     TEST(MinimumSpanningTree, Kruskal)
@@ -140,7 +104,7 @@ namespace
             int number_of_vertices = rng() % 1000 + 1;
             EdgeWeight weight_limit = 6000.0;
             double density = density(rng);
-            int seed = rng();
+            long long seed = rng();
 
             pair<EdgeWeight, EdgeWeight> result = 
                 graph.minimum_spanning_tree_test(
