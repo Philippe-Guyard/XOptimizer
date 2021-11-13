@@ -6,12 +6,14 @@
 // External libraries
 #include "../temp/graph.hpp"
 
+using EdgeWeight = long double;
+
 class RandomGraph : public Graph
 {
     public:
         void random_graph(
             int number_of_vertices, 
-            double weight_limit, 
+            EdgeWeight weight_limit, 
             double density, 
             int seed);
 };

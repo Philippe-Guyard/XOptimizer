@@ -11,12 +11,11 @@
 #include "../temp/graph.hpp"
 #include "random_graph.hpp"
 
-#define random_coordinate() -180.0+360.0*rng()/rng.max()
-#define random_double(weight_limit) weight_limit*rng()/rng.max()
+using EdgeWeight = long double;
 
 void RandomGraph::random_graph(
     int number_of_vertices, 
-    double weight_limit = 6000.0, 
+    EdgeWeight weight_limit = 6000.0, 
     double density = 0.5, 
     int seed = -1)
 {
@@ -26,13 +25,15 @@ void RandomGraph::random_graph(
         seed = std::chrono::system_clock::now().time_since_epoch().count();
     }
     std::mt19937_64 rng(seed);
+    std::uniform_real_distribution random_coordinate(-180.0, 180.0);
+    std::uniform_real_distribution random_weight(0.0, weight_limit);
 
     // Generate random vertices and construct unordered_map
     num_vertices = number_of_vertices;
     vertices.resize(num_of_vertices);
     for (int i = 0; i < num_of_vertices; i++)
     {
-        std::pair<double, double> vertex_data = {random_coordinate(), random_coordinate()};
+        std::pair<double, double> vertex_data = {random_coordinate(rng), random_coordinate(rng)};
         vertices[i] = Vertex(
                         VertexData(vertex_data), 
                         i);
@@ -65,7 +66,7 @@ void RandomGraph::random_graph(
                                     std::make_pair(
                                         &vertices[u], 
                                         &vertices[v]), 
-                                    random_double(weight_limit), 
+                                    random_weight(rng), 
                                     new_edge);
         // Passing edge by reference
         edges[new_edge++] = (*new_edge_ptr);
@@ -85,7 +86,7 @@ void RandomGraph::random_graph(
                                             std::make_pair(
                                                 &vertices[i], 
                                                 &vertices[j]), 
-                                            random_double(weight_limit), 
+                                            random_weight(rng), 
                                             new_edge);
                 // Passing edge by reference
                 edges[new_edge++] = (*new_edge_ptr);
