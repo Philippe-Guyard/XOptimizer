@@ -41,7 +41,7 @@ void RandomGraph::random_graph(
     for (int i = 0; i < num_vertices; i++)
     {
         VertexData vertex_data = VertexData({random_coordinate(rng), random_coordinate(rng)});
-        vertices[i] = Vertex(
+        vertices[i] = new Vertex(
                         vertex_data, 
                         i);
         vertex_position[vertex_data] = i;
@@ -70,12 +70,12 @@ void RandomGraph::random_graph(
         added[count++] = v;
         // Passing vertices by address
         Edge* new_edge_ptr = new Edge(
-                                    {&vertices[u], 
-                                    &vertices[v]}, 
+                                    {vertices[u], 
+                                    vertices[v]}, 
                                     random_weight(rng), 
                                     num_edges);
         // Passing edge by reference
-        edges[num_edges++] = (*new_edge_ptr);
+        edges[num_edges++] = new_edge_ptr;
         adjacency_list[u][v] = adjacency_list[v][u] = new_edge_ptr;
     }
 
@@ -89,13 +89,12 @@ void RandomGraph::random_graph(
             {
                 // Passing vertices by address
                 Edge* new_edge_ptr = new Edge(
-                                            std::make_pair(
-                                                &vertices[i], 
-                                                &vertices[j]), 
+                                            {vertices[i], 
+                                            vertices[j]}, 
                                             random_weight(rng), 
                                             num_edges);
                 // Passing edge by reference
-                edges[num_edges++] = (*new_edge_ptr);
+                edges[num_edges++] = new_edge_ptr;
                 adjacency_list[i][j] = adjacency_list[j][i] = new_edge_ptr;
             }
         }

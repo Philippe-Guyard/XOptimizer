@@ -28,7 +28,7 @@ enable_testing()
 
 file(GLOB_RECURSE TEST_SOURCES "test/*.cc")
 add_executable(Library ${TEST_SOURCES})                 # Test files
-target_link_libraries(Library Source)                  # Link to source files
+target_link_libraries(Library Source)                   # Link to source files
 target_link_libraries(Library gtest_main)               # Google Test
 
 include(GoogleTest)

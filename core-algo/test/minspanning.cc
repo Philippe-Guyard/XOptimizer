@@ -97,10 +97,10 @@ class MinimumSpanningTreeTest : public RandomGraph
                 }
             }
 
-            std::vector<Edge> minimum_spanning_tree_kruskal = min_spanning();
-            for (Edge e : minimum_spanning_tree_kruskal)
+            std::vector<Edge*> minimum_spanning_tree_kruskal = min_spanning();
+            for (Edge* e : minimum_spanning_tree_kruskal)
             {
-                computed_total_cost += e.get_weight();
+                computed_total_cost += e->get_weight();
             }
 
             return {expected_total_cost, computed_total_cost};
