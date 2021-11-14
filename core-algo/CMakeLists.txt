@@ -5,9 +5,6 @@ set(CMAKE_CXX_STANDARD 14)                              # Enable C++14 standard.
 
 option(TEST "Testing: " OFF)
 
-add_subdirectory(test)
-enable_testing()
-
 if(TEST)                                                # In case of testing
     file(GLOB_RECURSE SOURCES "temp/*.cpp")
     file(GLOB_RECURSE HEADERS "temp/*.hpp")
@@ -16,8 +13,23 @@ else()                                                  #In case of releasing
     file(GLOB_RECURSE HEADERS "src/*.hpp")
 endif()
 
-add_library(Library ${SOURCES} ${HEADERS})              # Temporary files
-target_link_libraries(Library Test)                     # Tests and test-aiding files
+add_library(Source ${SOURCES} ${HEADERS})               # Source files
+
+# Fetch newest stable version of GoogleTest
+include(FetchContent)
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/e2239ee6043f73722e7aa812a459f54a28552929.zip
+)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)      # For Windows: Prevent overriding the parent project's compiler/linker settings
+FetchContent_MakeAvailable(googletest)
+
+enable_testing()
+
+file(GLOB_RECURSE TEST_SOURCES "test/*.cc")
+add_executable(Library ${TEST_SOURCES})                 # Test files
+target_link_libraries(Library Sources)                  # Link to source files
+target_link_libraries(Library gtest_main)               # Google Test
 
 include(GoogleTest)
 gtest_discover_tests(Library)
