@@ -17,16 +17,26 @@ Graph::Graph(){
 
 Graph::Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::vector<EdgeWeight>> distances){
 
-    /*
-        Remarks:
-            It is ignoring the possibility that some vertices are equivalent (as vertices in the same location).
-
-    */
-
-
-   //Probably better code:
-   //TODO:  for() add_vertex();
-
+/**
+ * Constructor of Graph.
+ * 
+ * PARAMETERS:
+ * 
+ * int num_vertices : Number of vertices in the graph
+ * 
+ * VertexData* vertex_data_array : An array of size num_vertices that contains the data of the vertices to be added.
+ * 
+ * vector<vector<EdgeWeight> distances : An num_vertices x num_vertices matrix with the distances between the vertices.
+ * 
+ * 
+ * ASSUMPTIONS:
+ * All data in vertex_data_array correspond to different locations.
+ * 
+ * The size of vertex_data_array is num_vertices.
+ * 
+ * Distances is ideally an num_vertices x num_vertices symmetric matrix.
+ * 
+ */
 
     this->num_vertices = num_vertices;
     num_edges = 0;
@@ -146,6 +156,19 @@ void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeW
 
 
 int Graph::get_vertex_position(VertexData &d) const{
+
+/**
+ * A const member function to get the position of the vertex that has data d.
+ * It will raise an error if d is not a valid data.
+ * 
+ * PARAMETERS:
+ * VertexData &d : The data corresponding to the vertex that we want to find.
+ * 
+ * RETURN:
+ * int : The position of the vertex with data d in vertices.
+ * 
+ */
+
     assert( vertex_position.count(d) );
     return vertex_position.at(d);
 }
