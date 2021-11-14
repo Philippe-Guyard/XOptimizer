@@ -32,7 +32,7 @@ Graph::Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::v
     num_edges = 0;
 
     for(int i=0; i<num_vertices; ++i){
-        vertices.push_back(Vertex(vertex_data_array[i], i));
+        vertices.push_back(new Vertex(vertex_data_array[i], i));
     }
 
     // Resizing adjacency_list
@@ -46,10 +46,10 @@ Graph::Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::v
         for(int j=i+1; j<num_vertices; ++j){
 
             // Passing vertices by address
-            Edge* new_edge_ptr = new Edge(std::make_pair(&vertices[i], &vertices[j]), distances[i][j], num_edges);
+            Edge* new_edge_ptr = new Edge(std::make_pair(vertices[i], vertices[j]), distances[i][j], num_edges);
 
             // Passing edge by reference
-            edges.push_back(*new_edge_ptr); 
+            edges.push_back( new_edge_ptr ); 
             num_edges++;
 
             adjacency_list[i][j] = adjacency_list[j][i] = new_edge_ptr;
@@ -61,6 +61,33 @@ Graph::Graph(int num_vertices, VertexData* vertex_data_array, std::vector<std::v
         vertex_position[vertex_data_array[i]] = i;
     }
 }
+
+
+Graph::~Graph(){
+
+/**
+ * Default Destructor
+ * 
+ */
+
+    adjacency_list.clear();
+
+    while( edges.size() > 0 ){
+        Edge* edge_to_delete = edges.back();
+        edges.pop_back();
+
+        delete edge_to_delete;
+    }
+
+    while( vertices.size() > 0 ){
+        Vertex* vertex_to_delete = vertices.back();
+        vertices.pop_back();
+
+        delete vertex_to_delete;
+    }
+
+}
+
 
 void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances){
 
@@ -97,19 +124,19 @@ void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeW
 
     Vertex *new_vertex = new Vertex(data, num_vertices);
     
-    vertices.push_back(*new_vertex);
+    vertices.push_back( new_vertex );
 
     adjacency_list.emplace_back();
     adjacency_list[num_vertices].resize(num_vertices);
 
     for(int i=0; i<num_vertices; ++i){
         int j = vertex_position[ distances[i].first ];
-        Edge *new_edge = new Edge(std::make_pair(new_vertex, &vertices[j]), distances[i].second, num_edges);
+        Edge *new_edge = new Edge(std::make_pair(new_vertex, vertices[j]), distances[i].second, num_edges);
 
-        adjacency_list[j].push_back(new_edge);
+        adjacency_list[j].push_back( new_edge );
         adjacency_list[num_vertices][j] = new_edge;
 
-        edges.push_back(*new_edge);
+        edges.push_back( new_edge );
         num_edges++;
     }
 
@@ -117,6 +144,11 @@ void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeW
     num_vertices++;
 }
 
+
+int Graph::get_vertex_position(VertexData &d) const{
+    assert( vertex_position.count(d) );
+    return vertex_position.at(d);
+}
 
 void Graph::swap_vertex_indices(int pos1, int pos2){
 
@@ -135,14 +167,14 @@ void Graph::swap_vertex_indices(int pos1, int pos2){
 
     if(pos1==pos2) return;
 
-    Vertex *vertex_1 = &vertices[pos1];
-    Vertex *vertex_2 = &vertices[pos2];
+    Vertex *vertex_1 = vertices[pos1];
+    Vertex *vertex_2 = vertices[pos2];
 
     vertex_1->set_index(pos2);
     vertex_2->set_index(pos1);
 
-    vertices[pos1] = *vertex_2;
-    vertices[pos2] = *vertex_1;
+    vertices[pos1] = vertex_2;
+    vertices[pos2] = vertex_1;
 
     // Fixing adjacency list
 
@@ -249,6 +281,9 @@ EdgeWeight Graph::get_edge_weight(int i, int j) const{
  * 
  */
 
+    assert(i>=0 && i<num_vertices);
+    assert(j>=0 && j<num_vertices);
+
     if(i==j){
         return (EdgeWeight) 0;
     }
@@ -256,6 +291,7 @@ EdgeWeight Graph::get_edge_weight(int i, int j) const{
     return adjacency_list[i][j]->get_weight();
 
 }
+
 EdgeWeight Graph::get_edge_weight(VertexData di, int j) const{
 /**
  * Returns the weight of the edge between i and j. Here, i corresponds to the
@@ -271,7 +307,8 @@ EdgeWeight Graph::get_edge_weight(VertexData di, int j) const{
  * EdgeWeight : distance between i and j
  * 
  */
-    return get_edge_weight(vertex_position[di], j);
+
+    return get_edge_weight( get_vertex_position(di), j);
 }
 
 EdgeWeight Graph::get_edge_weight(int i, VertexData dj) const{
@@ -289,8 +326,10 @@ EdgeWeight Graph::get_edge_weight(int i, VertexData dj) const{
  * EdgeWeight : distance between i and j
  * 
  */
-    return get_edge_weight(i, vertex_position[dj]);
+
+    return get_edge_weight(i, get_vertex_position(dj));
 }
+
 EdgeWeight Graph::get_edge_weight(VertexData di, VertexData dj) const{
 /**
  * Returns the weight of the edge between i and j. Here, i,j correspond to the
@@ -307,7 +346,7 @@ EdgeWeight Graph::get_edge_weight(VertexData di, VertexData dj) const{
  * 
  */
 
-    return get_edge_weight(vertex_position[di], vertex_position[dj]);
+    return get_edge_weight(get_vertex_position(di), get_vertex_position(dj));
 }
 
 // sort edges member function
@@ -327,7 +366,7 @@ void Graph::sort_edges(){
 
     std::sort(edges.begin(), edges.end());
     for(int i=0; i<num_edges; ++i){
-        edges[i].set_index(i);
+        edges[i]->set_index(i);
     }
 
 }

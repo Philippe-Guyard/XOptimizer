@@ -29,7 +29,7 @@ void Edge::set_vertices(std::pair<Vertex*, Vertex*> vertices){
     this->vertices = vertices;
 }
 
-std::pair<Vertex*, Vertex*> Edge::get_vertices(){
+std::pair<Vertex*, Vertex*> Edge::get_vertices() const{
     return this->vertices;
 }
 

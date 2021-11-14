@@ -9,8 +9,8 @@
 // Vertex Class Implementaton
 
 Vertex::Vertex(){
-    this->v_data = VertexData();
-    this->v_index = -1; //placeholder value for index
+    v_data = VertexData();
+    v_index = -1; //placeholder value for index
 }
 
 Vertex::Vertex(VertexData v_data, int v_index){
@@ -19,17 +19,17 @@ Vertex::Vertex(VertexData v_data, int v_index){
 }
 
 int Vertex::get_index() const{
-    return this->v_index;
+    return v_index;
 }
 
 void Vertex::set_index(int new_index){
-    this->v_index = new_index;
+    v_index = new_index;
 }
 
 VertexData Vertex::get_data() const{
-    return this->v_data;
+    return v_data;
 }
 
-bool Vertex::operator==(Vertex& v2){
-    return v2.get_data() == this->v_data;
+bool Vertex::operator==(const Vertex &other) const{
+    return other.get_data() == v_data;
 }
