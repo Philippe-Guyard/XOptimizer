@@ -33,7 +33,7 @@ void RandomGraph::random_graph(
     }
     std::mt19937_64 rng(seed);
     std::uniform_real_distribution<double> random_coordinate(-180.0, 180.0);
-    std::uniform_real_distribution<double> random_weight(0.0, weight_limit);
+    std::uniform_real_distribution<long double> random_weight(0.0, weight_limit);
 
     // Generate random vertices and construct unordered_map
     num_vertices = number_of_vertices;
@@ -57,25 +57,25 @@ void RandomGraph::random_graph(
     // Build underlying random spanning tree
     // Ref: Alexey S. Rodionov and Hyunseung Choo, On Generating Random Network Structures: Trees, ICCS 2003, LNCS 2658, pp. 879-887, 2003.
     num_edges = 0;
-    int temp[num_vertices],
-        added[num_vertices],
-        count = 0;
+    std::vector<int> temp(num_vertices),  
+        added(num_vertices);
     for (int i = 0; i < num_vertices; i++) temp[i] = i;
-    std::shuffle(temp, temp + num_vertices, rng);
-    added[count] = temp[count++];
-    for (int i = 0; i < num_vertices; i++)
+    std::shuffle(temp.begin(), temp.end(), rng);
+    added[0] = temp[0];
+    for (int count = 1; count < num_vertices; count++)
     {
-        int v = temp[count],
-            u = added[rng()%count];
-        added[count++] = v;
+        int index = rng()%count,
+            v = temp[count],
+            u = added[index];
+        added[count] = v;
         // Passing vertices by address
         Edge* new_edge_ptr = new Edge(
                                     {vertices[u], 
                                     vertices[v]}, 
                                     random_weight(rng), 
-                                    num_edges);
+                                    num_edges++);
         // Passing edge by reference
-        edges[num_edges++] = new_edge_ptr;
+        edges.push_back(new_edge_ptr);
         adjacency_list[u][v] = adjacency_list[v][u] = new_edge_ptr;
     }
 
@@ -92,9 +92,9 @@ void RandomGraph::random_graph(
                                             {vertices[i], 
                                             vertices[j]}, 
                                             random_weight(rng), 
-                                            num_edges);
+                                            num_edges++);
                 // Passing edge by reference
-                edges[num_edges++] = new_edge_ptr;
+                edges.push_back(new_edge_ptr);
                 adjacency_list[i][j] = adjacency_list[j][i] = new_edge_ptr;
             }
         }
