@@ -28,7 +28,7 @@ namespace
     
     std::vector<std::vector<EdgeWeight> > distances = 
         {
-            {0.0, 24.8}, 
+            {0.0, 22.9}, // Use 24.8 for directed graph 
             {22.9, 0.0}
         };
 
