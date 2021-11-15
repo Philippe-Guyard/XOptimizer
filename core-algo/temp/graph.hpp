@@ -59,7 +59,8 @@ public:
     void set_index(int new_index);
 
     VertexData get_data() const;
-    bool operator==(const Vertex& other) const;    
+    bool operator==(const Vertex& other) const;   
+    bool operator!=(const Vertex &other) const;
 
 };
 

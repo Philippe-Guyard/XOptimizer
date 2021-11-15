@@ -99,6 +99,10 @@ Graph::~Graph(){
 }
 
 
+void Graph::update_vertex_data(VertexData& data){
+    return;
+}
+
 void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances){
 
 /**

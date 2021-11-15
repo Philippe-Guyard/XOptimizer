@@ -27,3 +27,7 @@ VertexData Vertex::get_data() const{
 bool Vertex::operator==(const Vertex &other) const{
     return other.get_data() == this->v_data;
 }
+
+bool Vertex::operator!=(const Vertex &other) const{
+    return other.get_data() != this->v_data;
+}
