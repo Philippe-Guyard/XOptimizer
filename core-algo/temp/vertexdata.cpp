@@ -3,7 +3,7 @@
 // VertexData Class Implementation
 
 VertexData::VertexData(){
-    geolocation = std::make_pair(-1,-1); //placeholder values 
+    this->geolocation = std::make_pair(-1,-1); //placeholder values 
 }
 
 VertexData::VertexData(std::pair<double, double> geolocation){
@@ -11,13 +11,13 @@ VertexData::VertexData(std::pair<double, double> geolocation){
 }
 
 std::pair<double, double> VertexData::get_geolocation() const{
-    return geolocation;
+    return this->geolocation;
 }
 
 bool VertexData::operator==(const VertexData& other) const{
-    return other.get_geolocation() == geolocation;
+    return other.get_geolocation() == this->geolocation;
 }
 
 bool VertexData::operator!=(const VertexData& other) const{
-    return other.get_geolocation() != geolocation;
+    return other.get_geolocation() != this->geolocation;
 }
