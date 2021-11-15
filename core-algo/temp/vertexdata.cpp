@@ -1,9 +1,3 @@
-#include<iostream>
-#include<unordered_map>
-#include<vector>
-#include<cstdio>
-#include<assert.h>
-
 #include "graph.hpp"
 
 // VertexData Class Implementation
@@ -13,7 +7,7 @@ VertexData::VertexData(){
 }
 
 VertexData::VertexData(std::pair<double, double> geolocation){
-    geolocation = geolocation;
+    this->geolocation = geolocation;
 }
 
 std::pair<double, double> VertexData::get_geolocation() const{
