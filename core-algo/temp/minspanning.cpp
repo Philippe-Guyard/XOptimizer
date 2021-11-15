@@ -7,6 +7,7 @@
 #include"graph.hpp"
 
 std::vector<Edge*> Graph::min_spanning(){
+    this->sort_edges();
     std::vector<Edge*> out;
     DisjointSet set = DisjointSet(num_vertices);
     int index = 0;
