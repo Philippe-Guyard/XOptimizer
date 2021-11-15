@@ -7,6 +7,10 @@ Vertex::Vertex(){
     v_index = -1; //placeholder value for index
 }
 
+Vertex::~Vertex(){
+    return;
+}
+
 Vertex::Vertex(VertexData v_data, int v_index){
     this->v_data = v_data;
     this->v_index = v_index;

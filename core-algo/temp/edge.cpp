@@ -15,6 +15,10 @@ Edge::Edge(){
     this->e_index = -1;
 }
 
+Edge::~Edge(){
+    return;
+}
+
 void Edge::set_weight(EdgeWeight weight){
     this->weight = weight;
 }
