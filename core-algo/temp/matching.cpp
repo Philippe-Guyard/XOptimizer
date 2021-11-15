@@ -43,5 +43,7 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<Vert
         }
     }
 
+    delete pm;
+    
     return solution;
 }
