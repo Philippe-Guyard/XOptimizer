@@ -1,9 +1,3 @@
-#include<iostream>
-#include<unordered_map>
-#include<vector>
-#include<cstdio>
-#include<assert.h>
-
 #include "graph.hpp"
 
 // Vertex Class Implementaton
@@ -19,17 +13,17 @@ Vertex::Vertex(VertexData v_data, int v_index){
 }
 
 int Vertex::get_index() const{
-    return v_index;
+    return this->v_index;
 }
 
 void Vertex::set_index(int new_index){
-    v_index = new_index;
+    this->v_index = new_index;
 }
 
 VertexData Vertex::get_data() const{
-    return v_data;
+    return this->v_data;
 }
 
 bool Vertex::operator==(const Vertex &other) const{
-    return other.get_data() == v_data;
+    return other.get_data() == this->v_data;
 }
