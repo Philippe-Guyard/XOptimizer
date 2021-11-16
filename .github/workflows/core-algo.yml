@@ -8,15 +8,15 @@ on:
 jobs:
   Push-in-Core-Algo:
     runs-on: windows-latest
-    if: github.ref == 'refs/heads/core-algo'
     steps:
+    - name: Checkout new code base
+      uses: actions/checkout@v2
     - name: Setting up building configuration
-      run: |
-        cd core-algo
-        cmake -B . -S build -DTEST=ON
+      run: cmake -B . -S build -DTEST=ON
+      working-directory: core-algo
     - name: Building the code base and tests
       run: cmake --build build
+      working-directory: core-algo
     - name: Testing
-      run: |
-        cd build
-        ctest
+      run: ctest
+      working-directory: build
