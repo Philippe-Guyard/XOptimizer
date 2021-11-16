@@ -1,0 +1,24 @@
+name: Core Algorithms CI
+
+on:
+	push:
+		paths:
+			- "core_algo/**"
+
+jobs:
+	Push-in-Core-Algo:
+		run-on: windows-latest
+		steps:
+			- name: Setting up building configuration
+			  run: |
+				cmake -B . -S build 
+		    working-directory: core-algo
+			- name: Building the code base and tests
+			  run: |
+				cmake --build build
+			  working-directory: core-algo
+			- name: Testing
+			  run: |
+				cd build
+				ctest
+			  working-directory: core-algo
