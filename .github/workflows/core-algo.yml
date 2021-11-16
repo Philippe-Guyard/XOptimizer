@@ -19,4 +19,4 @@ jobs:
       working-directory: core-algo
     - name: Testing
       run: ctest
-      working-directory: build
+      working-directory: core-algo/build
