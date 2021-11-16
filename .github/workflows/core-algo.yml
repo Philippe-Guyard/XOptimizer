@@ -12,7 +12,7 @@ jobs:
     - name: Checkout new code base
       uses: actions/checkout@v2
     - name: Setting up building configuration
-      run: cmake -B . -S build -DTEST=ON
+      run: cmake -S . -B build -DTEST=ON
       working-directory: core-algo
     - name: Building the code base and tests
       run: cmake --build build
