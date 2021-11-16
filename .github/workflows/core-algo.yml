@@ -8,13 +8,12 @@ on:
 jobs:
   Push-in-Core-Algo:
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}/core-algo
     if: github.ref == 'refs/heads/core-algo'
     steps:
     - name: Setting up building configuration
-      run: cmake -B . -S build -DTEST=ON
+      run: |
+        cd core-algo
+        cmake -B . -S build -DTEST=ON
     - name: Building the code base and tests
       run: cmake --build build
     - name: Testing
