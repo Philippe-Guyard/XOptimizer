@@ -1,16 +1,17 @@
 name: Core Algorithms CI
 
 on:
-	push:
-		paths:
-			- "core_algo/**"
-
+  push:
+    paths:
+    - "core-algo/**"
+ 
 jobs:
-	Push-in-Core-Algo:
-		run-on: windows-latest
-		defaults:
-			working-directory: core-algo
-		steps:
+  Push-in-Core-Algo:
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: core-algo
+    steps:
     - name: Setting up building configuration
       run: cmake -B . -S build -DTEST=ON
     - name: Building the code base and tests
