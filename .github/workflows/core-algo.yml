@@ -8,17 +8,14 @@ on:
 jobs:
 	Push-in-Core-Algo:
 		run-on: windows-latest
+		defaults:
+			working-directory: core-algo
 		steps:
-			- name: Setting up building configuration
-			  run: |
-				cmake -B . -S build 
-		    working-directory: core-algo
-			- name: Building the code base and tests
-			  run: |
-				cmake --build build
-			  working-directory: core-algo
-			- name: Testing
-			  run: |
-				cd build
-				ctest
-			  working-directory: core-algo
+    - name: Setting up building configuration
+      run: cmake -B . -S build -DTEST=ON
+    - name: Building the code base and tests
+      run: cmake --build build
+    - name: Testing
+      run: |
+        cd build
+        ctest
