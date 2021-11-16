@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     defaults:
       run:
-        working-directory: core-algo
+        working-directory: ${{ github.workspace }}/core-algo
     if: github.ref == 'refs/heads/core-algo'
     steps:
     - name: Setting up building configuration
