@@ -391,7 +391,7 @@ void Graph::sort_edges(){
  * 
  */
 
-    std::sort(edges.begin(), edges.end());
+    std::sort(edges.begin(), edges.end(), Edge::compare_edge_pointers);
     for(int i=0; i<num_edges; ++i){
         edges[i]->set_index(i);
     }
