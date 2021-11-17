@@ -110,8 +110,9 @@ public:
     EdgeWeight get_edge_weight(int i, VertexData dj) const;
     EdgeWeight get_edge_weight(VertexData di, VertexData dj) const;
 
+
     std::vector<Edge*> min_spanning();
-    std::vector<std::pair<int,int>> perfect_mincost_matching(std::vector<Vertex*>);
+    std::vector<std::pair<int,int>> perfect_mincost_matching(std::vector<int> vertex_indices);
 
 protected:
 
