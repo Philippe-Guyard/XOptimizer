@@ -4,12 +4,11 @@
 std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int> vertex_indices){
 
     std::vector<std::pair<int,int>> solution;
-    return solution;
     int n_vertices = vertex_indices.size();
+    // by the assumption that graph is complete
     int n_edges = (n_vertices*(n_vertices-1))/2;
     
     // we are going to number the vertices 0,1,2....,n-1 based on the order they appear in vertices
-    //int vertex_to_index[this->num_vertices];
 
     int vertex_i_index, vertex_j_index;
     PerfectMatching *pm = new PerfectMatching(n_vertices, n_edges);
@@ -26,12 +25,11 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
     pm->options = options;
     pm->Solve();
 
-    
     int index1, index2;
     int v_index1, v_index2;
     for(index1 = 0; index1<n_vertices; index1++){
         index2 = pm->GetMatch(index1);
-        if(index1 > index2){
+        if(index1 < index2){
             v_index1 = vertex_indices[index1];
             v_index2 = vertex_indices[index2];
             solution.push_back(std::make_pair(v_index1, v_index2));
