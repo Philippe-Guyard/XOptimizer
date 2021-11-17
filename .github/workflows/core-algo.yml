@@ -1,9 +1,11 @@
 name: Core Algorithms CI
 
 on:
-  push:
-    paths:
-    - "core-algo/**"
+  schedule:
+    - cron: '0 14,22 * * 6,0'
+  pull_request:
+    branch:
+      - main
  
 jobs:
   Push-in-Core-Algo:
