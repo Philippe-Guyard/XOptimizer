@@ -17,8 +17,8 @@ std::shared_ptr<std::istream> PBFParser::getInputStream() const {
     return inputStream;
 }
 
-void PBFParser::parse() {
-    std::vector<OSMPBF::BlobHeader> headers;
+std::shared_ptr<PBFFile> PBFParser::parse() {
+    /*std::vector<OSMPBF::BlobHeader> headers;
     std::vector<OSMPBF::Blob> blobs;
     char* buffer = (char*)malloc(32 * 1024 * 1024);
     for (int k = 0; inputStream->good(); k++) {
@@ -62,6 +62,7 @@ void PBFParser::parse() {
             std::memcpy(copy, buffer, blob.raw_size());
             rawBlobs.push_back(copy);
         }
-    }
+    }*/
+    return {};
 }
 
