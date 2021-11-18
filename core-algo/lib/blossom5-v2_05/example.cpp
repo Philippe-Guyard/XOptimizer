@@ -138,7 +138,7 @@ void ShowUsage()
 	exit(1);
 }
 
-
+/*
 int main(int argc, char* argv[])
 {
 	struct PerfectMatching::Options options;
@@ -282,4 +282,4 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-
+*/
