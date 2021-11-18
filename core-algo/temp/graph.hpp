@@ -134,7 +134,7 @@ protected:
     long double cost_of_path(const std::vector<int>& path) const;
     std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
 
-    void best_path_brute_force_aux(std::unordered_set<int>& set_of_vertices, std::vector<int>& path, 
+    void best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int>& path, const std::vector<int> &path_vertices,
                                     int v_initial, int v_final,
                                     long double &min_cost, std::vector<int>& min_cost_path) const;
 
