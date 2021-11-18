@@ -3,14 +3,16 @@ project(LogistiX_CoreAlgo                               # Set the project name
         VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 14)                              # Enable C++14 standard. Note GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                     # Enforce C++14 standard.        
-set(CMAKE_CXX_FLAGS "/EHc")                            # Enable /EH to build C++ code that follows the C++ standard for exception handling.
+set(CMAKE_CXX_FLAGS "/EHsc")                            # Enable /EH to build C++ code that follows the C++ standard for exception handling.
 
 option(TEST "Testing: " OFF)
 
 if(TEST)                                                # In case of testing
+    message("Testing is ON")
     file(GLOB_RECURSE SOURCES "lib/*.c" "lib/*.cpp" "temp/*.cpp" "test/*.cpp")
     file(GLOB_RECURSE HEADERS "lib/*.h" "lib/*.hpp" "temp/*.hpp" "test/*.hpp")
 else()                                                  #In case of releasing
+    message("Testing is OFF")
     file(GLOB_RECURSE SOURCES "lib/*.c" "lib/*.cpp" "src/*.cpp" "test/*.cpp")
     file(GLOB_RECURSE HEADERS "lib/*.h" "lib/*.hpp" "src/*.hpp" "test/*.hpp")
 endif()
@@ -40,4 +42,4 @@ target_link_libraries(Library gtest_main)               # Google Test
 include(GoogleTest)
 gtest_discover_tests(Library)
 
-unset(TEST)                                             # Reset cached variables
+unset(TEST CACHE)                                             # Reset cached variables
