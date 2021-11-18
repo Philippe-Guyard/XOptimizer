@@ -419,66 +419,72 @@ std::vector<int> Graph::best_path_brute_force(const std::vector<int>& path_verti
  * 
  */
 
-    std::unordered_set<int> set_of_vertices;
-    for(int i=1; i<path_vertices.size()-1; ++i){
-        set_of_vertices.insert(path_vertices[i]);
+    int m = path_vertices.size();
+
+    assert( m >= 2 );
+
+    if( m == 2 ){
+        return path_vertices;
     }
 
-    assert( set_of_vertices.size() == path_vertices.size()-2 );
-
     int v_initial = path_vertices[0];
-    int v_final = path_vertices[path_vertices.size()-1];
+    int v_final = path_vertices[m-1];
+
+    std::vector<bool> chosen(m-2, false);
+
 
     std::vector<int> min_cost_path;
     min_cost_path.push_back(v_initial);
 
+    EdgeWeight min_cost = -1;
+
     std::vector<int> path_aux;
     path_aux.push_back(v_initial);
 
-    long double min_cost = -1;
-
-    best_path_brute_force_aux(set_of_vertices, path_aux, v_initial, v_final, min_cost, min_cost_path);
+    best_path_brute_force_aux(chosen, path_aux, path_vertices, v_initial, v_final, min_cost, min_cost_path);
 
     return min_cost_path;
 }
 
-void Graph::best_path_brute_force_aux(std::unordered_set<int>& set_of_vertices, std::vector<int>& path, 
+void Graph::best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int> &current_path, const std::vector<int> &path_vertices,
                                     int v_initial, int v_final,
-                                    long double &min_cost, std::vector<int>& min_cost_path) const{
+                                    EdgeWeight &min_cost, std::vector<int>& min_cost_path) const{
 /**
  * 
  * 
  * 
  */
 
+    int m = chosen.size();
 
-    if(set_of_vertices.size() == 0){
-        path.push_back(v_final);
-        long double cost = cost_of_path(path);
+    if( m+1 == current_path.size() ){
+
+        current_path.push_back(v_final);
+        EdgeWeight cost = cost_of_path( current_path );
 
         if(min_cost == -1 || cost < min_cost){
-            min_cost_path = path;
+            min_cost_path = current_path;
             min_cost = cost;
         }
 
-        path.pop_back();
+        current_path.pop_back();
         
         return;
     }
-    
-    std::vector<int> elements_in_set;
-    for(auto v : set_of_vertices){
-        elements_in_set.push_back(v);
+
+    for(int i=0; i<m; ++i){
+        if( chosen[i] ){
+            continue;
+        }
+
+        current_path.push_back(path_vertices[i+1]);
+        chosen[i] = true;
+
+        best_path_brute_force_aux(chosen, current_path, path_vertices, v_initial, v_final,
+                                min_cost, min_cost_path);
+
+        current_path.pop_back();
+        chosen[i] = false;
+
     }
-
-    for(auto v : elements_in_set){
-        path.push_back(v);
-        set_of_vertices.erase(v);
-
-        best_path_brute_force_aux(set_of_vertices, path, v_initial, v_final, min_cost, min_cost_path);
-
-        path.pop_back();
-        set_of_vertices.insert(v);
-    }
-
 }
