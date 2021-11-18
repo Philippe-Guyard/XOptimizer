@@ -2,16 +2,22 @@ cmake_minimum_required(VERSION 3.14)                    # CMake version check
 project(LogistiX_CoreAlgo                               # Set the project name
         VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 14)                              # Enable C++14 standard. Note GoogleTest requires at least C++11
+set(CMAKE_CXX_STANDARD_REQUIRED ON)                     # Enforce C++14 standard.        
+set(CMAKE_CXX_FLAGS "/EHc")                            # Enable /EH to build C++ code that follows the C++ standard for exception handling.
 
 option(TEST "Testing: " OFF)
 
 if(TEST)                                                # In case of testing
-    file(GLOB_RECURSE SOURCES "temp/*.cpp" "test/*.cpp")
-    file(GLOB_RECURSE HEADERS "temp/*.hpp" "test/*.hpp")
+    file(GLOB_RECURSE SOURCES "lib/*.c" "lib/*.cpp" "temp/*.cpp" "test/*.cpp")
+    file(GLOB_RECURSE HEADERS "lib/*.h" "lib/*.hpp" "temp/*.hpp" "test/*.hpp")
 else()                                                  #In case of releasing
-    file(GLOB_RECURSE SOURCES "src/*.cpp" "test/*.cpp")
-    file(GLOB_RECURSE HEADERS "src/*.hpp" "test/*.hpp")
+    file(GLOB_RECURSE SOURCES "lib/*.c" "lib/*.cpp" "src/*.cpp" "test/*.cpp")
+    file(GLOB_RECURSE HEADERS "lib/*.h" "lib/*.hpp" "src/*.hpp" "test/*.hpp")
 endif()
+
+list(REMOVE_ITEM                                        # Exclude example.cpp with main function in blossom v library.s
+    SOURCES 
+    "lib/blossom5-v2_05/example.cpp")
 
 add_library(Source ${SOURCES} ${HEADERS})               # Source files
 
