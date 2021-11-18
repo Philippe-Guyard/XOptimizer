@@ -13,7 +13,7 @@ protected:
     std::pair<double, double> geolocation;
 
     // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations have to be equal
-    // TODO: think about the information we might want to hold in a vertex such as 
+    // TODO: think about the information we might want to hold in a vertex such as
     // order ids, address information, etc.
 
 public:
@@ -59,7 +59,7 @@ public:
     void set_index(int new_index);
 
     VertexData get_data() const;
-    bool operator==(const Vertex& other) const;   
+    bool operator==(const Vertex& other) const;
     bool operator!=(const Vertex &other) const;
 
 };
@@ -115,16 +115,17 @@ public:
 
     std::vector<Edge*> min_spanning();
     std::vector<std::pair<int,int>> perfect_mincost_matching(std::vector<int> vertex_indices);
+    std::vector<std::pair<int,int>> heuristic_perfect_mincost_matching(std::vector<int> vertex_indices);
 
 protected:
 
     int num_vertices;
     int num_edges;
 
-    std::vector<Vertex*> vertices; 
-    std::vector<Edge*> edges; 
+    std::vector<Vertex*> vertices;
+    std::vector<Edge*> edges;
 
-    std::vector<std::vector<Edge*>> adjacency_list; 
+    std::vector<std::vector<Edge*>> adjacency_list;
     std::unordered_map< VertexData, int, std::hash<VertexData> > vertex_position;
 
     void swap_vertex_indices(int pos1, int pos2);
