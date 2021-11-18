@@ -6,7 +6,7 @@
 #include <string>
 
 class Downloader: public QObject{
-		Q_OBJECT
+        Q_OBJECT
 public:
 		Downloader(QObject *parent=nullptr):QObject(parent){
 				connect(&m_manager, &QNetworkAccessManager::finished, this, &Downloader::handle_finished);
