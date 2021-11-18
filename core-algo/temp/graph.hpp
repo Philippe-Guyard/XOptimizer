@@ -131,9 +131,6 @@ protected:
     void swap_vertex_to_last(int pos);
     void sort_edges();
 
-<<<<<<< Updated upstream
-    
-=======
     long double cost_of_path(const std::vector<int>& path) const;
     std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
 
@@ -141,7 +138,6 @@ protected:
                                     int v_initial, int v_final,
                                     long double &min_cost, std::vector<int>& min_cost_path) const;
 
->>>>>>> Stashed changes
 };
 
 
