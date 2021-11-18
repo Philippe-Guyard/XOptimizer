@@ -47,13 +47,3 @@ bool Edge::operator<(const Edge& e2){
     return get_weight() < e2.get_weight();
 
 }
-
-bool compare_edge_pointers(Edge *ptr1, Edge *ptr2){
-/**
- * Returns true if and only if the weight of the edge *ptr1 is smaller than that of *ptr2.
- * 
- */
-
-
-    return ptr1->get_weight() < ptr2->get_weight();
-}

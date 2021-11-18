@@ -82,8 +82,6 @@ public:
     void set_index(int new_index);
 
     bool operator<(const Edge& e2);
-    bool compare_edge_pointers(Edge *ptr1, Edge *ptr2) const;
-
 
 protected:
 
@@ -129,8 +127,9 @@ protected:
 
     void swap_vertex_indices(int pos1, int pos2);
     void swap_vertex_to_last(int pos);
-
     void sort_edges();
+
+    
 };
 
 
