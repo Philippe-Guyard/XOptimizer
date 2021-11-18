@@ -4,8 +4,13 @@
 #include <QFileDialog>
 #include <QTextStream>
 #include <QFile>
-using namespace std;
+#include <iostream>
+#include <QDebug>
+#include <QStandardItemModel>
 
+using namespace std;
+QString chosenCity;
+QString chosenDepartment;
 QStringList departments = { "Auvergne-Rhône-Alpes", "Bourgogne-Franche-Comté", "Bretagne", "Centre-Val de Loire",};
 
 
@@ -21,7 +26,6 @@ XOptimizer::XOptimizer(QWidget *parent)
     , ui(new Ui::XOptimizer)
 {
     ui->setupUi(this);
-
     //Setting up the drop boxes
     ui->DepartmentcomboBox->addItems(departments);
 }
@@ -35,6 +39,11 @@ XOptimizer::~XOptimizer()
 void XOptimizer::on_DepartmentcomboBox_currentTextChanged(const QString &arg1)
 {   ui->CitycomboBox_2->clear();
     ui->CitycomboBox_2->addItems( cities[arg1]);
+    chosenDepartment = arg1;
+}
+void XOptimizer::on_CitycomboBox_2_currentTextChanged(const QString &arg1)
+{
+    chosenCity = arg1;
 }
 
 
@@ -51,7 +60,58 @@ void XOptimizer::on_uploadFileButton_clicked()
         QMessageBox::warning(this, "title", "file not open");
     }
     QTextStream in(&file);
-    QString text = in.readAll();
-    ui->plainTextEdit->setPlainText(text);
+
+    int n = 0;
+    while (!in.atEnd()){
+      ui->tableWidget->insertRow(n);
+      QString s=in.readLine(); // reads line from file
+      QStringList linesplit = s.split(',');
+      ui->tableWidget->setColumnCount(linesplit.length());
+      for( int i = 0; i<linesplit.length(); i++){
+          ui->tableWidget->setItem(n, i, new QTableWidgetItem(linesplit[i]));
+      }
+      n = n + 1;
+    }
+
 }
+
+
+
+void XOptimizer::on_pushButton_clicked()
+{
+    QString file_name = "C:/Users/tubvi/OneDrive/Stalinis kompiuteris/XOptimizer/GUI/writefile.txt";
+    saveFile(file_name); //To this file the edited data is saved and then we give this file to Marten
+}
+
+void XOptimizer::saveFile(const QString &name)
+{
+QFile file(name);
+
+if (file.open(QFile::WriteOnly | QIODevice::Text))
+{
+
+
+    QTextStream data( &file );
+    QStringList strList;
+    for( int r = 0; r < ui->tableWidget->rowCount(); ++r )
+        {
+            strList.clear();
+            for( int c = 0; c < ui->tableWidget->columnCount(); ++c )
+            {   QTableWidgetItem* item = ui->tableWidget->item(r,c);
+                if (!item || item->text().isEmpty())
+                {
+                    ui->tableWidget->setItem(r,c,new QTableWidgetItem("0"));
+                }
+                strList << ui->tableWidget->item( r, c )->text();
+
+            }
+            QString a = strList.join(",")+"\n";
+            data << a;
+        }
+    }
+
+    file.close();
+}
+
+
 
