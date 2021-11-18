@@ -4,6 +4,7 @@
 #include <QNetworkReply>
 #include <iostream>
 #include <string>
+#pragma once
 
 class Downloader: public QObject{
         Q_OBJECT

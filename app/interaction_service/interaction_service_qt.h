@@ -6,6 +6,7 @@
 #include <utils/downloader.cpp>
 #include <utils/order_parser.cpp>
 #include <string>
+#pragma once
 
 namespace XOptimizer {
     class InteractionService {

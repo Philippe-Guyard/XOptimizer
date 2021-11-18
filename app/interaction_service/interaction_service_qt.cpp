@@ -1,6 +1,5 @@
 #include "interaction_service_qt.h"
 #include "utils/downloader.cpp"
-#include <utils/order_parser.cpp>
 
 #include <iostream>
 #include <fstream>
