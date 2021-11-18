@@ -12,12 +12,11 @@
 
 // External libraries
 #include "gtest/gtest.h"
-#include "random_graph.hpp"
 #include "../lib/blossom5-v2_05/PerfectMatching.h"
 #include "../lib/blossom5-v2_05/GEOM/GeomPerfectMatching.h"
 
 // Main files to be tested
-#include "../temp/graph.hpp"
+#include "random_graph.hpp"
 
 using EdgeWeight = long double;
 
@@ -27,7 +26,8 @@ class PerfectMincostMatchingTest : public RandomGraph
         std::pair<EdgeWeight, EdgeWeight> maximal_mincost_matching_test(
             std::vector<int> vertex_indices)
         {
-            EdgeWeight computed_solution, expected_solution;
+            EdgeWeight computed_solution = 0, 
+                       expected_solution = 0;
             
             bool odd_num_vertices = false;
             std::vector<std::pair<VertexData, EdgeWeight> > distances(num_vertices);

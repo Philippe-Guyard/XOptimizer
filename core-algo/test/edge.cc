@@ -8,7 +8,7 @@
 #include "gtest/gtest.h"
 
 // Main files to be tested
-#include "../temp/graph.hpp"
+#include "../src/graph.hpp"
 
 using EdgeWeight = long double;
 
