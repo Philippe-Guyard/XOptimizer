@@ -1,5 +1,6 @@
 #include<iostream>
 #include<unordered_map>
+#include<set>
 #include<vector>
 #include<cstdio>
 #include<assert.h>
@@ -394,6 +395,90 @@ void Graph::sort_edges(){
     std::sort(edges.begin(), edges.end(), [](Edge* ptr1, Edge* ptr2) {return ptr1->get_weight() < ptr2->get_weight();});
     for(int i=0; i<num_edges; ++i){
         edges[i]->set_index(i);
+    }
+
+}
+
+long double Graph::cost_of_path(const std::vector<int>& path) const{
+    long double cost = 0;
+    for(int i=1; i<path.size(); ++i){
+        cost += get_edge_weight(path[i-1], path[i]);
+    }
+    
+    return cost;
+}
+
+std::vector<int> Graph::best_path_brute_force(const std::vector<int>& path_vertices) const{
+/**
+ * Find the min cost path that goes through the vertices in path_vertices while mantaining the first and last vertices fixed.
+ *
+ * Example: path_vertices = {v1, v2, v3, v4, v5}, it returns the minimum cost path that starts in v1, passes through v2,v3,v4 in some
+ * order, and ends in v5.
+ * 
+ * Warning: Takes exponential time in the size of path_vertices.
+ * 
+ */
+
+    std::unordered_set<int> set_of_vertices;
+    for(int i=1; i<path_vertices.size()-1; ++i){
+        set_of_vertices.insert(path_vertices[i]);
+    }
+
+    assert( set_of_vertices.size() == path_vertices.size()-2 );
+
+    int v_initial = path_vertices[0];
+    int v_final = path_vertices[path_vertices.size()-1];
+
+    std::vector<int> min_cost_path;
+    min_cost_path.push_back(v_initial);
+
+    std::vector<int> path_aux;
+    path_aux.push_back(v_initial);
+
+    long double min_cost = -1;
+
+    best_path_brute_force_aux(set_of_vertices, path_aux, v_initial, v_final, min_cost, min_cost_path);
+
+    return min_cost_path;
+}
+
+void Graph::best_path_brute_force_aux(std::unordered_set<int>& set_of_vertices, std::vector<int>& path, 
+                                    int v_initial, int v_final,
+                                    long double &min_cost, std::vector<int>& min_cost_path) const{
+/**
+ * 
+ * 
+ * 
+ */
+
+
+    if(set_of_vertices.size() == 0){
+        path.push_back(v_final);
+        long double cost = cost_of_path(path);
+
+        if(min_cost == -1 || cost < min_cost){
+            min_cost_path = path;
+            min_cost = cost;
+        }
+
+        path.pop_back();
+        
+        return;
+    }
+    
+    std::vector<int> elements_in_set;
+    for(auto v : set_of_vertices){
+        elements_in_set.push_back(v);
+    }
+
+    for(auto v : elements_in_set){
+        path.push_back(v);
+        set_of_vertices.erase(v);
+
+        best_path_brute_force_aux(set_of_vertices, path, v_initial, v_final, min_cost, min_cost_path);
+
+        path.pop_back();
+        set_of_vertices.insert(v);
     }
 
 }
