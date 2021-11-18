@@ -111,7 +111,7 @@ struct PerfectMatching::Edge : PriorityQueue<REAL>::Item
 	Edge*	prev[2];
 };
 
-typedef unsigned long POINTER_TYPE;
+typedef unsigned long long POINTER_TYPE;
 // if the declaration below fails, set POINTER_TYPE to be the appropriate integer type of the same length as (void*)
 extern char dummy_array[2*(sizeof(void*)==sizeof(POINTER_TYPE))-1];
 

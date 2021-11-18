@@ -73,13 +73,13 @@ class MinimumSpanningTreeTest : public RandomGraph
                        computed_total_cost = 0.0;
             
             // If the node is node not yet added to the minimum spanning tree add it, and increment the cost.
-            while(not queue.empty())
+            while(!queue.empty())
             {
                 std::pair<EdgeWeight, int> u = queue.top();
                 queue.pop();
                 int index = u.second;
 
-                if(not added[index])
+                if(!added[index])
                 {
                     final_cost[index] = u.first;
                     expected_total_cost += u.first;
@@ -90,7 +90,7 @@ class MinimumSpanningTreeTest : public RandomGraph
                     for(int i = 0; i < number_of_vertices; i++)
                     {
                         if(adjacency_list[index][i] != nullptr && 
-                           not added[i] && 
+                           !added[i] && 
                            u.first + (*adjacency_list[index][i]).get_weight() < final_cost[i])
                         {
                             queue.push({(*adjacency_list[index][i]).get_weight(),

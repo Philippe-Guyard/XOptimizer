@@ -1,6 +1,8 @@
 #include<iostream>
 #include<algorithm>
 #include<unordered_map>
+#include<unordered_set>
+
 #include<vector>
 #include<cstdio>
 #include<assert.h>
@@ -82,8 +84,6 @@ public:
     void set_index(int new_index);
 
     bool operator<(const Edge& e2);
-    bool compare_edge_pointers(Edge *ptr1, Edge *ptr2) const;
-
 
 protected:
 
@@ -130,8 +130,15 @@ protected:
 
     void swap_vertex_indices(int pos1, int pos2);
     void swap_vertex_to_last(int pos);
-
     void sort_edges();
+
+    long double cost_of_path(const std::vector<int>& path) const;
+    std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
+
+    void best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int>& path, const std::vector<int> &path_vertices,
+                                    int v_initial, int v_final,
+                                    long double &min_cost, std::vector<int>& min_cost_path) const;
+
 };
 
 
