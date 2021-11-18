@@ -139,6 +139,12 @@ protected:
                                     int v_initial, int v_final,
                                     long double &min_cost, std::vector<int>& min_cost_path) const;
 
+    // Eulerian Path
+    std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
+
+    // TSP = Travelling Salesman Problem
+    std::vector<int> TSP();
+
 };
 
 
