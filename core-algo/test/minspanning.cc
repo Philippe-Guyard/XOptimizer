@@ -112,7 +112,7 @@ class MinimumSpanningTreeTest : public RandomGraph
 
 namespace
 {
-    const int NUMBER_OF_TEST = 1;
+    const int NUMBER_OF_TEST = 20;
     std::mt19937_64 rng(std::chrono::system_clock::now().time_since_epoch().count());
     std::uniform_real_distribution<double> random_density(0.0, 1.0);
 
@@ -121,7 +121,6 @@ namespace
         for (int i = 0; i < NUMBER_OF_TEST; i++)
         {
             int number_of_vertices = rng() % 1000 + 1;
-            number_of_vertices = 10;
             EdgeWeight weight_limit = 6000.0;
             double density = random_density(rng);
             long long seed = rng();
