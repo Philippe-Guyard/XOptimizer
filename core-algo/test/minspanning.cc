@@ -133,7 +133,7 @@ namespace
                         density,
                         seed);
             
-            EXPECT_DOUBLE_EQ(result.first, result.second)
+            EXPECT_NEAR(result.first, result.second, 0.00000001)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
