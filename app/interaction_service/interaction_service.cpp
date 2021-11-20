@@ -1,4 +1,4 @@
-#include "interaction_service_qt.h"
+#include "interaction_service.h"
 #include "utils/downloader.cpp"
 
 #include <iostream>
