@@ -9,17 +9,17 @@ option(TEST "Testing: " OFF)
 
 if(TEST)                                                # In case of testing
     message("Testing is ON")
-    file(GLOB_RECURSE SOURCES "lib/*.c" "lib/*.cpp" "temp/*.cpp" "test/*.cpp")
-    file(GLOB_RECURSE HEADERS "lib/*.h" "lib/*.hpp" "temp/*.hpp" "test/*.hpp")
+    file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "temp/**.cpp" "test/**.cpp")
+    file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "temp/**.hpp" "test/**.hpp")
 else()                                                  #In case of releasing
     message("Testing is OFF")
-    file(GLOB_RECURSE SOURCES "lib/*.c" "lib/*.cpp" "src/*.cpp" "test/*.cpp")
-    file(GLOB_RECURSE HEADERS "lib/*.h" "lib/*.hpp" "src/*.hpp" "test/*.hpp")
+    file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "src/**.cpp" "test/**.cpp")
+    file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "src/**.hpp" "test/**.hpp")
 endif()
 
 list(REMOVE_ITEM                                        # Exclude example.cpp with main function in blossom v library.s
     SOURCES 
-    "lib/blossom5-v2_05/example.cpp")
+    ${CMAKE_CURRENT_SOURCE_DIR}/lib/blossom5-v2_05/example.cpp)
 
 add_library(Source ${SOURCES} ${HEADERS})               # Source files
 
@@ -34,7 +34,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-file(GLOB_RECURSE TEST_SOURCES "test/*.cc")
+file(GLOB_RECURSE TEST_SOURCES "test/**.cc")
 add_executable(Library ${TEST_SOURCES})                 # Test files
 target_link_libraries(Library Source)                   # Link to source files
 target_link_libraries(Library gtest_main)               # Google Test
