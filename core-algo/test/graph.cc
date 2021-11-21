@@ -56,6 +56,13 @@ namespace
                             locations, 
                             distances);
         graph.add_vertex(ens_saclay, additional_distances);
+        for (int i = 0; i < number_of_vertices; i++)
+        {
+            EXPECT_EQ(additional_distances[i].second, graph.get_edge_weight(i, number_of_vertices))
+                << "Initial distance and stored distance between Node " 
+                << i 
+                << " and the new node differ.\n";
+        }
     }
 
     TEST(Graph, DeleteVertex)
