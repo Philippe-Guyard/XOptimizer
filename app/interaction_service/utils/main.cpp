@@ -78,10 +78,10 @@ int main(int argc, char *argv[])
 
 		// Example of use
 
-		QFile file("/Users/markdaychman/Desktop/johanna.csv");
+        QFile file("/Users/markdaychman/Desktop/johanna.csv");
 		file.open(QIODevice::ReadWrite);
 
-		QFile outfile("/Users/markdaychman/Desktop/output.csv");
+        QFile outfile("/Users/markdaychman/Desktop/output.csv");
 		outfile.open(QIODevice::ReadWrite);
 
 
