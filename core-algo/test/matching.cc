@@ -24,7 +24,7 @@ class PerfectMincostMatchingTest : public RandomGraph
 {
     public: 
         std::pair<EdgeWeight, EdgeWeight> maximal_mincost_matching_test(
-            std::vector<int> vertex_indices)
+            std::vector<int>& vertex_indices)
         {
             EdgeWeight computed_solution = 0, 
                        expected_solution = 0;
@@ -37,7 +37,7 @@ class PerfectMincostMatchingTest : public RandomGraph
             }
             VertexData dummy = VertexData();
 
-            if (num_vertices & 1)
+            if (vertex_indices.size() & 1)
             /* 
             If the number of vertices is odd, we add another dummy vertex with weight of edges to
             other vertices to be infinity.
@@ -47,23 +47,23 @@ class PerfectMincostMatchingTest : public RandomGraph
                 add_vertex(dummy, distances);
                 vertex_indices.push_back(num_vertices - 1);
             }
-
             int number_of_vertices = vertex_indices.size(),
-                number_of_edges = number_of_vertices * (number_of_vertices - 1) / 2;
-
-            PerfectMatching* perfect_matching = new PerfectMatching(number_of_edges, num_edges);
-            for (Edge* e : edges)
+                number_of_edges = number_of_vertices * (number_of_vertices - 1) >> 1;
+            
+            PerfectMatching* perfect_matching = new PerfectMatching(number_of_vertices, number_of_edges);
+            for (int i = 0; i < number_of_vertices; i++)
             {
-                int u = e->get_vertices().first->get_index(), 
-                    v = e->get_vertices().first->get_index(), 
-                    w = e->get_weight();
-                perfect_matching->AddEdge(u, v, w);
+                for (int j = i+1; j < number_of_vertices; j++)
+                {
+                    perfect_matching->AddEdge(i, j, get_edge_weight(vertex_indices[i], vertex_indices[j]));
+                }
             }
+            
             struct PerfectMatching::Options options;
             perfect_matching->options = options;
             perfect_matching->Solve();
 
-            for (int ind1 = 0; ind1 < num_vertices; ind1++)
+            for (int ind1 = 0; ind1 < number_of_vertices; ind1++)
             {
                 int ind2 = perfect_matching->GetMatch(ind1);
                 if (ind1 < ind2 && 
@@ -71,22 +71,24 @@ class PerfectMincostMatchingTest : public RandomGraph
                         ind2 < num_vertices - 1)
                     )
                 {
-                    expected_solution += get_edge_weight(ind1, ind2);
+                    expected_solution += get_edge_weight(vertex_indices[ind1], vertex_indices[ind2]);
                 }
             }
-
+            delete perfect_matching;
+            
             if (odd_num_vertices)
             {
                 delete_vertex(dummy);
+                vertex_indices.pop_back();
             }
-
+            
             std::vector<std::pair<int, int> > computed_solution_edges = 
                 perfect_mincost_matching(vertex_indices);
             for (std::pair<int, int> e : computed_solution_edges)
             {
                 computed_solution += get_edge_weight(e.first, e.second);
             }
-
+            
             return {expected_solution, computed_solution};
         }
 };
@@ -101,10 +103,10 @@ namespace
     {
         for (int i = 0; i < NUMBER_OF_TEST; i++)
         {
-            int number_of_vertices = rng() % 1000 + 1;
+            int number_of_vertices = rng() % 5000 + 3;
             number_of_vertices = 10;
             EdgeWeight weight_limit = 6000.0;
-            double density = random_density(rng);
+            double density = 1.0;
             long long seed = rng();
 
             PerfectMincostMatchingTest graph = PerfectMincostMatchingTest();
@@ -114,12 +116,16 @@ namespace
                             seed);
 
             std::vector<int> vertex_indices;
-            for (int i = 0; i < number_of_vertices; i++)
+            for (int i = 0; i < number_of_vertices - 1; i++)
             {
                 if (rng() & 1)
                 {
                     vertex_indices.push_back(i);
                 }
+            }
+            if (vertex_indices.size() & 1)
+            {
+                vertex_indices.push_back(number_of_vertices - 1);
             }
 
             std::pair<EdgeWeight, EdgeWeight> result = 
