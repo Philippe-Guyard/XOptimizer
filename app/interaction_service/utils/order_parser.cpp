@@ -88,12 +88,13 @@ void file_to_order(QFile *file, QVector<Order>& order_list){
 		}
 }
 
+/*
 int main(){
-	QFile input("/Users/markdaychman/Desktop/out.csv");
-	QVector<Order> list;
-	file_to_order(&input, list);
-	std::cout << "==============" << std::endl;
-	std::cout << list.at(0).longitude << std::endl;
-	std::cout << list.at(0).latitude << std::endl;
+    QFile input("/Users/markdaychman/Desktop/out.csv");
+    QVector<Order> list;
+    file_to_order(&input, list);
+    std::cout << "==============" << std::endl;
+    std::cout << list.at(0).longitude << std::endl;
+    std::cout << list.at(0).latitude << std::endl;
 }
-
+*/

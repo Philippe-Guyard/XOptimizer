@@ -3,7 +3,7 @@
 #endif
 
 #include <parser/pbf-parser.h>
-#include <utils/downloader.cpp>
+#include <utils/api_wrapper.cpp>
 #include <utils/order_parser.cpp>
 #include <string>
 #pragma once
@@ -20,7 +20,7 @@ namespace XOptimizer {
         void parse_map();
 
         QString map_file_path;
-        Downloader downloader;
+        OpenStreetMapWrapper api_wrapper;
         QVector<Order> orders;
         std::shared_ptr<PBFParser::PBFFile> map_file_ptr;
     };

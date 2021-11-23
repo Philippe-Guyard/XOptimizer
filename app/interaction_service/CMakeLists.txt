@@ -19,13 +19,17 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
+        testing.cpp
         mainwindow.h
         mainwindow.ui
-        utils/downloader.cpp
+        utils/api_wrapper.cpp
+        utils/api_wrapper.moc
         utils/order_parser.cpp
         parser/pbf-parser.h
         interaction_service.cpp
         interaction_service.h
+        file_storage.cpp
+        file_storage.h
 )
 
 add_subdirectory(parser)
