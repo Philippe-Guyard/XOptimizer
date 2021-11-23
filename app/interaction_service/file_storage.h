@@ -3,8 +3,7 @@
 
 #include<QFile>
 
-class FileStorage
-{
+class FileStorage {
 public:
     FileStorage();
 
