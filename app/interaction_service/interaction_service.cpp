@@ -1,5 +1,4 @@
 #include "interaction_service.h"
-#include "utils/downloader.cpp"
 
 #include <iostream>
 #include <fstream>
@@ -10,17 +9,15 @@
 #include <string>
 
 namespace XOptimizer {
-    InteractionService::InteractionService()
-    {
-        QObject::connect(&downloader, &Downloader::finished, [this](bool sucess) {
-            qDebug() << "Download status: " << sucess;
-            this->parse_map();
-        });
+    InteractionService::InteractionService() {
+
     }
 
     void InteractionService::download_and_parse_map(const std::string &region, const std::string &department) {
         map_file_path = QString::fromStdString("./" + region + "_" + department + ".pbf");
-        downloader.download(region, department, map_file_path);
+        api_wrapper.download(region, department, map_file_path);
+        //TODO: Uncomment this. For now we don't have an implementation of the parser yet so it is useless
+        //parse_map();
     }
 
     void InteractionService::parse_map() {
