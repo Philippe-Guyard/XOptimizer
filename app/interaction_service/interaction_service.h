@@ -4,7 +4,7 @@
 
 #include <parser/pbf-parser.h>
 #include <utils/downloader.cpp>
-#include <utils/order_parser.cpp>
+#include <utils/order_parser.h>
 #include <string>
 #pragma once
 
