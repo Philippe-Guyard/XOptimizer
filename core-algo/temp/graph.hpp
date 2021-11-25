@@ -23,6 +23,8 @@ public:
     std::pair<double, double> get_geolocation() const;
     bool operator==(const VertexData &other) const;
     bool operator!=(const VertexData &other) const;
+    double get_distance(const VertexData &other) const;
+    std::vector<double> get_coordinates() const;
 };
 
 //overriding stds hash function for the VertexData class
@@ -176,6 +178,7 @@ protected:
     std::vector<int> TSP();
     std::vector<int> TSP(std::vector<int> &vertices_in_tour);
     std::vector<int> TSP(const std::vector<Vertex*> &vertices_in_tour);
+    std::vector<int> TSP_held_karp(); //only works in 1 inventory case
 
 };
 
