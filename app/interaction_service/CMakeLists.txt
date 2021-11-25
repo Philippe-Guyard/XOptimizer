@@ -25,6 +25,7 @@ set(PROJECT_SOURCES
         mainwindow.ui
         utils/api_wrapper.cpp
         utils/api_wrapper.moc
+	utils/api_wrapper.h
         utils/order_parser.cpp
         parser/pbf-parser.h
         interaction_service.cpp
