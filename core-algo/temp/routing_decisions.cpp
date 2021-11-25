@@ -14,7 +14,6 @@ std::vector< std::vector<int> > Graph::find_optimal_routing(
         const std::vector<Vertex*> &inventories_to_use,
         const std::vector<Vertex*> &clients_to_visit
     ){
-    
 
     if(clients_to_visit.size() > inventories_to_use.size()){
         assert(false); // send some warning message

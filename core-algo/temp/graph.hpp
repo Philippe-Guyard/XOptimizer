@@ -59,6 +59,9 @@ public:
     int get_index() const;
     void set_index(int new_index);
 
+    // TO IMPLEMENT
+    std::pair<EdgeWeight, EdgeWeight> get_eucliean_coordinates() const;
+
     VertexData get_data() const;
     bool operator==(const Vertex& other) const;
     bool operator!=(const Vertex &other) const;
@@ -111,6 +114,7 @@ public:
     EdgeWeight get_edge_weight(int i, VertexData dj) const;
     EdgeWeight get_edge_weight(VertexData di, VertexData dj) const;
 
+    std::vector< std::pair<EdgeWeight, EdgeWeight> > get_euclidean_coordinates(const std::vector<Vertex*> &vertices_to_process) const;
 
     std::vector<Edge*> min_spanning();
     std::vector<Edge*> min_spanning(const std::vector<int> &vertices_in_tree);

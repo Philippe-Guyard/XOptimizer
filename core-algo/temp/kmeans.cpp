@@ -16,6 +16,14 @@ double compute_distance(std::pair<int, int> p1, std::pair<int, int> p2){
 }
 
 
+/*
+* IMPORTANT:
+*
+*   k_means should actually return a vector<vector<int>> with each inner vector<int> containing the indices of the points in that cluster.
+* That is, you use the indices in the vector points.
+*
+*/
+
 std::vector<std::vector<std::pair<double, double> > > k_means(std::vector<std::pair<double, double> > points, int k, int max_iter, double eps){
     std::vector<std::pair<double, double> > centers;
     std::vector<std::pair<double, double> > not_centers = points;

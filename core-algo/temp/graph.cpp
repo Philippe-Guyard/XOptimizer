@@ -488,3 +488,14 @@ void Graph::best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int
 
     }
 }
+
+std::vector< std::pair<EdgeWeight, EdgeWeight> > Graph::get_euclidean_coordinates(const std::vector<Vertex*> &vertices_to_process) const{
+
+    std::vector< std::pair<EdgeWeight, EdgeWeight> > vertex_coordinates;
+    for(const auto &v : vertices_to_process){
+        vertex_coordinates.push_back( v->get_eucliean_coordinates() );
+    }
+
+    return vertex_coordinates;
+
+}

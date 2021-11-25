@@ -166,7 +166,7 @@ std::vector<int> Graph::TSP(std::vector<int> &vertices_in_tour){
     return finalPath;
 }
 
-std::vector<int> Graph::TSP(std::vector<Vertex*> &vertices_in_tour){
+std::vector<int> Graph::TSP(const std::vector<Vertex*> &vertices_in_tour){
     
     std::vector<int> indices_in_tour;
     for(auto& v : vertices_in_tour){
@@ -174,5 +174,5 @@ std::vector<int> Graph::TSP(std::vector<Vertex*> &vertices_in_tour){
     }
 
     return TSP(indices_in_tour);
-    
+
 }
