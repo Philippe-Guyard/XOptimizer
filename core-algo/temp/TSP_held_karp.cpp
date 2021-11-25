@@ -28,12 +28,12 @@ std::vector<int> Graph::TSP_held_karp(){
     }
     int curr = minind;
     int i = (1<<num_vertices)-1-(1<<minind);
-    while(path.size() != num_vertices - 1){
+    path.push_back(0);
+    path.push_back(minind);
+    while(path.size() != num_vertices){
         path.push_back(min_costs[i][curr].second);
         curr = min_costs[i][curr].second;
         i -= (1<<curr);
     }
-    path.push_back(0);
-    std::reverse(path.begin(), path.end());
     return path;
 }
