@@ -57,3 +57,5 @@ compile_commands.json
 .DS_Store
 
 .vscode
+build
+*.pbf
