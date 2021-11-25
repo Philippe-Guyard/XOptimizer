@@ -179,6 +179,7 @@ protected:
     std::vector<int> TSP(std::vector<int> &vertices_in_tour);
     std::vector<int> TSP(const std::vector<Vertex*> &vertices_in_tour);
     std::vector<int> TSP_held_karp(); //only works in 1 inventory case
+    
 
 };
 
