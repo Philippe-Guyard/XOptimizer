@@ -20,3 +20,13 @@ class RandomGraph : public Graph
             double density, 
             int seed);
 };
+
+class RandomTSP : public RandomGraph
+{
+    public:
+        EdgeWeight random_tsp(
+            int number_of_vertices,
+            EdgeWeight weight_limit,
+            int seed, 
+            bool symmetric);
+};
