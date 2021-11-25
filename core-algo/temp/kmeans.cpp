@@ -24,6 +24,52 @@ double compute_distance(std::pair<int, int> p1, std::pair<int, int> p2){
 *
 */
 
+
+// Maybe these function will make it easier to code 
+
+int find_closest_point(std::pair<double, double> point,const std::vector< std::pair<double, double> >& list_of_points){
+
+    int index_best = 0;
+    double distance_best = compute_distance(point , list_of_points[0]);
+
+    for(int i=1; i<list_of_points.size(); ++i){
+        if( compute_distance(point, list_of_points[i]) < distance_best ){
+            index_best = i;
+            distance_best = compute_distance(point, list_of_points[i]);
+        }
+    }
+
+    return index_best;
+}
+
+std::pair<double,double> find_center_of_mass(const std::vector< std::pair<double, double> >& list_of_points){
+
+    std::pair<double, double> mu = {0, 0};
+
+    for(const auto& point : list_of_points){
+        mu.first += point.first;
+        mu.second += point.second;
+    }
+
+    mu.first = mu.first / (EdgeWeight) list_of_points.size();
+    mu.second = mu.second / (EdgeWeight) list_of_points.size();
+
+    return mu;
+}
+
+double compute_cluster_cost(const std::vector< std::pair<double, double> >& list_of_points){
+
+    std::pair<double, double> mu = find_center_of_mass(list_of_points);
+
+    double total_cost = 0;
+    for(auto point : list_of_points){
+        total_cost += compute_distance(mu, point);
+    }
+
+    return total_cost;
+}
+
+
 std::vector<std::vector<std::pair<double, double> > > k_means(std::vector<std::pair<double, double> > points, int k, int max_iter, double eps){
     std::vector<std::pair<double, double> > centers;
     std::vector<std::pair<double, double> > not_centers = points;
