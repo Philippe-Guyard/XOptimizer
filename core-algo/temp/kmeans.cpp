@@ -20,8 +20,32 @@ std::vector<std::vector<std::pair<double, double> > > k_means(std::vector<std::p
     std::vector<std::pair<double, double> > centers;
     std::vector<std::pair<double, double> > not_centers = points;
     int n = points.size();
+    
+    /**
+     * 
+     * 
+    Using random properly is difficult in c++ you can search for mersene twister to do it properly.
+    
+    Code:
 
-    srand(time(0));
+    std::random_device dev;
+    std::mt19937 rng(dev());
+
+    rng.seed(time(0));
+
+    std::uniform_int_distribution<std::mt19937::result_type> distr(a, b); 
+
+    // samples an integer uniformly at random in [a,b]
+    distr(rng);
+
+    // samples another integer at random (independent from previous used samples)
+    distr(rng);
+    distr(rng);
+
+    */
+
+    // srand(time(0));
+
     int index = rand() % n;
     centers.push_back(points[index]);
     not_centers.erase(not_centers.begin()+index);

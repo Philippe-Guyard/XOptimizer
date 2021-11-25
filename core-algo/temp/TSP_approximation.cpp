@@ -80,6 +80,56 @@ std::vector<int> Graph::TSP(){
         deg[ (e->get_vertices()).second->get_index() ]++;
     }
 
+    // We get the vertices with odd degrees
+    std::vector<int> odd_degree_vertices;
+
+    for(int i=0; i<n; ++i){
+        if( deg[i]%2 == 1 ){
+            odd_degree_vertices.push_back(i);
+        }
+    }
+
+    std::vector< std::pair<int,int> > min_cost_matching = perfect_mincost_matching(odd_degree_vertices);
+
+    // Tactical renaming
+    std::vector<Edge*> &christofidesGraph = MST;
+
+    for(const auto &match : min_cost_matching){
+        christofidesGraph.push_back( adjacency_list[match.first][match.second] );
+    }
+
+    std::vector<int> eulerPath = euler_tour(christofidesGraph);
+
+    std::vector<bool> chosen(n, false);
+    std::vector<int> finalPath;
+
+    for(const auto& v : eulerPath){
+        if( chosen[v] ){
+            continue;
+        }
+
+        chosen[v] = true;
+        finalPath.push_back(v);
+    }
+
+    return finalPath;
+}
+
+
+// For the multiple inventories case
+std::vector<int> Graph::TSP(std::vector<int> &vertices_in_tour){
+
+    std::vector<Edge*> MST = min_spanning(vertices_in_tour);
+    
+    int n = num_vertices;
+
+    // Vector with the degrees of vertices in MST
+    std::vector<int> deg(n, 0);
+
+    for(const auto &e : MST){
+        deg[ (e->get_vertices()).first->get_index() ]++;
+        deg[ (e->get_vertices()).second->get_index() ]++;
+    }
 
     // We get the vertices with odd degrees
     std::vector<int> odd_degree_vertices;
@@ -114,4 +164,15 @@ std::vector<int> Graph::TSP(){
     }
 
     return finalPath;
+}
+
+std::vector<int> Graph::TSP(std::vector<Vertex*> &vertices_in_tour){
+    
+    std::vector<int> indices_in_tour;
+    for(auto& v : vertices_in_tour){
+        indices_in_tour.push_back(v->get_index());
+    }
+
+    return TSP(indices_in_tour);
+    
 }
