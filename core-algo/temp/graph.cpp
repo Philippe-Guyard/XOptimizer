@@ -399,8 +399,8 @@ void Graph::sort_edges(){
 
 }
 
-long double Graph::cost_of_path(const std::vector<int>& path) const{
-    long double cost = 0;
+EdgeWeight Graph::cost_of_path(const std::vector<int>& path) const{
+    EdgeWeight cost = 0;
     for(int i=1; i<path.size(); ++i){
         cost += get_edge_weight(path[i-1], path[i]);
     }

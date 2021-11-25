@@ -7,7 +7,7 @@
 #include<cstdio>
 #include<assert.h>
 
-using EdgeWeight = long double;
+using EdgeWeight = double;
 
 class VertexData{
 
@@ -164,12 +164,12 @@ protected:
     void swap_vertex_to_last(int pos);
     void sort_edges();
 
-    long double cost_of_path(const std::vector<int>& path) const;
+    EdgeWeight cost_of_path(const std::vector<int>& path) const;
     std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
 
     void best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int>& path, const std::vector<int> &path_vertices,
                                     int v_initial, int v_final,
-                                    long double &min_cost, std::vector<int>& min_cost_path) const;
+                                    EdgeWeight &min_cost, std::vector<int>& min_cost_path) const;
 
     // Eulerian Path
     std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
