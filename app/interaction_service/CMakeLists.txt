@@ -16,10 +16,10 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 
-
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
+        testing.h
         testing.cpp
         mainwindow.h
         mainwindow.ui
