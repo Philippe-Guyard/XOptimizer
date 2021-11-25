@@ -113,13 +113,17 @@ namespace XOptimizer::PBFParser {
         int granularity;
         long double lat_offset, lon_offset;
         int date_granularity;
+        std::vector<std::shared_ptr<PrimitiveGroup>> primitive_groups;
     public:
         PrimitiveBlock(std::vector<std::string> stringTable, int granularity, long double latOffset,
-                       long double lonOffset, int dateGranularity)
-                       : string_table(std::move(stringTable)),
-                         granularity(granularity), lat_offset(latOffset),
-                         lon_offset(lonOffset),
-                         date_granularity(dateGranularity) {}
+                       long double lonOffset, int dateGranularity,
+                       std::vector<std::shared_ptr<PrimitiveGroup>> primitiveGroups)
+                       :  string_table(std::move(stringTable)),
+                          granularity(granularity),
+                          lat_offset(latOffset),
+                          lon_offset(lonOffset),
+                          date_granularity(dateGranularity),
+                          primitive_groups(std::move(primitiveGroups)) {}
 
         [[nodiscard]] const std::vector<std::string> &get_string_table() const {
             return string_table;
@@ -139,6 +143,10 @@ namespace XOptimizer::PBFParser {
 
         [[nodiscard]] int get_date_granularity() const {
             return date_granularity;
+        }
+
+        [[nodiscard]] std::vector<std::shared_ptr<PrimitiveGroup>> get_primitive_groups() const {
+            return primitive_groups;
         }
     };
     class PBFFile {
