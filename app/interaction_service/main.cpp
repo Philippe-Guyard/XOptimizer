@@ -1,16 +1,13 @@
 #include "mainwindow.h"
+#include "testing.h"
+#include <QLoggingCategory>
 
 #include <QApplication>
 
-#include "testing.cpp"
-
-int main(int argc, char *argv[])
-{
-    test_download();
-    /*
+int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg, true);
     MainWindow w;
     w.show();
     return a.exec();
-    */
 }
