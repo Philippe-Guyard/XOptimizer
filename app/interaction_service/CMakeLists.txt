@@ -14,18 +14,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 
 
 set(PROJECT_SOURCES
         main.cpp
         mainwindow.cpp
+        testing.cpp
         mainwindow.h
         mainwindow.ui
-        utils/downloader.cpp
+        utils/api_wrapper.cpp
+        utils/api_wrapper.moc
         utils/order_parser.cpp
         parser/pbf-parser.h
         interaction_service.cpp
         interaction_service.h
+        utils/order_parser.h
+        file_storage.cpp
+        file_storage.h
 )
 
 add_subdirectory(parser)

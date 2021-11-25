@@ -69,7 +69,9 @@ private:
 //				QCoreApplication::quit(); You need to implement it
 		}
 };
-#include <main.moc>
+#include "api_wrapper.moc"
+
+/*
 int main(int argc, char *argv[])
 {
 		QCoreApplication a(argc, argv);
@@ -78,10 +80,10 @@ int main(int argc, char *argv[])
 
 		// Example of use
 
-		QFile file("/Users/markdaychman/Desktop/johanna.csv");
+        QFile file("/Users/markdaychman/Desktop/johanna.csv");
 		file.open(QIODevice::ReadWrite);
 
-		QFile outfile("/Users/markdaychman/Desktop/output.csv");
+        QFile outfile("/Users/markdaychman/Desktop/output.csv");
 		outfile.open(QIODevice::ReadWrite);
 
 
@@ -96,6 +98,7 @@ int main(int argc, char *argv[])
 
 		return a.exec();
 }
+*/
 
 
 

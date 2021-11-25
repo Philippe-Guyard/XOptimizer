@@ -1,30 +1,25 @@
-#include <QFile>
-#include <QTextStream>
-#include <stdio.h>
-#include <QtDebug>
-#include <QMap>
-#include <QVector>
-#include <iostream>
+#include "utils/order_parser.h"
 
-class Order{
-	public:
-		Order(){}
-		void set_id(int id){
-				this->id = id;
-				qDebug()<< "set id";
-		}
-		void set_adresse(QString adresse){
-				this->adresse = adresse;
-		}
-		void set_longitude(double longitude){
-				this->longitude = longitude;
-		}
-		void set_latitude(double latitude){
-				this->latitude = latitude;
-		}
-		void set_other(QString header,QString value){
-				this->other_dict.insert(header,value);
-		}
+void Order::set_id(int id){
+    this->id = id;
+    qDebug()<< "set id";
+}
+void Order::set_location(QString location){
+    this->location = location;
+    qDebug()<<"set location";
+}
+void Order::set_geolocation(QString geo){
+    this->geolocation = geo;
+    qDebug() << "set Geolocation";
+}
+void Order::set_other(QString header,QString value){
+    // overloads the value if header already exists
+    this->other_dict.insert(header,value);
+    qDebug() << "set other to key,value:" << header << ", " << value;
+}
+//vector<string> headers
+//split()
+//split_line[i] corresponds to headers[i]
 
 		double longitude;
 		double latitude;
@@ -34,7 +29,7 @@ class Order{
 };
 
 Order line_to_order(QString line, QVector<QString> header){
-		QRegExp rx(", (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)|,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)| ,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+        QRegularExpression rx(", (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)|,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)| ,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
 		QStringList line_list = line.split(rx); //split line according to regex without skipping empty parts
 		QListIterator<QString> line_it(line_list);
@@ -70,13 +65,13 @@ void file_to_order(QFile *file, QVector<Order>& order_list){
 		 * Rewrite so that I use the LineToOrder function!!!
 		 */
 		QTextStream stream(file);  //read a line
-		QRegExp rx(", (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)|,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)| ,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+        QRegularExpression rx(", (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)|,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)| ,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 		// This splits the string on ',' or ', ' or ' ,' that is followed by an even number of double quotes, sorry for the mess :(
 		// also make sure there are no lone quotation marks otherwise it fucks up everything
 
 		if(file->open(QIODevice::ReadOnly)){
 				QString line = stream.readLine();
-				QStringList header_list = line.split(rx, QString::SkipEmptyParts);
+                QStringList header_list = line.split(rx, Qt::SkipEmptyParts); //QString::SkipEmpty parts is obsolete and should not be used in new code
 				QVector<QString> headers = QVector<QString>::fromList(header_list);
 
 				for (QString line = stream.readLine();
@@ -88,12 +83,13 @@ void file_to_order(QFile *file, QVector<Order>& order_list){
 		}
 }
 
+/*
 int main(){
-	QFile input("/Users/markdaychman/Desktop/out.csv");
+    QFile input("/Users/markdaychman/Desktop/out.csv");
 	QVector<Order> list;
-	file_to_order(&input, list);
+    file_to_order(&input, list);
 	std::cout << "==============" << std::endl;
 	std::cout << list.at(0).longitude << std::endl;
 	std::cout << list.at(0).latitude << std::endl;
 }
-
+*/
