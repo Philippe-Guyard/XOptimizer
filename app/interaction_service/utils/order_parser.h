@@ -13,12 +13,13 @@ class Order{
     Order(){}
     void set_id(int id);
     void set_location(QString location);
-    void set_geolocation(QString geo);
+    void set_longitude(double longitude);
+    void set_latitude(double latitude);
     void set_other(QString header,QString value);
   private:
     int id; //order ID
-    QString location; //order geolocation
-    QString geolocation;
+    QString location; //order adress
+    std::pair<double, double> geolocation;
     QMap<QString , QString> other_dict;
 };
 
