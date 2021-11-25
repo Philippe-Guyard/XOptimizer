@@ -4,9 +4,7 @@
 // Standard libraries
 
 // External libraries
-#include "../src/graph.hpp"
-
-using EdgeWeight = long double;
+#include "../temp/graph.hpp"
 
 /**
  * Generete random undirected weight.

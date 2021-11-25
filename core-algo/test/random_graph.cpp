@@ -12,7 +12,6 @@
 // External libraries
 #include "random_graph.hpp"
 
-using EdgeWeight = long double;
 /**
  * Initialize to a random undirected weighted graph, with given density and weight limit.
  * 
@@ -106,7 +105,7 @@ void RandomTSP::random_tsp(
     int number_of_vertices,
     EdgeWeight weight_limit = 6000.0,
     int seed = -1, 
-    bool symmetric = True)
+    bool symmetric = true)
 {   
     // Seeding the random number generator
     if (seed == -1)
