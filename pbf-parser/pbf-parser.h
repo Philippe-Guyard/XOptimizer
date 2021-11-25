@@ -21,6 +21,7 @@
 #include <vector>
 #include "generated/fileformat.pb.h"
 #include "generated/osmformat.pb.h"
+#include "../core-algo/temp/map.hpp"
 
 namespace XOptimizer::PBFParser {
     class BBox {
@@ -45,7 +46,9 @@ namespace XOptimizer::PBFParser {
             return top;
         }
     };
-    class PrimitiveGroup {};
+    class PrimitiveGroup {
+        virtual void kar() {}
+    };
     class Node {
         long long id;
         std::vector<std::pair<std::string, std::string>> key_vals;
@@ -145,7 +148,7 @@ namespace XOptimizer::PBFParser {
             return date_granularity;
         }
 
-        [[nodiscard]] std::vector<std::shared_ptr<PrimitiveGroup>> get_primitive_groups() const {
+        [[nodiscard]] const std::vector<std::shared_ptr<PrimitiveGroup>>& get_primitive_groups() const {
             return primitive_groups;
         }
     };
@@ -189,6 +192,8 @@ namespace XOptimizer::PBFParser {
         [[nodiscard]] const std::vector<std::shared_ptr<PrimitiveBlock>> &get_blocks() const {
             return blocks;
         }
+
+        [[nodiscard]] std::shared_ptr<Map> to_map() const;
     };
 
     class PBFParser {

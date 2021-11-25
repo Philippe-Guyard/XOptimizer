@@ -8,6 +8,7 @@ namespace zlib {
 }
 
 #include <istream>
+#include <cmath>
 using namespace XOptimizer::PBFParser;
 using namespace zlib;
 
@@ -159,3 +160,64 @@ std::shared_ptr<PBFFile> PBFParser::parse() {
     return std::make_shared<PBFFile>(bbox, required_features, optional_features, writing_program, source, blocks);
 }
 
+long double haversine(long double lat1, long double lon1, long double lat2, long double lon2) {
+    long double R = 6371e3;
+    long double phi1 = lat1 * M_PI/180;
+    long double phi2 = lat2 * M_PI/180;
+    long double deltaPhi = (lat2-lat1) * M_PI/180;
+    long double deltaLambda = (lon2-lon1) * M_PI/180;
+
+    long double a = sin(deltaPhi/2) * sin(deltaPhi/2) +
+              cos(phi1) * cos(phi2) *
+              sin(deltaLambda/2) * sin(deltaLambda/2);
+    long double c = 2 * atan2(sqrt(a), sqrt(1-a));
+
+    return R * c;
+}
+
+std::shared_ptr<Map> PBFFile::to_map() const {
+    std::vector<long long> indices;
+    std::unordered_map<long long, int> indicesMap;
+    std::vector<VertexData> data;
+    for (const auto& block : blocks) {
+        for (auto group : block->get_primitive_groups()) {
+            if (auto nodesGroup = std::dynamic_pointer_cast<NodesPrimitiveGroup>(group)) {
+                for (const auto& node : nodesGroup->get_nodes()) {
+                    indicesMap[node->get_id()] = indices.size();
+                    indices.push_back(node->get_id());
+                    data.emplace_back(std::make_pair(node->get_lat(), node->get_lon()));
+                }
+            }
+        }
+    }
+    std::vector<std::vector<std::pair<int, EdgeWeight>>> adjacencyList;
+    adjacencyList.reserve(indices.size());
+    for (int i = 0; i < indices.size(); i++) adjacencyList.emplace_back();
+    for (const auto& block : blocks) {
+        for (auto group : block->get_primitive_groups()) {
+            if (auto waysGroup = std::dynamic_pointer_cast<WaysPrimitiveGroup>(group)) {
+                for (const auto& way : waysGroup->get_ways()) {
+                    for (int i = 0; i < way->get_refs().size() - 1; i++) {
+                        const auto& v1 = data[indicesMap[way->get_refs()[i]]];
+                        const auto& v2 = data[indicesMap[way->get_refs()[i+1]]];
+                        long double dist = haversine(
+                                v1.get_geolocation().first, v1.get_geolocation().second,
+                                v2.get_geolocation().first, v2.get_geolocation().second
+                        );
+                        adjacencyList[indicesMap[way->get_refs()[i]]].emplace_back(
+                                indicesMap[way->get_refs()[i+1]],
+                                dist
+                        );
+                    }
+                }
+            }
+        }
+    }
+    VertexData* vertexData = new VertexData[data.size()];
+    std::copy(data.begin(), data.end(), vertexData);
+    return std::make_shared<Map>(
+            data.size(),
+            vertexData,
+            std::move(adjacencyList)
+    );
+}

@@ -106,6 +106,9 @@ check_install_library(zlib ${ZLIB_URL} FALSE FALSE ZLIB_INSTALL_PATH)
 set(LIBPROTOBUF_PATH "${LIBPROTOBUF_INSTALL_PATH}/protobuf-${PROTO_VERSION}")
 set(ZLIB_PATH "${ZLIB_INSTALL_PATH}/zlib-${ZLIB_VERSION}")
 
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/libs/build/libprotobuf")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/libs/build/zlib")
+
 # build protobuf
 set(protobuf_BUILD_TESTS OFF)
 set(protobuf_BUILD_CONFORMANCE OFF)
@@ -114,13 +117,13 @@ set(protobuf_BUILD_PROTOC_BINARIES OFF)
 set(protobuf_BUILD_LIBPROTOC ON)
 set(protobuf_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
 set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
-add_subdirectory("${LIBPROTOBUF_PATH}/cmake")
+add_subdirectory("${LIBPROTOBUF_PATH}/cmake" "${CMAKE_BINARY_DIR}/libs/build/libprotobuf")
 
 # zlib
 set(SKIP_INSTALL_ALL TRUE)
 set(CMAKE_POLICY_DEFAULT_CMP0042 NEW)
 set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
-add_subdirectory("${ZLIB_PATH}")
+add_subdirectory("${ZLIB_PATH}" "${CMAKE_BINARY_DIR}/libs/build/zlib")
 set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "" FORCE)
 
 set(GENERATED_PARSER_FILES
