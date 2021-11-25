@@ -4,7 +4,7 @@
 
 #include <parser/pbf-parser.h>
 #include <utils/order_parser.h>
-#include <utils/api_wrapper.cpp>
+#include <utils/api_wrapper.h>
 #include <string>
 #pragma once
 
