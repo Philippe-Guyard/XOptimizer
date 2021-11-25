@@ -28,7 +28,7 @@ std::vector<int> Graph::TSP_held_karp(){
     }
     int curr = minind;
     int i = (1<<num_vertices)-1-(1<<minind);
-    while(path.size() < num_vertices){
+    while(path.size() != num_vertices - 1){
         path.push_back(min_costs[i][curr].second);
         curr = min_costs[i][curr].second;
         i -= (1<<curr);
