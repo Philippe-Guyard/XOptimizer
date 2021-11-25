@@ -1,4 +1,4 @@
-#include "../src/graph.hpp"
+#include "graph.hpp"
 
 class Map{
 

@@ -1,5 +1,4 @@
 #include "map.hpp"
-#include "graph.hpp"
 
 int Map::brute_force_closest_vertex_index(VertexData& vertex_data){
 
