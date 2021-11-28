@@ -1,39 +1,33 @@
-#include <QFile>
-#include <QTextStream>
-#include <stdio.h>
-#include <QtDebug>
-#include <QMap>
-#include <QVector>
-#include <iostream>
-#include <QRegularExpression> //QRegExp is an old class used for QT4, this class is implmemnted from QT5
-#include <QString>
+#include "order_parser.h"
+#include <QRegularExpression>
 
-class Order{
-	public:
-		Order(){}
-		void set_id(int id){
-				this->id = id;
-				qDebug()<< "set id";
-		}
-		void set_adresse(QString adresse){
-				this->adresse = adresse;
-		}
-		void set_longitude(double longitude){
-				this->longitude = longitude;
-		}
-		void set_latitude(double latitude){
-				this->latitude = latitude;
-		}
-		void set_other(QString header,QString value){
-				this->other_dict.insert(header,value);
-		}
+void Order::set_id(int id){
+    this->id = id;
+    qDebug()<< "set id";
+}
 
-		double longitude;
-		double latitude;
-		int id;
-		QString adresse;
-		QMap<QString , QString> other_dict;
-};
+void Order::set_location(QString location){
+    this->location = location;
+    qDebug()<<"set location";
+}
+
+void Order::set_other(QString header,QString value){
+    // overloads the value if header already exists
+    this->other_dict.insert(header,value);
+    qDebug() << "set other to key,value:" << header << ", " << value;
+}
+
+void Order::set_latitude(double latitude) {
+    geolocation.first = latitude;
+}
+
+void Order::set_longitude(double longitude) {
+    geolocation.second = longitude;
+}
+
+//vector<string> headers
+//split()
+//split_line[i] corresponds to headers[i]
 
 Order line_to_order(QString line, QVector<QString> header){
         QRegularExpression rx(", (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)|,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)| ,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
@@ -52,10 +46,10 @@ Order line_to_order(QString line, QVector<QString> header){
 						order->set_id(cur_item.toInt());
 				}
 				else if(cur_header.toLower() == "adresse"){
-						order->set_adresse(cur_item);
+						order->set_location(cur_item);
 				}
 				else if(cur_header.toLower() == "longitude"){
-						order->set_longitude(cur_item.toDouble());
+                        order->set_longitude(cur_item.toDouble());
 				}
 				else if(cur_header.toLower() == "latitude"){
 						order->set_latitude(cur_item.toDouble());
@@ -78,7 +72,7 @@ void file_to_order(QFile *file, QVector<Order>& order_list){
 
 		if(file->open(QIODevice::ReadOnly)){
 				QString line = stream.readLine();
-                QStringList header_list = line.split(rx, Qt::SkipEmptyParts); //QString::SkipEmpty parts is obsolete and should not be used in new code
+                QStringList header_list = line.split(rx); //QString::SkipEmpty parts is obsolete and should not be used in new code
 				QVector<QString> headers = QVector<QString>::fromList(header_list);
 
 				for (QString line = stream.readLine();
