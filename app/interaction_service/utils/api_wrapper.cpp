@@ -49,7 +49,7 @@ void OpenStreetMapWrapper::handle_finished(QNetworkReply *reply){
 				QByteArray read = reply->readAll();
 				QString filename = reply->request().attribute(QNetworkRequest::User).toString();
 				QFile out(filename);
-				if(out.open(QIODevice::WriteOnly)){
+				if(out.open(QIODevice::ReadWrite)){
 						out.write(read);
 						out.close();
 				}
@@ -59,6 +59,10 @@ void OpenStreetMapWrapper::handle_finished(QNetworkReply *reply){
 		}
 		reply->deleteLater();
 //				QCoreApplication::quit(); You need to implement it
+}
+
+QNetworkAccessManager* OpenStreetMapWrapper::get_manager(){
+	return &manager;
 }
 
 #include "api_wrapper.moc"

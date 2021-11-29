@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     qDebug() << "Before download.";
-    test_download(s);
+//    test_download(s);
     qDebug() << "After download.";
 }
 

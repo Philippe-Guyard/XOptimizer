@@ -19,7 +19,7 @@ namespace XOptimizer {
     }
 
     void InteractionService::download_and_parse_map(const std::string &region, const std::string &department) {
-        map_file_path = QString::fromStdString("/home/philippeg/Desktop/Bachelor/CSE201/project/XOptimizer/app/interaction_service/" + region + "_" + department + ".pbf");
+//				map_file_path = QString::fromStdString("" + region + "_" + department + ".pbf");
         api_wrapper.download(region, department, map_file_path);
         //TODO: Uncomment this. For now we don't have an implementation of the parser yet so it is useless
         //parse_map();
@@ -38,4 +38,12 @@ namespace XOptimizer {
     void InteractionService::read_csv(QFile* file) {
         file_to_order(file, orders);
     }
+
+		void InteractionService::set_map_file_path(QString path){
+			map_file_path = path;
+		}
+
+		OpenStreetMapWrapper* InteractionService::get_api_wrapper(){
+			return &api_wrapper;
+		}
 }

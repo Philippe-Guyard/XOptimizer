@@ -14,6 +14,7 @@ public:
 	OpenStreetMapWrapper(QObject* parent=nullptr);
 	void download(const std::string&, const std::string&, const QFile&);
 	void searchCSV(QFile&, QFile&);
+	QNetworkAccessManager* get_manager();
 
 private:
 	QNetworkAccessManager manager;

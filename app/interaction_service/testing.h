@@ -5,6 +5,15 @@
 
 #include "interaction_service.h"
 
-void test_download(XOptimizer::InteractionService& s);
-void test_parse_orders(XOptimizer::InteractionService& s);
-void test_search_csv(XOptimizer::InteractionService& s);
+class Testing{
+public:
+	Testing(XOptimizer::InteractionService*);
+	void test_download();
+	void test_parse_orders();
+	void test_search_csv();
+	void run_all();
+	XOptimizer::InteractionService* service;
+	QString test_resources;
+};
+
+

@@ -16,12 +16,13 @@ namespace XOptimizer {
 
         void download_and_parse_map(const std::string& region, const std::string& department);
         void read_csv(QFile* file);
+				void set_map_file_path(QString);
+				OpenStreetMapWrapper* get_api_wrapper();
+				QVector<Order> orders;
     private:
         void parse_map();
-
-        QString map_file_path;
-        OpenStreetMapWrapper api_wrapper;
-        QVector<Order> orders;
+				QString map_file_path;
+				OpenStreetMapWrapper api_wrapper;
         std::shared_ptr<PBFParser::PBFFile> map_file_ptr;
     };
 };
