@@ -8,7 +8,9 @@
 #include <QDebug>
 #include <QStandardItemModel>
 
+
 using namespace std;
+
 QString chosenCity;
 QString chosenDepartment;
 QStringList departments = { "Auvergne-Rhône-Alpes", "Bourgogne-Franche-Comté", "Bretagne", "Centre-Val de Loire",};
@@ -81,8 +83,13 @@ void XOptimizer::on_uploadFileButton_clicked()
 
 void XOptimizer::on_pushButton_clicked()
 {
-    QString file_name = "C:/Users/tubvi/OneDrive/Stalinis kompiuteris/XOptimizer/GUI/writefile.txt";
+    QDir dir(".");
+    QString file_name = dir.absolutePath() + "/writefile.txt";
     saveFile(file_name); //To this file the edited data is saved and then we give this file to Marten
+
+    QFile file(file_name);
+    //Pass it to Marten here
+
 }
 
 void XOptimizer::saveFile(const QString &name)
