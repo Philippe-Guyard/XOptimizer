@@ -33,4 +33,10 @@ class RandomGraph : public Graph
             EdgeWeight weight_limit,
             int seed, 
             bool symmetric);
+        
+        void random_graph_with_eulerian_circuits(
+            int number_of_vertices, 
+            EdgeWeight weight_limit, 
+            double density, 
+            int seed);
 };

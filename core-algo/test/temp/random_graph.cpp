@@ -9,6 +9,7 @@
 #include <vector>                   // std::vector
 #include <limits>                   // std::numeric_limits
 #include <queue>                    // std::priority_queue
+#include <stdexcept>                // std::invalid_argument
 
 // External libraries
 #include "random_graph.hpp"
@@ -38,30 +39,19 @@ void RandomGraph::random_graph(
     std::uniform_real_distribution<double> random_coordinate(-180.0, 180.0);
     std::uniform_real_distribution<long double> random_weight(0.0, weight_limit);
 
-    // Generate random vertices and construct unordered_map
-    num_vertices = number_of_vertices;
-    vertices.resize(num_vertices);
-    for (int i = 0; i < num_vertices; i++)
+    // Generate random vertices
+    VertexData* vertex_data_array = new VertexData[number_of_vertices];
+    std::vector<std::vector<EdgeWeight> > distances(number_of_vertices);
+    for (int i = 0; i < number_of_vertices; i++)
     {
-        VertexData vertex_data = VertexData({random_coordinate(rng), random_coordinate(rng)});
-        vertices[i] = new Vertex(
-                        vertex_data, 
-                        i);
-        vertex_position[vertex_data] = i;
-    }
-
-    // Resize adjacency list
-    adjacency_list.resize(num_vertices);
-    for (int i = 0; i < num_vertices; i++)
-    {
-        adjacency_list[i].resize(num_vertices, nullptr);
+        vertex_data_array[i] = VertexData({random_coordinate(rng), random_coordinate(rng)});
+        distances[i].assign(number_of_vertices, std::numeric_limits<EdgeWeight>::max());
     }
 
     // Build underlying random spanning tree
     // Ref: Alexey S. Rodionov and Hyunseung Choo, On Generating Random Network Structures: Trees, ICCS 2003, LNCS 2658, pp. 879-887, 2003.
-    num_edges = 0;
-    std::vector<int> temp(num_vertices),  
-        added(num_vertices);
+    std::vector<int> temp(number_of_vertices),  
+        added(number_of_vertices);
     for (int i = 0; i < num_vertices; i++) temp[i] = i;
     std::shuffle(temp.begin(), temp.end(), rng);
     added[0] = temp[0];
@@ -71,15 +61,7 @@ void RandomGraph::random_graph(
             v = temp[count],
             u = added[index];
         added[count] = v;
-        // Passing vertices by address
-        Edge* new_edge_ptr = new Edge(
-                                    {vertices[u], 
-                                    vertices[v]}, 
-                                    random_weight(rng), 
-                                    num_edges++);
-        // Passing edge by reference
-        edges.push_back(new_edge_ptr);
-        adjacency_list[u][v] = adjacency_list[v][u] = new_edge_ptr;
+        distances[u][v] = distances[v][u] = random_weight(rng);
     }
 
     // Generate additional random edges
@@ -90,18 +72,13 @@ void RandomGraph::random_graph(
         {
             if (bern_dist(rng) && adjacency_list[i][j] == nullptr)
             {
-                // Passing vertices by address
-                Edge* new_edge_ptr = new Edge(
-                                            {vertices[i], 
-                                            vertices[j]}, 
-                                            random_weight(rng), 
-                                            num_edges++);
-                // Passing edge by reference
-                edges.push_back(new_edge_ptr);
-                adjacency_list[i][j] = adjacency_list[j][i] = new_edge_ptr;
+                distances[i][j] = distances[j][i] = random_weight(rng);
             }
         }
     }
+
+    Graph(number_of_vertices, vertex_data_array, distances);
+    delete vertex_data_array;
 }
 
 /**
@@ -324,4 +301,97 @@ std::pair<EdgeWeight, EdgeWeight> RandomGraph::random_tsp(
 
     std::vector<int> computed_path = TSP();
     return {optimal_cost, cost_of_path(computed_path)};
+}
+
+void RandomGraph::random_graph_with_eulerian_circuits(
+    int number_of_vertices, 
+    EdgeWeight weight_limit = 6000.0, 
+    double density = 0.5, 
+    int seed = -1)
+{
+    if (number_of_vertices < 2)
+    {
+        throw std::invalid_argument("Number of vertices is insufficient.");
+    }
+    
+    // Seeding the random number generator
+    if (seed == -1)
+    {
+        seed = std::chrono::system_clock::now().time_since_epoch().count();
+    }
+    std::mt19937_64 rng(seed);
+    std::uniform_real_distribution<double> random_coordinate(-180.0, 180.0);
+    std::uniform_real_distribution<long double> random_weight(0.0, weight_limit);
+
+    // Generate random vertices
+    VertexData* vertex_data_array = new VertexData[number_of_vertices];
+    std::vector<std::vector<EdgeWeight> > distances(number_of_vertices);
+    for (int i = 0; i < number_of_vertices; i++)
+    {
+        vertex_data_array[i] = VertexData({random_coordinate(rng), random_coordinate(rng)});
+        distances[i].assign(number_of_vertices, std::numeric_limits<EdgeWeight>::max());
+    }
+
+    // Build underlying random spanning tree
+    // Ref: Alexey S. Rodionov and Hyunseung Choo, On Generating Random Network Structures: Trees, ICCS 2003, LNCS 2658, pp. 879-887, 2003.
+    std::vector<int>
+        temp(number_of_vertices),  
+        added(number_of_vertices),  
+        deg(number_of_vertices), 
+        odd_deg_vertices(number_of_vertices);
+    int cnt = 0;
+    for (int i = 0; i < num_vertices; i++) temp[i] = i;
+    std::shuffle(temp.begin(), temp.end(), rng);
+    added[0] = temp[0];
+    for (int count = 1; count < num_vertices; count++)
+    {
+        int index = rng()%count,
+            v = temp[count],
+            u = added[index];
+        added[count] = v;
+        deg[u]++, deg[v]++;
+        distances[u][v] = distances[v][u] = random_weight(rng);
+    }
+
+    for (int i = 0; i < number_of_vertices; i++)
+    {
+        if (deg[i] & i)
+        {
+            odd_deg_vertices[cnt++] = i;
+        }
+    }
+
+    // Generate additional random edges
+    std::bernoulli_distribution bern_dist(density);
+    while (cnt)
+    {
+        std::uniform_int_distribution<int> random_vertices(0, cnt-1);
+        int u = random_vertices(rng), v = random_vertices(rng);
+        while (u == v)
+        {
+            v = random_vertices(rng);
+        }
+
+        u = odd_deg_vertices[u],
+        v = odd_deg_vertices[v];
+
+        if (distances[u][v] == std::numeric_limits<EdgeWeight>::max())
+        {
+            distances[u][v] = distances[v][u] = random_weight(rng);
+            deg[u]++, deg[v]++;
+        }
+        else
+        {
+            distances[u][v] = distances[v][u] = random_weight(rng);
+            deg[u]--, deg[v]--;
+        }
+
+        std::swap(odd_deg_vertices[u], odd_deg_vertices[cnt-1]);
+        cnt--;
+        std::swap(odd_deg_vertices[v], odd_deg_vertices[cnt-1]);
+        cnt--;
+    }
+
+    Graph(number_of_vertices, vertex_data_array, distances);
+    delete vertex_data_array;
 }
