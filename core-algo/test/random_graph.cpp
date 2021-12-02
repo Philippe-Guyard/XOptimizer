@@ -101,7 +101,7 @@ void RandomGraph::random_graph(
     }
 }
 
-void RandomTSP::random_tsp(
+EdgeWeight RandomTSP::random_tsp(
     int number_of_vertices,
     EdgeWeight weight_limit = 6000.0,
     int seed = -1, 
@@ -113,7 +113,7 @@ void RandomTSP::random_tsp(
         seed = std::chrono::system_clock::now().time_since_epoch().count();
     }
     std::mt19937_64 rng(seed);
-    std::uniform_real_distribution<double> random_coordinate(-180.0, 180.0);
+    std::uniform_real_distribution<EdgeWeight> random_coordinate(-180.0, 180.0);
     std::uniform_real_distribution<EdgeWeight> random_weight(0.0, weight_limit);
 
     // Generate random data for random graph
@@ -133,7 +133,7 @@ void RandomTSP::random_tsp(
     {
         permu[i] = i;
         alpha[i] = random_weight();
-        gamma = min(gamma, 2*alpha[i]);
+        gamma = std::min(gamma, 2*alpha[i]);
     }
     std::random_shuffle(permu.begin(), permu.end());
     
@@ -144,7 +144,7 @@ void RandomTSP::random_tsp(
         {
             if (u < v)
             {
-                distances[u][w] = distances[w][u] = alpha[u] + alpha[w] + random_pertubation();
+                distances[u][v] = distances[v][u] = alpha[u] + alpha[v] + random_pertubation();
             }
         }
     }
