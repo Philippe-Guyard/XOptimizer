@@ -22,9 +22,7 @@ std::vector<int> Graph::best_path_brute_force(const std::vector<int>& path_verti
 
     int m = path_vertices.size();
 
-    assert( m >= 2 );
-
-    if( m == 2 ){
+    if( m <= 2 ){
         return path_vertices;
     }
 
@@ -32,7 +30,6 @@ std::vector<int> Graph::best_path_brute_force(const std::vector<int>& path_verti
     int v_final = path_vertices[m-1];
 
     std::vector<bool> chosen(m-2, false);
-
 
     std::vector<int> min_cost_path;
     min_cost_path.push_back(v_initial);
@@ -47,9 +44,16 @@ std::vector<int> Graph::best_path_brute_force(const std::vector<int>& path_verti
     return min_cost_path;
 }
 
-void Graph::best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int> &current_path, const std::vector<int> &path_vertices,
-                                    int v_initial, int v_final,
-                                    EdgeWeight &min_cost, std::vector<int>& min_cost_path) const{
+void Graph::best_path_brute_force_aux
+(
+    std::vector<bool> &chosen,
+    std::vector<int> &current_path,
+    const std::vector<int> &path_vertices,
+    int v_initial,
+    int v_final,
+    EdgeWeight &min_cost,
+    std::vector<int>& min_cost_path
+) const{
 /**
  * 
  * 

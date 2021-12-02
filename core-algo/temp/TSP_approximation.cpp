@@ -29,12 +29,25 @@ std::vector<int> Graph::euler_tour(const std::vector<Edge*>& smaller_graph) cons
         smaller_graph_adjacency_list.resize(n);
     }
 
+    // Degree List
+    std::vector<int> degrees;
+    degrees.resize(n);
+
     for(const auto &e : smaller_graph){
         int x1 = (e->get_vertices()).first->get_index();
         int x2 = (e->get_vertices()).second->get_index();
 
         smaller_graph_adjacency_list[x1][x2]++;
         smaller_graph_adjacency_list[x2][x1]++;
+
+        degrees[x1]++;
+        degrees[x2]++;
+    }
+    
+    for(int i=0; i<n; ++i){
+        if( degrees[i] % 2 != 0){
+            throw std::exception();
+        }
     }
 
     std::stack<int> st;

@@ -11,32 +11,45 @@
 #include "graph.hpp"
 #include "kmeans.cpp"
 
-std::vector< std::vector<Vertex*> > Graph::cluster_vertices(const std::vector<Vertex*> &vertices_to_cluster, int num_clusters){
+std::vector< std::vector<int> >Graph::cluster_vertices(const std::vector<int> &vertices_to_cluster, int num_clusters){
 
-    return k_means(get_euclidean_coordinates(vertices_to_cluster), num_clusters);
+    std::vector< std::pair<double, double> > vertex_coordinates;
+
+    for(auto index : vertices_to_cluster){
+        vertex_coordinates.push_back( vertices[index]->get_eucliean_coordinates() );
+    }
+
+    
+    std::vector< std::vector<int> > clusters = k_means(vertex_coordinates, num_clusters);
+
+    return clusters;
 
 }
 
 
-std::pair< EdgeWeight, EdgeWeight > Graph::find_cluster_center(const std::vector<Vertex*> &cluster){
+std::pair<double, double> Graph::find_cluster_center(const std::vector<int> &cluster){
 
-    std::vector< std::pair<EdgeWeight, EdgeWeight> > vertex_coordinates; 
+    std::vector< std::pair<double, double> > vertex_coordinates; 
 
-    std::pair<EdgeWeight, EdgeWeight> mu = {0, 0};
+    for(auto index : cluster){
+        vertex_coordinates.push_back( vertices[index]->get_eucliean_coordinates() );
+    }
+
+    std::pair<double, double> mu = {0, 0};
 
     for(const auto& point : vertex_coordinates){
         mu.first += point.first;
         mu.second += point.second;
     }
 
-    mu.first = (EdgeWeight) mu.first / (EdgeWeight) cluster.size();
-    mu.second = (EdgeWeight) mu.second / (EdgeWeight) cluster.size();
+    mu.first = mu.first / (double) cluster.size();
+    mu.second = mu.second / (double) cluster.size();
 
     return mu;
 
 }
 
-std::vector< std::pair< EdgeWeight, EdgeWeight > > Graph::find_clusters_centers(const std::vector< std::vector<Vertex*> > &clusters){
+std::vector< std::pair<double,double> > Graph::find_clusters_centers(const std::vector< std::vector<int> > &clusters){
 
     std::vector< std::pair< EdgeWeight, EdgeWeight > > centers;
     for(const auto& cluster : clusters){

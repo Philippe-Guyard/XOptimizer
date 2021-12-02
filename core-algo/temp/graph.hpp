@@ -111,41 +111,77 @@ public:
 
     int get_vertex_position(VertexData &d) const;
 
+
+    // get edge weight functions
     EdgeWeight get_edge_weight(int i, int j) const;
     EdgeWeight get_edge_weight(VertexData di, int j) const;
     EdgeWeight get_edge_weight(int i, VertexData dj) const;
     EdgeWeight get_edge_weight(VertexData di, VertexData dj) const;
 
+
     std::vector< std::pair<EdgeWeight, EdgeWeight> > get_euclidean_coordinates(const std::vector<Vertex*> &vertices_to_process) const;
 
+
+    // minimum spanning tree functions
     std::vector<Edge*> min_spanning();
     std::vector<Edge*> min_spanning(const std::vector<int> &vertices_in_tree);
 
+
+    // mincost matching functions
     std::vector<std::pair<int,int>> perfect_mincost_matching(std::vector<int> vertex_indices);
     std::vector<std::pair<int,int>> heuristic_perfect_mincost_matching(std::vector<int> vertex_indices);
 
-    std::vector< std::vector<int> > find_optimal_routing(
-        const std::vector<Vertex*> &inventories_to_use,
-        const std::vector<Vertex*> &clients_to_visit
+    std::vector< std::pair<int, int> > euclidean_mincost_matching
+    (
+        const std::vector< std::pair<double, double> > &left_points,
+        const std::vector< std::pair<double, double> > &right_point
     );
+    
 
-    /*
-    * CLUSTERING MEMBER FUNCTIONS:
-    */
+    // vertex clustering functions
+    std::vector<std::vector<int>> cluster_vertices(const std::vector<int> &vertices_to_cluster, int num_clusters);
 
-    std::vector< std::vector<Vertex*> > cluster_vertices(const std::vector<Vertex*> &vertices_to_cluster, int num_clusters);
-    std::pair< EdgeWeight, EdgeWeight > find_cluster_center(const std::vector<Vertex*> &cluster);
-    std::vector< std::pair< EdgeWeight, EdgeWeight > > find_clusters_centers(const std::vector< std::vector<Vertex*> > &clusters);
+    std::pair<double, double> find_cluster_center(const std::vector<int> &cluster);
 
-    std::vector< std::pair<int, int> > euclidean_mincost_matching(
-        const std::vector< std::pair<EdgeWeight, EdgeWeight> > &left_points,
-        const std::vector< std::pair<EdgeWeight, EdgeWeight> > &right_point
-        );
+    std::vector< std::pair<double, double> > find_clusters_centers(const std::vector< std::vector<int> > &clusters);
+
 
     // In the return the pair {i, j} represents inventory i and cluster j
     std::vector< std::pair<int, int> > match_inventories_to_clusters(
-        const std::vector<Vertex*> &inventories_to_match,
-        const std::vector< std::pair<EdgeWeight, EdgeWeight> > &centers_of_clusters_to_match
+        const std::vector<int> &inventories_to_match,
+        const std::vector< std::pair<double, double> > &centers_of_clusters_to_match
+    );
+
+
+    // Functions for path analysis
+    EdgeWeight cost_of_path(const std::vector<int>& path) const;
+
+    std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
+
+    void best_path_brute_force_aux
+    (
+        std::vector<bool> &chosen,
+        std::vector<int>& path, const std::vector<int> &path_vertices,
+        int v_initial,
+        int v_final,
+        EdgeWeight &min_cost,
+        std::vector<int>& min_cost_path
+    ) const;
+
+    // Eulerian Path
+    std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
+
+    // TSP = Travelling Salesman Problem
+    std::vector<int> TSP();
+    std::vector<int> TSP(std::vector<int> &vertices_in_tour);
+    std::vector<int> TSP(const std::vector<Vertex*> &vertices_in_tour);
+    std::vector<int> TSP_held_karp(); //only works in 1 inventory case
+
+    // Multiple inventories
+    std::vector< std::vector<int> > find_optimal_routing
+    (
+        const std::vector<int> &inventories_to_use,
+        const std::vector<int> &clients_to_visit
     );
 
 protected:
@@ -162,24 +198,7 @@ protected:
 
     void swap_vertex_indices(int pos1, int pos2);
     void swap_vertex_to_last(int pos);
-    void sort_edges();
-
-    EdgeWeight cost_of_path(const std::vector<int>& path) const;
-    std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
-
-    void best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int>& path, const std::vector<int> &path_vertices,
-                                    int v_initial, int v_final,
-                                    EdgeWeight &min_cost, std::vector<int>& min_cost_path) const;
-
-    // Eulerian Path
-    std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
-
-    // TSP = Travelling Salesman Problem
-    std::vector<int> TSP();
-    std::vector<int> TSP(std::vector<int> &vertices_in_tour);
-    std::vector<int> TSP(const std::vector<Vertex*> &vertices_in_tour);
-    std::vector<int> TSP_held_karp(); //only works in 1 inventory case
-    
+    void sort_edges();    
 
 };
 
