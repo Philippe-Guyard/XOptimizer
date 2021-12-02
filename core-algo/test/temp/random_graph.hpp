@@ -18,11 +18,16 @@ class RandomGraph : public Graph
             EdgeWeight weight_limit, 
             double density, 
             int seed);
-};
+        
+        std::pair<EdgeWeight, EdgeWeight> minimum_spanning_tree_test(
+            int number_of_vertices,
+            EdgeWeight weight_limit, 
+            double density, 
+            int seed);
+        
+        std::pair<EdgeWeight, EdgeWeight> maximal_mincost_matching_test(
+            std::vector<int>& vertex_indices);
 
-class RandomTSP : public RandomGraph
-{
-    public:
         std::pair<EdgeWeight, EdgeWeight> random_tsp(
             int number_of_vertices,
             EdgeWeight weight_limit,

@@ -8,9 +8,12 @@
 #include <algorithm>                // std::random_shuffle, std::min
 #include <vector>                   // std::vector
 #include <limits>                   // std::numeric_limits
+#include <queue>                    // std::priority_queue
 
 // External libraries
 #include "random_graph.hpp"
+#include "../../lib/blossom5-v2_05/PerfectMatching.h"
+#include "../../lib/blossom5-v2_05/GEOM/GeomPerfectMatching.h"
 
 /**
  * Initialize to a random undirected weighted graph, with given density and weight limit.
@@ -101,7 +104,165 @@ void RandomGraph::random_graph(
     }
 }
 
-std::pair<EdgeWeight, EdgeWeight> RandomTSP::random_tsp(
+/**
+ * Generate a random undirected weighted graph, and compute the cost of minimum 
+ * spanning tree using Prim's algorithm. The result is then compared with official
+ * method implemented and provided in Graph class.
+ * 
+ * Independent implementation of Minimum Spanning Tree algorithm, for testing purpose.
+ * Here, Prim's algorithm is chosen.
+ * 
+ * @param {int}         number_of_vertices  : Number of vertices.
+ * @param {EdgeWeight}  weight_limit        : Upper limit for ranom weight. The lower bound is set by default to 0. Default set to be 6000.0
+ * @param {double}      density             : Density of random graph from 0 to 1, e.g. 0 corresponds to a tree, and 1 corresponds to complete graph. Default set to be 0.5
+ * @param {int}         seed                : Seed fed into random number generator. Default set to be the EPOCH time at runtime.
+ * 
+ * @return {pair<EdgeWeight, EdgeWeight>} A pair of EdgeWeigt {expected_total_cost, computed_total_cost}, where expected_total_cost is computed by Prim's algorithm, and the computed_total_cost is computed by official method.
+ */
+std::pair<EdgeWeight, EdgeWeight> RandomGraph::minimum_spanning_tree_test(
+    int number_of_vertices,
+    EdgeWeight weight_limit = 6000.0, 
+    double density = 0.5, 
+    int seed = -1)
+{
+    // Seeding the random number generator
+    if (seed == -1)
+    {
+        seed = std::chrono::system_clock::now().time_since_epoch().count();
+    }
+
+    if (density < 0.0 || density > 1.0)
+    {
+        density = 0.5;
+    }
+
+    // randomly initialize the graph
+    random_graph(number_of_vertices, 
+                    weight_limit, 
+                    density, 
+                    seed);
+    
+    // Actual Prim's algorithm implementation
+    std::vector<bool> added(number_of_vertices);
+    std::vector<EdgeWeight> final_cost(number_of_vertices, std::numeric_limits<EdgeWeight>::max());
+    final_cost[0] = 0;
+
+    std::priority_queue<std::pair<EdgeWeight, int>,
+                        std::vector<std::pair<EdgeWeight, int> >,
+                        std::greater<std::pair<EdgeWeight, int> >
+                        > queue;
+    queue.push({0, 0});
+
+    EdgeWeight expected_total_cost = 0.0,
+                computed_total_cost = 0.0;
+    
+    // If the node is node not yet added to the minimum spanning tree add it, and increment the cost.
+    while(!queue.empty())
+    {
+        std::pair<EdgeWeight, int> u = queue.top();
+        queue.pop();
+        int index = u.second;
+
+        if(!added[index])
+        {
+            final_cost[index] = u.first;
+            expected_total_cost += u.first;
+            added[index] = true;
+
+            // Iterate through all the nodes adjacent to the node taken out of priority queue.
+            // Push only those nodes (weight,node) that are not yet present in the minumum spanning tree.
+            for(int i = 0; i < number_of_vertices; i++)
+            {
+                if(adjacency_list[index][i] != nullptr && 
+                    !added[i] && 
+                    u.first + (*adjacency_list[index][i]).get_weight() < final_cost[i])
+                {
+                    queue.push({(*adjacency_list[index][i]).get_weight(),
+                                i});
+                }
+            }
+        }
+    }
+
+    std::vector<Edge*> minimum_spanning_tree_kruskal = min_spanning();
+    for (Edge* e : minimum_spanning_tree_kruskal)
+    {
+        computed_total_cost += e->get_weight();
+    }
+
+    return {expected_total_cost, computed_total_cost};
+}
+
+std::pair<EdgeWeight, EdgeWeight> RandomGraph::maximal_mincost_matching_test(
+    std::vector<int>& vertex_indices)
+{
+    EdgeWeight computed_solution = 0, 
+                expected_solution = 0;
+    
+    bool odd_num_vertices = false;
+    std::vector<std::pair<VertexData, EdgeWeight> > distances(num_vertices);
+    for (int i = 0; i < num_vertices; i++)
+    {
+        distances[i] = {vertices[i]->get_data(), std::numeric_limits<EdgeWeight>::max()};
+    }
+    VertexData dummy = VertexData();
+
+    if (vertex_indices.size() & 1)
+    /* 
+    If the number of vertices is odd, we add another dummy vertex with weight of edges to
+    other vertices to be infinity.
+    */
+    {
+        odd_num_vertices = true;
+        add_vertex(dummy, distances);
+        vertex_indices.push_back(num_vertices - 1);
+    }
+    int number_of_vertices = vertex_indices.size(),
+        number_of_edges = number_of_vertices * (number_of_vertices - 1) >> 1;
+    
+    PerfectMatching* perfect_matching = new PerfectMatching(number_of_vertices, number_of_edges);
+    for (int i = 0; i < number_of_vertices; i++)
+    {
+        for (int j = i+1; j < number_of_vertices; j++)
+        {
+            perfect_matching->AddEdge(i, j, get_edge_weight(vertex_indices[i], vertex_indices[j]));
+        }
+    }
+    
+    struct PerfectMatching::Options options;
+    perfect_matching->options = options;
+    perfect_matching->Solve();
+
+    for (int ind1 = 0; ind1 < number_of_vertices; ind1++)
+    {
+        int ind2 = perfect_matching->GetMatch(ind1);
+        if (ind1 < ind2 && 
+                (!odd_num_vertices || 
+                ind2 < num_vertices - 1)
+            )
+        {
+            expected_solution += get_edge_weight(vertex_indices[ind1], vertex_indices[ind2]);
+        }
+    }
+    delete perfect_matching;
+    
+    if (odd_num_vertices)
+    {
+        delete_vertex(dummy);
+        vertex_indices.pop_back();
+    }
+    
+    std::vector<std::pair<int, int> > computed_solution_edges = 
+        perfect_mincost_matching(vertex_indices);
+    for (std::pair<int, int> e : computed_solution_edges)
+    {
+        computed_solution += get_edge_weight(e.first, e.second);
+    }
+    
+    return {expected_solution, computed_solution};
+}
+
+std::pair<EdgeWeight, EdgeWeight> RandomGraph::random_tsp(
     int number_of_vertices,
     EdgeWeight weight_limit = 6000.0,
     int seed = -1, 

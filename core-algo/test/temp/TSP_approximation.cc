@@ -31,7 +31,7 @@ namespace
             double density = random_density(rng);
             long long seed = rng();
             
-            RandomTSP random_tsp = RandomTSP();
+            RandomGraph random_tsp = RandomGraph();
             std::pair<EdgeWeight, EdgeWeight> result = 
                 random_tsp.random_tsp(
                     number_of_vertices, 
