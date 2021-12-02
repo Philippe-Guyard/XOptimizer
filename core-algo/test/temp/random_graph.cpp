@@ -101,7 +101,7 @@ void RandomGraph::random_graph(
     }
 }
 
-EdgeWeight RandomTSP::random_tsp(
+std::pair<EdgeWeight, EdgeWeight> RandomTSP::random_tsp(
     int number_of_vertices,
     EdgeWeight weight_limit = 6000.0,
     int seed = -1, 
@@ -117,11 +117,11 @@ EdgeWeight RandomTSP::random_tsp(
     std::uniform_real_distribution<EdgeWeight> random_weight(0.0, weight_limit);
 
     // Generate random data for random graph
-    std::vector<VertexData> vertex_data_array(number_of_vertices);
+    VertexData* vertex_data_array = new VertexData[number_of_vertices];
     std::vector<std::vector<EdgeWeight> > distances(number_of_vertices * number_of_vertices);
     for (int i = 0; i < number_of_vertices; i++)
     {
-        vertex_data_array[i] = VertexData({random_coordinate(), random_coordinate()});
+        vertex_data_array[i] = VertexData({random_coordinate(rng), random_coordinate(rng)});
     }
 
     // Generate random_permutation
@@ -132,7 +132,7 @@ EdgeWeight RandomTSP::random_tsp(
     for (int i = 0; i < number_of_vertices; i++)
     {
         permu[i] = i;
-        alpha[i] = random_weight();
+        alpha[i] = random_weight(rng);
         gamma = std::min(gamma, 2*alpha[i]);
     }
     std::random_shuffle(permu.begin(), permu.end());
@@ -144,7 +144,7 @@ EdgeWeight RandomTSP::random_tsp(
         {
             if (u < v)
             {
-                distances[u][v] = distances[v][u] = alpha[u] + alpha[v] + random_pertubation();
+                distances[u][v] = distances[v][u] = alpha[u] + alpha[v] + random_pertubation(rng);
             }
         }
     }
@@ -158,6 +158,9 @@ EdgeWeight RandomTSP::random_tsp(
     distances[u][v] = distances[v][u] = d;
     optimal_cost += d; 
 
-    Graph(number_of_vertices, &vertex_data_array, distances);
-    return optimal_cost;
+    Graph(number_of_vertices, vertex_data_array, distances);
+    delete vertex_data_array;
+
+    std::vector<int> computed_path = TSP();
+    return {optimal_cost, cost_of_path(computed_path)};
 }

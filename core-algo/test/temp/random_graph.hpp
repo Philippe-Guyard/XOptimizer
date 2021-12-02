@@ -2,6 +2,7 @@
 // All rights reserved.
 
 // Standard libraries
+#include <utility>                  // std::pair, std::make_pair
 
 // External libraries
 #include "../../temp/graph.hpp"
@@ -22,7 +23,7 @@ class RandomGraph : public Graph
 class RandomTSP : public RandomGraph
 {
     public:
-        EdgeWeight random_tsp(
+        std::pair<EdgeWeight, EdgeWeight> random_tsp(
             int number_of_vertices,
             EdgeWeight weight_limit,
             int seed, 
