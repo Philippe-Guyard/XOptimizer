@@ -23,8 +23,7 @@
  * should work. This can help you to test.
  */
 
-// Giuseppe
-double R_earth = 0;
+double R_earth = 6371;
 
 class Vec3{
 
@@ -33,7 +32,6 @@ public:
     Vec3();
     Vec3(double x, double y, double z);
     
-    // Giuseppe
     Vec3(double theta, double phi);
 
     ~Vec3();
@@ -68,10 +66,11 @@ Vec3::Vec3(double x, double y, double z){
     this->z = z;
 }
 
-// Giuseppe
+// Done assuming the angles are in degrees, if radians replace with angle*180/pi
 Vec3::Vec3(double theta, double phi){
-    // Find the cartesian coordinates corresponding to the spherical
-    // coordinates (R_earth, theta, phi)
+    x = R_earth*sin(phi)*cos(theta);
+    y = R_earth*sin(phi)*sin(theta);
+    z = R_earth*cos(phi);
 
 }
 
