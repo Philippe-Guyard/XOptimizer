@@ -18,8 +18,6 @@
 // Main files to be tested
 #include "random_graph.hpp"
 
-using EdgeWeight = long double;
-
 class PerfectMincostMatchingTest : public RandomGraph
 {
     public: 

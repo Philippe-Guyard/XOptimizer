@@ -10,8 +10,6 @@
 // Main files to be tested
 #include "../../temp/graph.hpp"
 
-using EdgeWeight = long double;
-
 namespace
 {
     int index = 1;
