@@ -12,8 +12,8 @@
 
 // External libraries
 #include "gtest/gtest.h"
-#include "../lib/blossom5-v2_05/PerfectMatching.h"
-#include "../lib/blossom5-v2_05/GEOM/GeomPerfectMatching.h"
+#include "../../lib/blossom5-v2_05/PerfectMatching.h"
+#include "../../lib/blossom5-v2_05/GEOM/GeomPerfectMatching.h"
 
 // Main files to be tested
 #include "random_graph.hpp"
