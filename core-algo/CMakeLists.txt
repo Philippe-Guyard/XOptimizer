@@ -10,12 +10,14 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")                # Enforce use of GNU Com
 
     if(TEST)                                                # In case of testing
         message("Testing is ON")
-        file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "temp/**.cpp" "test/**.cpp")
-        file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "temp/**.hpp" "test/**.hpp")
+        file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "temp/**.cpp" "test/temp/**.cpp")
+        file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "temp/**.hpp" "test/temp/**.hpp")
+        file(GLOB_RECURSE TEST_SOURCES "test/temp/**.cc")
     else()                                                  #In case of releasing
         message("Testing is OFF")
-        file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "src/**.cpp" "test/**.cpp")
-        file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "src/**.hpp" "test/**.hpp")
+        file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "src/**.cpp" "test/src/**.cpp")
+        file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "src/**.hpp" "test/src/**.hpp")
+        file(GLOB_RECURSE TEST_SOURCES "test/src/**.cc")
     endif()
 
     list(REMOVE_ITEM                                        # Exclude example.cpp with main function in blossom v library.s
@@ -34,8 +36,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")                # Enforce use of GNU Com
     FetchContent_MakeAvailable(googletest)
 
     enable_testing()
-
-    file(GLOB_RECURSE TEST_SOURCES "test/**.cc")
+    
     add_executable(Library ${TEST_SOURCES})                 # Test files
     target_link_libraries(Library Source)                   # Link to source files
     target_link_libraries(Library gtest_main)               # Google Test
