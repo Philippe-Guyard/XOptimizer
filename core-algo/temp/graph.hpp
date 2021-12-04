@@ -119,9 +119,6 @@ public:
     EdgeWeight get_edge_weight(VertexData di, VertexData dj) const;
 
 
-    std::vector< std::pair<EdgeWeight, EdgeWeight> > get_euclidean_coordinates(const std::vector<Vertex*> &vertices_to_process) const;
-
-
     // minimum spanning tree functions
     std::vector<Edge*> min_spanning();
     std::vector<Edge*> min_spanning(const std::vector<int> &vertices_in_tree);
@@ -177,12 +174,7 @@ public:
     std::vector<int> TSP(const std::vector<Vertex*> &vertices_in_tour);
     std::vector<int> TSP_held_karp(); //only works in 1 inventory case
 
-    // Multiple inventories
-    std::vector< std::vector<int> > find_optimal_routing
-    (
-        const std::vector<int> &inventories_to_use,
-        const std::vector<int> &clients_to_visit
-    );
+
 
 protected:
 

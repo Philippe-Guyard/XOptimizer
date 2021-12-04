@@ -13,7 +13,10 @@
 #include"Vec3_temp.cpp"
 
 
+
 int main(){
+
+
     //Testing Vec3
     // Test constructors
     std::cout << "Testing default constructor" << std::endl;
@@ -107,9 +110,41 @@ int main(){
 
     //TODO: test clustering algorithm on Vec3 by comparing with outputs using kmeans form external libraries
 
+
+    std::vector<Vec3> A1_aux = {Vec3(0,0,0), Vec3(10,15,12)};
+    std::vector<Vec3> A2_aux = {Vec3(0.4, 0.2, -0.3), Vec3(11,11,11), Vec3(12,11,13)};
+
+    ArrayVec3 A1 = ArrayVec3(A1_aux);
+    ArrayVec3 A2 = ArrayVec3(A2_aux);
+
+    std::cout << A1 << "\n" <<  A2 << std::endl;
+
+    std::cout << std::endl;
+
+
+    // TEST 0
+    bool test0 = false;
+    if(test0){
+        std::vector<int> match = match_function_0(A1, A2);
+
+        for(int i=0; i<match.size(); ++i){
+            std::cout << A1[i] << " " << A2[match[i]] << std::endl;
+        }
+    }
+
+    // TEST 1
+    bool test1 = true;
+    if(test1){
+        std::vector<ArrayVec3> match = match_function_1(A1, A2);
+
+        for(int i=0; i<match.size(); ++i){
+            std::cout << "Inventory " << A1[i] << " to cluster:" << std::endl;
+            std::cout << match[i] << std::endl;
+            std::cout << std::endl;
+        }
+    }
+
 }
-
-
 
 
 

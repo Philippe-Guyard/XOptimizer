@@ -1,6 +1,7 @@
 #include<iostream>
 #include<math.h>
 #include<vector>
+#include<assert.h>
 
 #include<cstdio>
 #include<time.h>
@@ -12,12 +13,12 @@
 
 /**
  * For Giuseppe:
- * 
+ *
  * Find the radius of the earth and write it to a constant R_earth (in km)
- * 
+ *
  * Write a constructor to Vec3 that receives two angles phi and theta (Recall that PHY102 stuff
  * that converted spherical coordinates to cartesian coordinates.) The Radius should be R_earth.
- * 
+ *
  * Test with inputs by writing a main file with small tests. You can do std::cout with Vec3 and ArrayVec3, so
  *      std::cout << Vec3(1,6,-1);
  * should work. This can help you to test.
@@ -31,7 +32,7 @@ public:
 
     Vec3();
     Vec3(double x, double y, double z);
-    
+
     Vec3(double theta, double phi);
 
     ~Vec3();
@@ -220,7 +221,7 @@ ArrayVec3::~ArrayVec3(){
 std::ostream &operator<<(std::ostream &os, const ArrayVec3& A){
     /**
      * Function responsible for std::cout ArrayVec3 objects.
-     * 
+     *
      */
     std::ostream& res = os << "ArrayVec3: " << "(size: " << A.size() << ")" << std::endl;
     for(int i=0; i<A.size(); ++i){
@@ -373,4 +374,104 @@ std::vector< std::vector<int> > ArrayVec3::k_means(int num_clusters)    const{
 
     return clusters;
 
+}
+
+std::vector< int > match_function_0(ArrayVec3 arr1, ArrayVec3 arr2){
+/**
+* This is the function that will receive sets of Vec3 arr1 and arr2, and will return
+* the minimum cost matching between the points in arr1 and arr2.
+*
+* Cost here is arbitrary because it currently uses a heuristic method to do this matching.
+*
+* Temporary name because no better name came to mind.
+*
+* INPUT:
+*   Requirement: arr1 and arr2 need to have the same size.
+*
+* RETURN:
+*   vector<int> : A vector with arr2.size() entries, each of them corresponding to
+*   the cluster assigned to each inventory in arr1 (respecting the positions).
+*
+*/
+
+    if(arr1.size() != arr2.size()){
+        throw std::exception();
+    }
+
+    // n^2 naive way of doing it:
+    int n = arr2.size();
+    std::vector<bool> chosen(n, false);
+    std::vector<int> res(n, 0);
+
+    for(int i=0; i<n; ++i){
+
+        long double min_dist2 = 50*1000;
+        int best_index = -1;
+
+        for(int j=0; j<n; ++j){
+
+            if(chosen[j]){
+                continue;
+            }
+
+            if( dist2(arr1[i], arr2[j]) < min_dist2 ){
+                best_index = j;
+                min_dist2 = dist2(arr1[i], arr2[j]);
+            }
+
+        }
+
+        assert( best_index != -1 );
+        res[i] = best_index;
+        chosen[best_index] = true;
+    }
+
+    return res;
+}
+
+std::vector< ArrayVec3 > match_function_1(ArrayVec3 arr1, ArrayVec3 arr2){
+/**
+* This is the function that will receive the inventories as arr1, the clients as arr2
+* and will match them accordingly.
+*
+* Temporary name because no better name came to mind.
+*
+* RETURN:
+*   vector<ArrayVec3> : A vector with arr1.size() entries, each of them corresponding to
+*   the cluster assigned to each inventory in arr1 (respecting the positions).
+*
+*/
+    // Clusters the clients into up to arr1.size() clusters
+    std::vector< std::vector<int> > clusters = arr2.k_means( arr1.size() );
+
+    std::vector< ArrayVec3 > clusters_Vec3;
+    std::vector< Vec3 > centers;
+
+    for(auto& cluster : clusters){
+        // cluster contains the indices of the Vec3 in the cluster
+        ArrayVec3 cluster_Vec3;
+
+        for(auto i : cluster){
+            cluster_Vec3.push_back( arr2[i] );
+        } // cluster_Vec3 now is an ArrayVec3 structure corresponding to the cluster
+
+        clusters_Vec3.push_back( cluster_Vec3 );
+        centers.push_back(cluster_Vec3.center_of_mass());
+    }
+
+    // Now centers is filled with the centers of the clusters
+    // The default value is 0 in the case of an empty cluster
+    while( centers.size() < arr1.size() ){
+        clusters_Vec3.push_back( ArrayVec3() );
+        centers.push_back( Vec3(0,0,0) );
+    }
+
+    std::vector<int> matching = match_function_0(arr1, centers);
+
+    std::vector<ArrayVec3> res;
+    for(auto i : matching){
+        res.push_back( clusters_Vec3[i] );
+    }
+
+    return res;
 }
