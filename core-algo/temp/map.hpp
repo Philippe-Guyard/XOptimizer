@@ -8,6 +8,7 @@ class Map{
         int brute_force_closest_vertex_index(VertexData& vertex_data);
         std::vector<std::vector<EdgeWeight>> find_distances(std::vector<int>);
         std::vector<std::vector<EdgeWeight>> find_distances();
+        EdgeWeight find_distance_astar(int i, int j); //here i and j are indices of source and destination in the vertices array
         
 
 
