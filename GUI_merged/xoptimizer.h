@@ -26,6 +26,12 @@ private slots:
 
     void on_CitycomboBox_2_currentTextChanged(const QString &arg1);
 
+    void on_NextButton_clicked();
+
+    void on_stackedWidget_currentChanged(int arg1);
+
+    void change_page(int a);
+
 private:
     Ui::XOptimizer *ui;
 };

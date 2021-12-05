@@ -7,6 +7,8 @@
 #include <iostream>
 #include <QDebug>
 #include <QStandardItemModel>
+#include <QMovie>
+#include <QTimer>
 
 
 using namespace std;
@@ -30,8 +32,15 @@ XOptimizer::XOptimizer(QWidget *parent)
     ui->setupUi(this);
     //Setting up the drop boxes
     ui->DepartmentcomboBox->addItems(departments);
-    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
-    ui->quickWidget->show();
+//    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
+//    ui->quickWidget->show();
+
+    QDir dir(".");
+    QString movielocation = dir.absolutePath() + "/loader.gif";
+    QMovie *movie = new QMovie(movielocation);
+    ui-> loaderlabel ->setMovie(movie);
+    movie->start();
+
 }
 
 XOptimizer::~XOptimizer()
@@ -123,4 +132,27 @@ if (file.open(QFile::WriteOnly | QIODevice::Text))
 }
 
 
+
+#include <unistd.h>
+
+void XOptimizer::on_NextButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+    QTimer::singleShot(3000, this, SLOT(ui->stackedWidget->setCurrentIndex(2)));
+
+
+
+}
+
+void XOptimizer::change_page(int a){
+
+    ui->stackedWidget->setCurrentIndex(a);
+
+}
+
+
+void XOptimizer::on_stackedWidget_currentChanged(int arg1)
+{
+
+}
 
