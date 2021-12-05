@@ -164,7 +164,7 @@ public:
 
         retranslateUi(XOptimizer);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(XOptimizer);

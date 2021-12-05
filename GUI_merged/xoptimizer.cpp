@@ -98,6 +98,7 @@ void XOptimizer::on_pushButton_clicked()
 
     QFile file(file_name);
     //Pass it to Marten here
+    ui->stackedWidget->setCurrentIndex(3);
 
 }
 
@@ -138,8 +139,7 @@ if (file.open(QFile::WriteOnly | QIODevice::Text))
 void XOptimizer::on_NextButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(1);
-    QTimer::singleShot(3000, this, SLOT(ui->stackedWidget->setCurrentIndex(2)));
-
+    QTimer::singleShot(1000, this, [this]() { ui->stackedWidget->setCurrentIndex(2); } );
 
 
 }
