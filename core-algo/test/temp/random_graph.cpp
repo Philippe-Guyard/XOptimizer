@@ -239,7 +239,7 @@ std::pair<EdgeWeight, EdgeWeight> RandomGraph::maximal_mincost_matching_test(
     return {expected_solution, computed_solution};
 }
 
-std::pair<EdgeWeight, EdgeWeight> RandomGraph::random_tsp(
+std::EdgeWeight RandomGraph::random_tsp(
     int number_of_vertices,
     EdgeWeight weight_limit = 6000.0,
     int seed = -1, 
@@ -299,8 +299,7 @@ std::pair<EdgeWeight, EdgeWeight> RandomGraph::random_tsp(
     Graph(number_of_vertices, vertex_data_array, distances);
     delete vertex_data_array;
 
-    std::vector<int> computed_path = TSP();
-    return {optimal_cost, cost_of_path(computed_path)};
+    return optimal_cost;
 }
 
 void RandomGraph::random_graph_with_eulerian_circuits(
