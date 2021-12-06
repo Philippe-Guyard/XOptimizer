@@ -6,9 +6,15 @@ class Map{
 
         Map(int num_vertices, VertexData* vertex_data_array, std::vector<std::vector<std::pair<int, EdgeWeight>>> adjacency_list);
         int brute_force_closest_vertex_index(VertexData& vertex_data);
+        
+        // functions with dijkstra's algorithm
+        std::vector<std::vector<EdgeWeight>> find_distances(); // uses set data structure for n^2 log(n) time (all pairs)
+        std::vector<std::vector<EdgeWeight>> find_distances_slow(); // uses brute for search for n^3 time (all pairs)
         std::vector<std::vector<EdgeWeight>> find_distances(std::vector<int>);
-        std::vector<std::vector<EdgeWeight>> find_distances();
-        EdgeWeight find_distance_astar(int i, int j); //here i and j are indices of source and destination in the vertices array
+        std::vector<std::vector<EdgeWeight>> find_distances_slow(std::vector<int>);
+
+        // functions with a* search algorithm
+        EdgeWeight find_distances_astar(int i, int j); //here i and j are indices of source and destination in the vertices array
         
 
 
