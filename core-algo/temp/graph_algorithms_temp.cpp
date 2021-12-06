@@ -8,6 +8,7 @@
 #include<cstdio>
 #include<assert.h>
 
+namespace graph_algorithms{
 
 std::vector<int> euler_tour(const std::vector<std::vector<int>> &adjacency_list ){
 /**
@@ -17,7 +18,10 @@ std::vector<int> euler_tour(const std::vector<std::vector<int>> &adjacency_list 
  * Implementation inspired by:
  * https://cp-algorithms.com/graph/euler_path.html
  *
- * NOTE: This will fail in case the adjacency matrix is not symmetric.
+ * NOTES: 
+ * - This will fail in case the adjacency matrix is not symmetric.
+ * - This assumes that the graph is connected.
+ * - This will raise an exception if there are degrees which are not even.
  */
 
 
@@ -166,3 +170,4 @@ std::vector<int> best_path_brute_force(const std::vector<std::vector<double>> &a
     return best_path;
 }
 
+}

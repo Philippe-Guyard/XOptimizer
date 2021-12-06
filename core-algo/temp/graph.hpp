@@ -4,6 +4,7 @@
 #include<unordered_set>
 
 #include<vector>
+#include<stack>
 #include<cstdio>
 #include<assert.h>
 
@@ -167,6 +168,8 @@ public:
 
     // Eulerian Path
     std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
+
+    std::vector<int> shortcut_path(const std::vector<int> &path) const;
 
     // TSP = Travelling Salesman Problem
     std::vector<int> TSP();

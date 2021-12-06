@@ -9,128 +9,61 @@
 #include<assert.h>
 
 #include "graph.hpp"
+#include "graph_algorithms_temp.cpp"
 
-std::vector<int> Graph::euler_tour(const std::vector<Edge*>& smaller_graph) const{
-/**
- * Returns an Eulerian Cycle passing through all edges in smaller_graph.
- * 
- * Implementation inspired by:
- * https://cp-algorithms.com/graph/euler_path.html
- * 
- */
-
+std::vector<int> Graph::euler_tour(const std::vector<Edge*>& edges_subgraph)    const{
 
     int n = num_vertices;
 
+    std::vector<std::vector<int>> subgraph_adjacency_list(n);
 
-    // Make Adjacency List for the smaller graph
-    std::vector< std::vector<int> > smaller_graph_adjacency_list(n);
-    for(int i=0; i<n; ++i){
-        smaller_graph_adjacency_list.resize(n);
-    }
-
-    // Degree List
-    std::vector<int> degrees;
-    degrees.resize(n);
-
-    for(const auto &e : smaller_graph){
+    for(const auto &e : edges_subgraph){
         int x1 = (e->get_vertices()).first->get_index();
         int x2 = (e->get_vertices()).second->get_index();
 
-        smaller_graph_adjacency_list[x1][x2]++;
-        smaller_graph_adjacency_list[x2][x1]++;
-
-        degrees[x1]++;
-        degrees[x2]++;
-    }
-    
-    for(int i=0; i<n; ++i){
-        if( degrees[i] % 2 != 0){
-            throw std::exception();
-        }
+        subgraph_adjacency_list[x1].push_back(x2);
+        subgraph_adjacency_list[x2].push_back(x1);
     }
 
-    std::stack<int> st;
-    st.push(0);
-
-    std::vector<int> eulerian_cycle;
-
-    while( !st.empty() ){
-        int v = st.top();
-        int u;
-
-        for(u=0; u<n; ++u){
-            if(smaller_graph_adjacency_list[v][u]){
-
-                smaller_graph_adjacency_list[v][u]--;
-                smaller_graph_adjacency_list[u][v]--;
-
-                st.push(u);
-                break;
-            }
-        }
-
-        if(u==n){
-            eulerian_cycle.push_back(v);
-            st.pop();
-        }
-    }
-
-    return eulerian_cycle;
+    return graph_algorithms::euler_tour( subgraph_adjacency_list );
 }
 
-std::vector<int> Graph::TSP(){
+// TSP Functions
 
-    std::vector<Edge*> MST = min_spanning();
+std::vector<int> Graph::shortcut_path(const std::vector<int> &path) const{
 
-    int n = num_vertices;
+    std::vector<bool> chosen(num_vertices, false);
+    std::vector<int> final_path;
 
-    // Vector with the degrees of vertices in MST
-    std::vector<int> deg(n, 0);
-
-    for(const auto &e : MST){
-        deg[ (e->get_vertices()).first->get_index() ]++;
-        deg[ (e->get_vertices()).second->get_index() ]++;
-    }
-
-    // We get the vertices with odd degrees
-    std::vector<int> odd_degree_vertices;
-
-    for(int i=0; i<n; ++i){
-        if( deg[i]%2 == 1 ){
-            odd_degree_vertices.push_back(i);
-        }
-    }
-
-    std::vector< std::pair<int,int> > min_cost_matching = perfect_mincost_matching(odd_degree_vertices);
-
-    // Tactical renaming
-    std::vector<Edge*> &christofidesGraph = MST;
-
-    for(const auto &match : min_cost_matching){
-        christofidesGraph.push_back( adjacency_list[match.first][match.second] );
-    }
-
-    std::vector<int> eulerPath = euler_tour(christofidesGraph);
-
-    std::vector<bool> chosen(n, false);
-    std::vector<int> finalPath;
-
-    for(const auto& v : eulerPath){
+    for(const auto& v : path){
         if( chosen[v] ){
             continue;
         }
 
         chosen[v] = true;
-        finalPath.push_back(v);
+        final_path.push_back(v);
     }
 
-    return finalPath;
+    return final_path;
+
+}
+
+std::vector<int> Graph::TSP(){
+
+    std::vector<int> vertices_in_tour;
+
+    for(int i=0; i < num_vertices; ++i){
+        vertices_in_tour.push_back(i);
+    }
+
+    return TSP(vertices_in_tour);
+
 }
 
 
 // For the multiple inventories case
 std::vector<int> Graph::TSP(std::vector<int> &vertices_in_tour){
+
 
     std::vector<Edge*> MST = min_spanning(vertices_in_tour);
     
@@ -156,28 +89,18 @@ std::vector<int> Graph::TSP(std::vector<int> &vertices_in_tour){
     std::vector< std::pair<int,int> > min_cost_matching = perfect_mincost_matching(odd_degree_vertices);
 
     // Tactical renaming
-    std::vector<Edge*> &christofidesGraph = MST;
+    std::vector<Edge*> &christofides_graph = MST;
 
     for(const auto &match : min_cost_matching){
-        christofidesGraph.push_back( adjacency_list[match.first][match.second] );
+        christofides_graph.push_back( adjacency_list[match.first][match.second] );
     }
 
-    std::vector<int> eulerPath = euler_tour(christofidesGraph);
+    std::vector<int> christofides_euler_path = euler_tour(christofides_graph);
 
-    std::vector<bool> chosen(n, false);
-    std::vector<int> finalPath;
-
-    for(const auto& v : eulerPath){
-        if( chosen[v] ){
-            continue;
-        }
-
-        chosen[v] = true;
-        finalPath.push_back(v);
-    }
-
-    return finalPath;
+    return shortcut_path(christofides_euler_path);
 }
+
+
 
 std::vector<int> Graph::TSP(const std::vector<Vertex*> &vertices_in_tour){
     
