@@ -17,25 +17,23 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 
 set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        testing.h
-        testing.cpp
-        mainwindow.h
-        mainwindow.ui
-        utils/api_wrapper.cpp
-        utils/api_wrapper.moc
-	utils/api_wrapper.h
-        utils/order_parser.cpp
-        parser/pbf-parser.h
-        interaction_service.cpp
-        interaction_service.h
-        utils/order_parser.h
-        file_storage.cpp
-        file_storage.h
+    main.cpp
+    mainwindow.cpp
+    testing.h
+    testing.cpp
+    mainwindow.h
+    mainwindow.ui
+    utils/api_wrapper.cpp
+    utils/api_wrapper.moc
+    utils/api_wrapper.h
+    utils/order_parser.cpp
+    interaction_service.cpp
+    interaction_service.h
+    utils/order_parser.h
+    file_storage.cpp
+    file_storage.h
 )
 
-add_subdirectory(parser)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(interaction_service
@@ -67,6 +65,23 @@ set_target_properties(interaction_service PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
 )
+
+set(PARSER_FILES
+    parser/pbf-parser.cpp
+    parser/pbf-parser.h
+)
+
+set(CORE_ALGO
+    ../../core-algo
+)
+
+add_subdirectory(parser/)
+target_link_libraries(interaction_service PRIVATE pbf_parser)
+
+add_subdirectory(${CORE_ALGO} "${CMAKE_BINARY_DIR}/libs/build/core-algo")
+target_include_directories(interaction_service PUBLIC ${CORE_ALGO} )
+target_link_libraries(interaction_service PRIVATE Source)
+
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(interaction_service)
