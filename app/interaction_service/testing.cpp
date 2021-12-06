@@ -9,8 +9,7 @@ Testing::Testing(XOptimizer::InteractionService* s){
 
 void Testing::test_download(){
 	QFile out1("./out.pbf");
-	QFileInfo inf(out1);
-	service->set_map_file_path(inf.absoluteFilePath());
+    QFileInfo inf(out1);
 	QNetworkAccessManager* man = service->get_api_wrapper()->get_manager();
 	service->download_and_parse_map("corse", "haute_corse");
 	QObject::connect(man, &QNetworkAccessManager::finished, [&](QNetworkReply* reply){
