@@ -13,3 +13,6 @@ _deps
 
 #ignore protobuf and zlib
 libs
+
+parser/pbf_parser_autogen
+parser/pbf_parser_generated_autogen
