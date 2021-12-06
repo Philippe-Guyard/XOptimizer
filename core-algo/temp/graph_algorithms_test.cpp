@@ -8,7 +8,9 @@
 #include<cstdio>
 #include<assert.h>
 
-#include "graph_algorithms_temp.cpp"
+#include "graph_algorithms.cpp"
+
+/*
 
 int main(){
     using namespace std;
@@ -26,3 +28,5 @@ int main(){
     }
 
 }
+
+*/

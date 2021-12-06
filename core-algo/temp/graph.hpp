@@ -8,7 +8,7 @@
 #include<cstdio>
 #include<assert.h>
 
-#include "Vec3_temp.cpp"
+#include "Vec3.cpp"
 
 using EdgeWeight = double;
 

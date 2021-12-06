@@ -1,15 +1,5 @@
-#include<iostream>
-#include<algorithm>
-#include<unordered_map>
-#include<unordered_set>
-#include<stack>
-
-#include<vector>
-#include<cstdio>
-#include<assert.h>
-
 #include "graph.hpp"
-#include "graph_algorithms_temp.cpp"
+#include "graph_algorithms.cpp"
 
 std::vector<int> Graph::euler_tour(const std::vector<Edge*>& edges_subgraph)    const{
 

@@ -1,9 +1,3 @@
-#include<iostream>
-
-#include<unordered_map>
-#include<vector>
-#include<cstdio>
-
 #include "graph.hpp"
 #include "disjointset.hpp"
 

@@ -1,5 +1,5 @@
 #include "graph.hpp"
-#include "graph_algorithms_temp.cpp"
+#include "graph_algorithms.cpp"
 
 double Graph::cost_of_path(const std::vector<int>& path) const{
     double cost = 0;

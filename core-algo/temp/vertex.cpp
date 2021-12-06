@@ -1,5 +1,4 @@
 #include "graph.hpp"
-#include "Vec3_temp.cpp"
 
 // Vertex Class Implementaton
 

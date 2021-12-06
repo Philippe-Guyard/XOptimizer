@@ -10,10 +10,10 @@
 
 #include<algorithm>
 
-#include"Vec3_temp.cpp"
+#include"Vec3.cpp"
 
 
-
+/*
 int main(){
 
 
@@ -146,21 +146,7 @@ int main(){
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 
 
