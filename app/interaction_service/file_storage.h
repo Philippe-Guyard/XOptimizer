@@ -18,7 +18,7 @@ public:
     //For Map/PBF files
     QMap<std::string, QFile*> FiledictMaps;
 
-    std::string get_save_path(std::string region,std::string department);
+    //std::string get_save_path(std::string region,std::string department);
     QString get_save_path_from_map_name(std::string map_name);
 
 

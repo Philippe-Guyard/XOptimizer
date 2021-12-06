@@ -12,8 +12,8 @@
 void FileStorage::save_map(std::string map_name, QFile* map){
     FiledictMaps[map_name] = map;
 };
-//For maps
 
+//For maps
 bool FileStorage::is_map_saved(std::string map_name){
     return FiledictMaps.contains(map_name);
 }
