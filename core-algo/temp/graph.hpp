@@ -159,6 +159,12 @@ public:
     std::vector<int> TSP(const std::vector<Vertex*> &vertices_in_tour);
     std::vector<int> TSP_held_karp(); //only works in 1 inventory case
 
+    // Functions for optimal routing
+    // File algo_interface.cpp
+    std::vector<int> optimal_routing(int inventory_index, std::vector<int> client_indices); //one inventory
+    std::vector<int> optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
+
+
 
 
 protected:
