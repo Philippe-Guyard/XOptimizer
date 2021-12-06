@@ -32,14 +32,14 @@ namespace
             long long seed = rng();
             
             RandomGraph random_tsp = RandomGraph();
-            std::pair<EdgeWeight, EdgeWeight> result = 
+            std::EdgeWeight result = 
                 random_tsp.random_tsp(
                     number_of_vertices, 
                     weight_limit, 
                     seed, 
                     true);
                 
-            EXPECT_IN_RANGE(result.second, result.first, result.first * 1.5)
+            EXPECT_IN_RANGE(result, random_tsp.TSP(), result.first * 1.5)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
@@ -49,6 +49,36 @@ namespace
                 << ", seed = "
                 << seed
                 << ", the expected and computed minimum cost do not follow thereotical result.\n"; 
+        }
+    }
+
+    TEST(TSP, BruteForce)
+    {
+        for (int i = 0; i < NUMBER_OF_TEST; i++)
+        {
+            int number_of_vertices = 10;
+            EdgeWeight weight_limit = 6000.0;
+            double density = random_density(rng);
+            long long seed = rng();
+            
+            RandomGraph random_tsp = RandomGraph();
+            std::EdgeWeight result = 
+                random_tsp.random_tsp(
+                    number_of_vertices, 
+                    weight_limit, 
+                    seed, 
+                    true);
+                
+            EXPECT_IN_RANGE(result, random_tsp.TSP(), result + 0.00001)
+                << "For number_of_vertices = " 
+                << number_of_vertices
+                << ", weight_limit = "
+                << weight_limit
+                << ", density = "
+                << density
+                << ", seed = "
+                << seed
+                << ", the expected and computed minimum cost do not match.\n"; 
         }
     }
 }
