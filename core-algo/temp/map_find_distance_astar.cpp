@@ -1,6 +1,6 @@
 #include "map.hpp"
 
-EdgeWeight Map::find_distance_astar(int start, int end){
+EdgeWeight Map::find_distances_astar(int start, int end){
 	VertexData end_data = vertices.at(end)->get_data();
 	std::vector<EdgeWeight> gScore(this->num_vertices, std::numeric_limits<EdgeWeight>::max());
 	std::vector<EdgeWeight> fScore(this->num_vertices, std::numeric_limits<EdgeWeight>::max());
