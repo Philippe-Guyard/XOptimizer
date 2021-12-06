@@ -11,7 +11,7 @@
 
 #include<algorithm>
 
-double R_earth = 6371;
+double R_earth = 6371; // in km
 
 class Vec3{
 

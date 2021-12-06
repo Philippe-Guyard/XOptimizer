@@ -31,6 +31,6 @@ std::vector<int> Graph::best_path_brute_force(const std::vector<int>& path_verti
     return graph_algorithms::best_path_brute_force(
         this->build_adjacency_matrix(),
         path_vertices
-    );
+        );
 
 }

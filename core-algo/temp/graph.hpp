@@ -62,9 +62,6 @@ public:
     int get_index() const;
     void set_index(int new_index);
 
-    // TO IMPLEMENT
-    std::pair<EdgeWeight, EdgeWeight> get_eucliean_coordinates() const;
-
     VertexData get_data() const;
     bool operator==(const Vertex& other) const;
     bool operator!=(const Vertex &other) const;
@@ -131,36 +128,20 @@ public:
     std::vector<std::pair<int,int>> perfect_mincost_matching(std::vector<int> vertex_indices);
     std::vector<std::pair<int,int>> heuristic_perfect_mincost_matching(std::vector<int> vertex_indices);
 
-    std::vector< std::pair<int, int> > euclidean_mincost_matching
-    (
-        const std::vector< std::pair<double, double> > &left_points,
-        const std::vector< std::pair<double, double> > &right_point
-    );
-    
 
     // vertex clustering functions
-    std::vector<std::vector<int>> cluster_vertices(const std::vector<int> &vertices_to_cluster, int num_clusters);
+    // File clustering_vertices.cpp
 
-    std::pair<double, double> find_cluster_center(const std::vector<int> &cluster);
-
-    std::vector< std::pair<double, double> > find_clusters_centers(const std::vector< std::vector<int> > &clusters);
-
-
-    // In the return the pair {i, j} represents inventory i and cluster j
-    std::vector< std::pair<int, int> > match_inventories_to_clusters(
-        const std::vector<int> &inventories_to_match,
-        const std::vector< std::pair<double, double> > &centers_of_clusters_to_match
-    );
 
 
     // Functions for path analysis
     // File path_analysis.cpp
 
     double cost_of_path(const std::vector<int>& path) const;
-
     std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
 
 
+    // File TSP_approximation.cpp
     // Eulerian Path
     std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
 
