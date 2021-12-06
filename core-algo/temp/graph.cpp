@@ -398,3 +398,24 @@ void Graph::sort_edges(){
     }
 
 }
+
+
+std::vector<std::vector<double>> Graph::build_adjacency_matrix()    const{
+
+    std::vector< std::vector<double> > adjacency_matrix_return(num_vertices);
+
+    for(int i=0; i < num_vertices; ++i){
+        adjacency_matrix_return[i].resize(num_vertices);
+    }
+
+    for(int i=0; i<num_vertices; ++i){
+        for(int j=i; j<num_vertices; ++j){
+            
+            adjacency_matrix_return[i][j] = adjacency_matrix_return[j][i] = get_edge_weight(i, j);
+            
+        }
+    }
+
+    return adjacency_matrix_return;
+
+}

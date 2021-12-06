@@ -120,6 +120,8 @@ public:
     EdgeWeight get_edge_weight(VertexData di, VertexData dj) const;
 
 
+    std::vector<std::vector<double>> build_adjacency_matrix()    const;
+
     // minimum spanning tree functions
     std::vector<Edge*> min_spanning();
     std::vector<Edge*> min_spanning(const std::vector<int> &vertices_in_tree);
@@ -152,19 +154,12 @@ public:
 
 
     // Functions for path analysis
-    EdgeWeight cost_of_path(const std::vector<int>& path) const;
+    // File path_analysis.cpp
+
+    double cost_of_path(const std::vector<int>& path) const;
 
     std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
 
-    void best_path_brute_force_aux
-    (
-        std::vector<bool> &chosen,
-        std::vector<int>& path, const std::vector<int> &path_vertices,
-        int v_initial,
-        int v_final,
-        EdgeWeight &min_cost,
-        std::vector<int>& min_cost_path
-    ) const;
 
     // Eulerian Path
     std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
