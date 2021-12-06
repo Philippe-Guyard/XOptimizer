@@ -11,19 +11,6 @@
 
 #include<algorithm>
 
-/**
- * For Giuseppe:
- *
- * Find the radius of the earth and write it to a constant R_earth (in km)
- *
- * Write a constructor to Vec3 that receives two angles phi and theta (Recall that PHY102 stuff
- * that converted spherical coordinates to cartesian coordinates.) The Radius should be R_earth.
- *
- * Test with inputs by writing a main file with small tests. You can do std::cout with Vec3 and ArrayVec3, so
- *      std::cout << Vec3(1,6,-1);
- * should work. This can help you to test.
- */
-
 double R_earth = 6371;
 
 class Vec3{
