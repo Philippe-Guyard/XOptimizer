@@ -4,13 +4,13 @@ OpenStreetMapWrapper::OpenStreetMapWrapper(QObject *parent):QObject(parent){
 		connect(&manager, &QNetworkAccessManager::finished, this, &OpenStreetMapWrapper::handle_finished);
 }
 
-void OpenStreetMapWrapper::download(const std::string &region, const std::string &department, const QFile& outfile) {
+QNetworkReply* OpenStreetMapWrapper::download(const std::string &region, const std::string &department, const QFile& outfile) {
         qDebug() << "Download started.";
-		QNetworkRequest request;
+        QNetworkRequest request;
 		QUrl url = QUrl(QString::fromStdString("https://download.openstreetmap.fr/extracts/europe/france/" + region + "/" + department + ".osm.pbf"));
-		request.setUrl(url);
-		request.setAttribute(QNetworkRequest::User, outfile.fileName());
-		manager.get(request);
+        request.setUrl(url);
+        request.setAttribute(QNetworkRequest::User, outfile.fileName());
+        return manager.get(request);
 }
 
 void OpenStreetMapWrapper::searchCSV(QFile& file, QFile& outfile){
