@@ -1,4 +1,6 @@
 #include "graph.hpp"
+#include "Vec3_temp.cpp"
+
 #include <math.h>
 
 // VertexData Class Implementation
@@ -26,9 +28,11 @@ bool VertexData::operator!=(const VertexData& other) const{
 double VertexData::get_distance(const VertexData& other) const{
     double phi1 = geolocation.first * (M_PI/180.0);
     double lambda1 = geolocation.second * (M_PI/180.0);
+
     double phi2 = other.get_geolocation().first * (M_PI/180.0);
     double lambda2 = other.get_geolocation().second * (M_PI/180.0);
-    int R = 6371000;
+
+    int R = 6371000; // in m
     
     double deltaphi = phi2 - phi1;
     double deltalambda = lambda2 - lambda1;
@@ -38,3 +42,13 @@ double VertexData::get_distance(const VertexData& other) const{
     
     return R * c;
 };
+
+Vec3 VertexData::get_euclidean_coordinates() const{
+
+    // geolocation first is the first angle
+
+    double phi1 = geolocation.first * (M_PI/180.0);
+    double lambda1 = geolocation.second * (M_PI/180.0);
+
+    return Vec3(phi1, lambda1);
+}

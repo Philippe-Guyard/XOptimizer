@@ -1,4 +1,5 @@
 #include "graph.hpp"
+#include "Vec3_temp.cpp"
 
 // Vertex Class Implementaton
 
@@ -34,4 +35,8 @@ bool Vertex::operator==(const Vertex &other) const{
 
 bool Vertex::operator!=(const Vertex &other) const{
     return other.get_data() != this->v_data;
+}
+
+Vec3 Vertex::get_euclidean_coordinates()    const{
+    return get_data().get_euclidean_coordinates();
 }

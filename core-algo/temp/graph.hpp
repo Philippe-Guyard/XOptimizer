@@ -8,6 +8,8 @@
 #include<cstdio>
 #include<assert.h>
 
+#include "Vec3_temp.cpp"
+
 using EdgeWeight = double;
 
 class VertexData{
@@ -26,6 +28,8 @@ public:
     bool operator!=(const VertexData &other) const;
     double get_distance(const VertexData &other) const;
     std::vector<double> get_coordinates() const;
+
+    Vec3 get_euclidean_coordinates() const;
 };
 
 //overriding stds hash function for the VertexData class
@@ -65,6 +69,8 @@ public:
     VertexData get_data() const;
     bool operator==(const Vertex& other) const;
     bool operator!=(const Vertex &other) const;
+
+    Vec3 get_euclidean_coordinates() const;
 
 };
 
