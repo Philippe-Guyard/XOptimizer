@@ -137,7 +137,7 @@ public:
 
     // vertex clustering functions
     // File clustering_vertices.cpp
-
+    std::vector< std::vector<int> >cluster_vertices(const std::vector<int> &vertices_to_cluster, int num_clusters);
 
 
     // Functions for path analysis
