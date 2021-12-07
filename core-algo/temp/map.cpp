@@ -51,7 +51,7 @@ EdgeWeight Map::get_edge_weight(int i, int j){
     if (this->edge_weights[i].count(j)){
         return this->edge_weights[i][j];
     }
-    return -1;
+    return std::numeric_limits<EdgeWeight>::max();
 }
 
 EdgeWeight Map::get_edge_weight(int i, Vertex* v2){
@@ -60,7 +60,7 @@ EdgeWeight Map::get_edge_weight(int i, Vertex* v2){
     if (this->edge_weights[i].count(j)){
         return this->edge_weights[i][j];
     }
-    return -1;
+    return std::numeric_limits<EdgeWeight>::max();
 }
 
 EdgeWeight Map::get_edge_weight(Vertex* v1, int j){
@@ -69,7 +69,7 @@ EdgeWeight Map::get_edge_weight(Vertex* v1, int j){
     if (this->edge_weights[i].count(j)){
         return this->edge_weights[i][j];
     }
-    return -1;
+    return std::numeric_limits<EdgeWeight>::max();
 }
 
 EdgeWeight Map::get_edge_weight(Vertex* v1, Vertex* v2){
@@ -79,5 +79,5 @@ EdgeWeight Map::get_edge_weight(Vertex* v1, Vertex* v2){
     if (this->edge_weights[i].count(j)){
         return this->edge_weights[i][j];
     }
-    return -1;
+    return std::numeric_limits<EdgeWeight>::max();
 }
