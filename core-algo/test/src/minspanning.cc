@@ -16,8 +16,6 @@
 // Main files to be tested
 #include "random_graph.hpp"
 
-using EdgeWeight = long double;
-
 // Independent implementation of Minimum Spanning Tree algorithm, for testing purpose.
 // Here, Prim's algorithm is chosen.
 class MinimumSpanningTreeTest : public RandomGraph

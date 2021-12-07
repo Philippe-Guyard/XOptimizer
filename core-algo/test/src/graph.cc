@@ -9,7 +9,7 @@
 #include "gtest/gtest.h"
 
 // Main files to be tested
-#include "../src/graph.hpp"
+#include "../../src/graph.hpp"
 
 namespace
 {

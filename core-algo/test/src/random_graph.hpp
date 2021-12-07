@@ -4,9 +4,7 @@
 // Standard libraries
 
 // External libraries
-#include "../src/graph.hpp"
-
-using EdgeWeight = long double;
+#include "../../src/graph.hpp"
 
 /**
  * Generete random undirected weight.
@@ -19,14 +17,4 @@ class RandomGraph : public Graph
             EdgeWeight weight_limit, 
             double density, 
             int seed);
-};
-
-class RandomTSP : public RandomGraph
-{
-    public:
-        EdgeWeight random_tsp(
-            int number_of_vertices,
-            EdgeWeight weight_limit,
-            int seed, 
-            bool symmetric);
 };

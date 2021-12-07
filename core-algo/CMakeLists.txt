@@ -1,11 +1,13 @@
 cmake_minimum_required(VERSION 3.14)                    # CMake version check
+
 project(LogistiX_CoreAlgo                               # Set the project name
         VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 14)                              # Enable C++14 standard. Note GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                     # Enforce C++14 standard.        
 #set(CMAKE_CXX_FLAGS "/EHsc")                            # Enable /EH to build C++ code that follows the C++ standard for exception handling.
 
-option(TEST "Testing: " OFF)
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")                # Enforce use of GNU Compiler for expected behaviours
+    option(TEST "Testing: " OFF)
 
 if(TEST)                                                # In case of testing
     message("Testing is ON")
