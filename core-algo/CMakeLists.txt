@@ -19,20 +19,20 @@ else()                                                  #In case of releasing
     file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "src/**.hpp" "temp/map.hpp")
 endif()
 
-list(REMOVE_ITEM                                        # Exclude example.cpp with main function in blossom v library.s
-    SOURCES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib/blossom5-v2_05/example.cpp)
+    list(REMOVE_ITEM                                        # Exclude example.cpp with main function in blossom v library.s
+        SOURCES 
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib/blossom5-v2_05/example.cpp)
 
-add_library(Source ${SOURCES} ${HEADERS})               # Source files
+    add_library(Source ${SOURCES} ${HEADERS})               # Source files
 
-# Fetch newest stable version of GoogleTest
-include(FetchContent)
-FetchContent_Declare(
-    googletest
-    URL https://github.com/google/googletest/archive/e2239ee6043f73722e7aa812a459f54a28552929.zip
-)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)      # For Windows: Prevent overriding the parent project's compiler/linker settings
-FetchContent_MakeAvailable(googletest)
+    # Fetch newest stable version of GoogleTest
+    include(FetchContent)
+    FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/e2239ee6043f73722e7aa812a459f54a28552929.zip
+    )
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)      # For Windows: Prevent overriding the parent project's compiler/linker settings
+    FetchContent_MakeAvailable(googletest)
 
 if (TEST)
     enable_testing()
@@ -44,6 +44,6 @@ if (TEST)
 
     include(GoogleTest)
     gtest_discover_tests(Library)
-endif()
 
-unset(TEST CACHE)                                             # Reset cached variables
+    unset(TEST CACHE)                                             # Reset cached variables
+endif()
