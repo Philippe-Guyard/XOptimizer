@@ -46,6 +46,31 @@ Map::Map(int num_vertices, VertexData* vertex_data_array, std::vector<std::vecto
 
 }
 
+Map::~Map(){
+
+/**
+ * Default Destructor
+ * 
+ */
+
+    adjacency_list.clear();
+
+    while( edges.size() > 0 ){
+        Edge* edge_to_delete = edges.back();
+        edges.pop_back();
+
+        delete edge_to_delete;
+    }
+
+    while( vertices.size() > 0 ){
+        Vertex* vertex_to_delete = vertices.back();
+        vertices.pop_back();
+
+        delete vertex_to_delete;
+    }
+
+}
+
 EdgeWeight Map::get_edge_weight(int i, int j){
 
     if (this->edge_weights[i].count(j)){

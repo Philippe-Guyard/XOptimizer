@@ -5,6 +5,7 @@ class Map{
     public:
 
         Map(int num_vertices, VertexData* vertex_data_array, std::vector<std::vector<std::pair<int, EdgeWeight>>> adjacency_list);
+        ~Map();
         int brute_force_closest_vertex_index(VertexData& vertex_data);
         
         // functions with dijkstra's algorithm
