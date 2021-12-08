@@ -239,7 +239,7 @@ std::pair<EdgeWeight, EdgeWeight> RandomGraph::maximal_mincost_matching_test(
     return {expected_solution, computed_solution};
 }
 
-std::EdgeWeight RandomGraph::random_tsp(
+EdgeWeight RandomGraph::random_tsp(
     int number_of_vertices,
     EdgeWeight weight_limit = 6000.0,
     int seed = -1, 

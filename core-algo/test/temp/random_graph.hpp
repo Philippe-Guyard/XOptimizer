@@ -28,7 +28,7 @@ class RandomGraph : public Graph
         std::pair<EdgeWeight, EdgeWeight> maximal_mincost_matching_test(
             std::vector<int>& vertex_indices);
 
-        std::EdgeWeight random_tsp(
+        EdgeWeight random_tsp(
             int number_of_vertices,
             EdgeWeight weight_limit,
             int seed, 

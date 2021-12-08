@@ -32,14 +32,14 @@ namespace
             long long seed = rng();
             
             RandomGraph random_tsp = RandomGraph();
-            std::EdgeWeight result = 
+            EdgeWeight result = 
                 random_tsp.random_tsp(
                     number_of_vertices, 
                     weight_limit, 
                     seed, 
                     true);
                 
-            EXPECT_IN_RANGE(result, random_tsp.TSP(), result.first * 1.5)
+            EXPECT_IN_RANGE(result, random_tsp.cost_of_path(random_tsp.TSP()), result * 1.5)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
@@ -62,14 +62,14 @@ namespace
             long long seed = rng();
             
             RandomGraph random_tsp = RandomGraph();
-            std::EdgeWeight result = 
+            EdgeWeight result = 
                 random_tsp.random_tsp(
                     number_of_vertices, 
                     weight_limit, 
                     seed, 
                     true);
                 
-            EXPECT_IN_RANGE(result, random_tsp.TSP(), result + 0.00001)
+            EXPECT_IN_RANGE(result, random_tsp.cost_of_path(random_tsp.TSP()), result + 0.00001)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
