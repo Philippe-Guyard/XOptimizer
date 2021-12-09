@@ -7,7 +7,14 @@
 #include<vector>
 #include<cstdio>
 
-double compute_distance(std::pair<int, int> p1, std::pair<int, int> p2){
+#include<time.h>
+
+double compute_distance(std::pair<double, double> p1, std::pair<double, double> p2){
+/**
+ * Computes the distance between points p1 and p2.
+ * 
+ */
+
     int x1 = p1.first;
     int y1 = p1.second;
     int x2 = p2.first;
@@ -16,18 +23,14 @@ double compute_distance(std::pair<int, int> p1, std::pair<int, int> p2){
 }
 
 
-/*
-* IMPORTANT:
-*
-*   k_means should actually return a vector<vector<int>> with each inner vector<int> containing the indices of the points in that cluster.
-* That is, you use the indices in the vector points.
-*
-*/
-
-
-// Maybe these function will make it easier to code 
-
-int find_closest_point(std::pair<double, double> point,const std::vector< std::pair<double, double> >& list_of_points){
+int find_closest_point(std::pair<double, double> point, const std::vector< std::pair<double, double> >& list_of_points){
+/**
+ * Finds the index of the point in list_of_points that is closest to the parameter point.
+ * 
+ */
+    if( list_of_points.size() == 0 ){
+        throw std::exception();
+    }
 
     int index_best = 0;
     double distance_best = compute_distance(point , list_of_points[0]);
@@ -43,7 +46,11 @@ int find_closest_point(std::pair<double, double> point,const std::vector< std::p
 }
 
 std::pair<double,double> find_center_of_mass(const std::vector< std::pair<double, double> >& list_of_points){
-
+/**
+ * Returns the center of mass of the points in list_of_points.
+ * 
+ * If the list is empty, returns 0.
+ */
     std::pair<double, double> mu = {0, 0};
 
     for(const auto& point : list_of_points){
@@ -51,26 +58,88 @@ std::pair<double,double> find_center_of_mass(const std::vector< std::pair<double
         mu.second += point.second;
     }
 
-    mu.first = mu.first / (EdgeWeight) list_of_points.size();
-    mu.second = mu.second / (EdgeWeight) list_of_points.size();
+    mu.first = mu.first / (double) list_of_points.size();
+    mu.second = mu.second / (double) list_of_points.size();
 
     return mu;
 }
 
 double compute_cluster_cost(const std::vector< std::pair<double, double> >& list_of_points){
-
+/**
+ * Gives the cost of the cluster. The formula of the cost is
+ *      Sum over p of ||p - mu||^2
+ * where p are the points in list_of_points and mu is the center of mass.
+ * 
+ */
     std::pair<double, double> mu = find_center_of_mass(list_of_points);
 
     double total_cost = 0;
     for(auto point : list_of_points){
-        total_cost += compute_distance(mu, point);
+        total_cost += compute_distance(mu, point)*compute_distance(mu, point);
     }
 
     return total_cost;
 }
 
 
+std::vector< std::vector<int> > k_means
+(
+    std::vector<std::pair<double,double>> points,
+    int num_clusters
+){
+
+    // not really a meaningful number
+    int num_iter = 1e5;
+
+    int n = points.size();
+
+    // setting up the random device
+    // #include<time.h> is necessary
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    rng.seed(time(0));
+    std::uniform_int_distribution<std::mt19937::result_type> distr(0, n-1); 
+
+
+    std::vector<std::pair<double,double>> centers;
+    std::vector<std::vector<int>> clusters;
+    
+    // defines the centers randomly 
+    for(int i=0; i<num_clusters; ++i){
+        centers.push_back( points[distr(rng)] );
+    }
+
+    for(int iteration=0; iteration<num_iter; iteration++){
+
+        clusters.clear();
+
+        for(int i=0; i<n; ++i){
+            // finds the closest cluster
+            int closest_cluster = find_closest_point(points[i], centers);
+
+            // assigns this point to the new cluster
+            clusters[closest_cluster].push_back(i);
+        }
+        
+        // adjusts the values of centers
+        for(int i=0; i<num_clusters; i++){
+
+            std::vector<std::pair<double,double>> points_in_cluster;
+            for(auto index : clusters[i]){
+                points_in_cluster.push_back( points[index] );
+            }
+
+            centers[i] = find_center_of_mass(points_in_cluster);
+        }
+    }
+
+    return clusters;
+}
+
+
+
 std::vector<std::vector<std::pair<double, double> > > k_means(std::vector<std::pair<double, double> > points, int k, int max_iter, double eps){
+    
     std::vector<std::pair<double, double> > centers;
     std::vector<std::pair<double, double> > not_centers = points;
     int n = points.size();
@@ -199,12 +268,3 @@ std::vector<std::vector<std::pair<double, double> > > k_means(std::vector<std::p
     }
 
 };
-
-
-
-
-
-
-
-
-
