@@ -155,6 +155,11 @@ void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeW
         num_edges++;
     }
 
+    Edge *trivial_edge = new Edge(std::pair<Vertex*, Vertex*> {new_vertex, new_vertex}, 0, num_edges);
+    adjacency_list[num_vertices].push_back( trivial_edge );
+    edges.push_back( trivial_edge );
+    num_edges++;
+
     vertex_position[data] = num_vertices;
     num_vertices++;
 }
