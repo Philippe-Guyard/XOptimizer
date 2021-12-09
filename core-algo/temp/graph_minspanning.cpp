@@ -40,7 +40,7 @@ std::vector<Edge*> Graph::min_spanning(const std::vector<int> &vertices_in_tree)
     sort_edges();
 
 
-    std::vector<bool> inside_tree(n);
+    std::vector<bool> inside_tree( num_vertices );
     for(auto v : vertices_in_tree){
         inside_tree[v] = true;
     }
