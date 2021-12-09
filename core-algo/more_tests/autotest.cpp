@@ -6,12 +6,14 @@ using namespace std;
 
 #define TEST1 true
 #define TEST2 true
+#define TEST3 true
+#define TEST4 true
+#define TEST5 true
 
-void test_add_vertex(){
+Graph graph_example(int N=15){
 
     Graph g = Graph();
-    
-    int N = 15;
+
     for(int i=0; i<N; ++i){
         VertexData vdata = VertexData({i,i});
 
@@ -22,6 +24,15 @@ void test_add_vertex(){
 
         g.add_vertex(vdata, dis);
     }
+
+    return g;
+}
+
+void test_add_vertex(){
+
+    int N = 15;
+
+    Graph g = graph_example(N);
 
     for(int i=3; i<=5; ++i){
         for(int j=6; j<=8; ++j){
@@ -36,20 +47,9 @@ void test_add_vertex(){
 
 void test_delete_vertex(){
 
-    Graph g = Graph();
-    
     int N = 15;
-    
-    for(int i=0; i<N; ++i){
-        VertexData vdata = VertexData({i,i});
 
-        vector< pair<VertexData, double> > dis(i);
-        for(int j=0; j<i; ++j){
-            dis[j] = {VertexData({j,j}), i*j};
-        }
-
-        g.add_vertex(vdata, dis);
-    }
+    Graph g = graph_example(N);
 
     if(g.get_num_vertices() != N){
         cout << "Wrong num vertices in 0th iteration" << endl;
@@ -86,7 +86,55 @@ void test_delete_vertex(){
         }
     }
 
+}
 
+void test_graph_destructor(){
+
+    int N = 100;
+    int k;
+
+    for(int i=0; i < N; ++i){
+        Graph g = graph_example();
+        k = g.get_num_vertices();
+    }
+
+}
+
+void test_TSP_approximation(){
+
+    int N = 9;
+    Graph g = graph_example(N);
+    
+    vector<int> res = g.TSP();
+
+    for(auto i: res){
+        cout << i <<" ";
+    }
+
+    cout << "Cost of path: " << g.cost_of_path(res) << endl;
+    cout << endl;
+
+}
+
+void test_brute_force_path(){
+
+    int N = 9;
+
+    Graph g = graph_example(N);
+
+    vector<int> arange;
+    for(int i=0; i<N; ++i){
+        arange.push_back(i);
+    }
+
+    vector<int> res = g.best_path_brute_force(arange);
+
+    for(auto i: res){
+        cout << i << " ";
+    }
+
+    cout << "Cost of path: " << g.cost_of_path(res) << endl;
+    cout << endl;
 
 }
 
@@ -120,6 +168,47 @@ catch(int e){
         cout << "Invalid Result" << endl;
     }
 }
+
+#endif
+
+#ifdef TEST3
+
+try{
+    cout << "Running Test3" << endl;
+    test_graph_destructor();
+}
+catch(int e){
+
+}
+
+#endif
+
+#ifdef TEST4
+
+try{
+
+    cout << "Running Test4" << endl;
+    test_TSP_approximation();
+
+}
+catch(exception &e){
+    cout << "Unkown Error" << endl;
+}
+
+#endif
+
+#ifdef TEST5
+
+try{
+
+    cout << "Running Test5" << endl;
+    test_brute_force_path();
+
+}
+catch(exception &e){
+    cout << "Unkown Error" << endl;
+}
+
 
 #endif
 
