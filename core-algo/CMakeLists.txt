@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)                     # Enforce C++14 standard
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")                # Enforce use of GNU Compiler for expected behaviours
     option(TEST "Testing: " OFF)
+endif()
 
 if(TEST)                                                # In case of testing
     message("Testing is ON")
