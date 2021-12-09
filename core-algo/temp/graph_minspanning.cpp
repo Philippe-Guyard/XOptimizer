@@ -31,13 +31,17 @@ std::vector<Edge*> Graph::min_spanning(){
 std::vector<Edge*> Graph::min_spanning(const std::vector<int> &vertices_in_tree){
 
     int n = vertices_in_tree.size();
+    std::vector<Edge*> mst;
+
+    if( n==0 || n==1 ){
+        return mst;
+    }
 
     sort_edges();
 
-    std::vector<Edge*> mst;
 
     std::vector<bool> inside_tree(n);
-    for(auto& v : vertices_in_tree){
+    for(auto v : vertices_in_tree){
         inside_tree[v] = true;
     }
 
