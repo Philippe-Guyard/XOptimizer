@@ -314,8 +314,12 @@ EdgeWeight Graph::get_edge_weight(int i, int j) const{
  * 
  */
 
-    assert(i>=0 && i<num_vertices);
-    assert(j>=0 && j<num_vertices);
+    if( !(i>=0 && i<num_vertices) ){
+        throw std::exception();
+    }
+    if( !(j>=0 && j<num_vertices)){
+        throw std::exception();
+    }
 
     if(i==j){
         return (EdgeWeight) 0;
