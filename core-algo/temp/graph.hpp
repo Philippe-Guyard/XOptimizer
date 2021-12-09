@@ -164,7 +164,7 @@ public:
     // Functions for optimal routing
     // File algo_interface.cpp
     std::vector<int> optimal_routing(int inventory_index, std::vector<int> client_indices); //one inventory
-    std::vector<int> optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
+    std::vector< std::vector<int> > optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
 
 
 
