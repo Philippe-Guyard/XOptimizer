@@ -109,6 +109,8 @@ public:
     Graph();
     ~Graph();
 
+    int get_num_vertices()  const;
+
     void add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances );
     void delete_vertex(VertexData& data);
     void update_vertex_data(VertexData& data);

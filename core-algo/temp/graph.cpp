@@ -100,6 +100,10 @@ Graph::~Graph(){
 }
 
 
+int Graph::get_num_vertices()   const{
+    return num_vertices;
+}
+
 void Graph::update_vertex_data(VertexData& data){
     return;
 }
@@ -179,7 +183,10 @@ int Graph::get_vertex_position(VertexData &d) const{
  * 
  */
 
-    assert( vertex_position.count(d) );
+    if( !vertex_position.count(d) ){
+        return -1;
+    }
+
     return vertex_position.at(d);
 }
 
@@ -253,7 +260,9 @@ void Graph::delete_vertex(VertexData& data){
      */
 
     // prevent deletion of vertices that don't exist
-    assert( vertex_position.count(data) );
+    if( get_vertex_position(data) == -1){
+        return;
+    }
 
     int pos = vertex_position[data];
     swap_vertex_to_last(pos);
@@ -290,6 +299,8 @@ void Graph::delete_vertex(VertexData& data){
 
         delete edge_to_delete;
     }
+
+    vertex_position.erase(data);
 
     num_edges -= edges_to_delete.size();
     num_vertices--;
