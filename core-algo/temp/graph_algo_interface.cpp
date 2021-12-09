@@ -1,6 +1,13 @@
 #include "graph.hpp"
 
-
+/**
+ * 
+ * For Giuseppe:
+ *  Good morning!
+ * 
+ * Today you can finish writing these functions bellow and write a few tests for them.
+ * 
+ */
 
 std::vector<int> Graph::optimal_routing(int inventory_index, std::vector<int> client_indices){
     int m = client_indices.size();
@@ -29,17 +36,8 @@ std::vector<int> Graph::optimal_routing(int inventory_index, std::vector<int> cl
 }
 
 
+std::vector<int> Graph::optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices){
+    return std::vector<int>();
 
-std::vector<int> Graph::optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices){return std::vector<int>();}
-
-
-
-
-
-
-
-
-
-
-
+}
 
