@@ -280,7 +280,9 @@ EdgeWeight RandomGraph::random_tsp(
     for (int i = 0; i < number_of_vertices; i++)
     {
         vertex_data_array[i] = VertexData({random_coordinate(rng), random_coordinate(rng)});
+        distances[i].assign(number_of_vertices, std::numeric_limits<EdgeWeight>::max());
     }
+    return 0;
 
     // Generate random_permutation
     int permu[number_of_vertices];
@@ -294,6 +296,7 @@ EdgeWeight RandomGraph::random_tsp(
         gamma = std::min(gamma, 2*alpha[i]);
     }
     std::random_shuffle(permu, permu + number_of_vertices);
+    return 0;
     
     std::uniform_real_distribution<EdgeWeight> random_pertubation(0.0, gamma);
     for (int u : permu)
@@ -400,7 +403,7 @@ void RandomGraph::random_graph_with_eulerian_circuits(
             odd_deg_vertices[cnt++] = i;
         }
     }
-    while (cnt && num < 100)
+    while (cnt)
     {
         std::uniform_int_distribution<int> random_vertices_i(0, cnt-1);
         std::uniform_int_distribution<int> random_vertices_j(0, cnt-2);
