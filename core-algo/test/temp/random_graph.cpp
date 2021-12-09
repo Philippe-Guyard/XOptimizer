@@ -275,16 +275,18 @@ EdgeWeight RandomGraph::random_tsp(
     std::uniform_real_distribution<EdgeWeight> random_weight(0.0, weight_limit);
 
     // Generate random data for random graph
-    VertexData* vertex_data_array = new VertexData[number_of_vertices];
+    VertexData vertex_data_array[number_of_vertices];
     std::vector<std::vector<EdgeWeight> > distances(number_of_vertices * number_of_vertices);
     for (int i = 0; i < number_of_vertices; i++)
     {
         vertex_data_array[i] = VertexData({random_coordinate(rng), random_coordinate(rng)});
+        distances[i].assign(number_of_vertices, std::numeric_limits<EdgeWeight>::max());
     }
+    return 0;
 
     // Generate random_permutation
-    std::vector<int> permu(number_of_vertices);
-    std::vector<EdgeWeight> alpha(number_of_vertices);
+    int permu[number_of_vertices];
+    EdgeWeight alpha[number_of_vertices];
     EdgeWeight gamma = std::numeric_limits<EdgeWeight>::max(), optimal_cost = 0, d;
     int u, v;
     for (int i = 0; i < number_of_vertices; i++)
@@ -293,7 +295,8 @@ EdgeWeight RandomGraph::random_tsp(
         alpha[i] = random_weight(rng);
         gamma = std::min(gamma, 2*alpha[i]);
     }
-    std::random_shuffle(permu.begin(), permu.end());
+    std::random_shuffle(permu, permu + number_of_vertices);
+    return 0;
     
     std::uniform_real_distribution<EdgeWeight> random_pertubation(0.0, gamma);
     for (int u : permu)
@@ -316,8 +319,16 @@ EdgeWeight RandomGraph::random_tsp(
     distances[u][v] = distances[v][u] = d;
     optimal_cost += d; 
 
-    Graph(number_of_vertices, vertex_data_array, distances);
-    delete vertex_data_array;
+    // Build the graph
+    for (int i = 0; i < number_of_vertices; i++)
+    {
+        std::vector<std::pair<VertexData, EdgeWeight>> distance(i); 
+        for (int j = 0; j < i; j++)
+        {
+            distance[j] = {vertex_data_array[j], distances[i][j]};
+        }
+        add_vertex(vertex_data_array[i], distance);
+    }
 
     return optimal_cost;
 }
@@ -387,22 +398,22 @@ void RandomGraph::random_graph_with_eulerian_circuits(
     // Make degrees of all vertices even
     for (int i = 0; i < number_of_vertices; i++)
     {
-        if (deg[i] & i)
+        if (deg[i] & 1)
         {
             odd_deg_vertices[cnt++] = i;
         }
     }
     while (cnt)
     {
-        std::uniform_int_distribution<int> random_vertices(0, cnt-1);
-        int u = random_vertices(rng), v = random_vertices(rng);
-        while (u == v)
+        std::uniform_int_distribution<int> random_vertices_i(0, cnt-1);
+        std::uniform_int_distribution<int> random_vertices_j(0, cnt-2);
+        int i = random_vertices_i(rng), j = random_vertices_j(rng);
+        if (i <= j)
         {
-            v = random_vertices(rng);
+            j++;
         }
 
-        u = odd_deg_vertices[u],
-        v = odd_deg_vertices[v];
+        int u = odd_deg_vertices[i], v = odd_deg_vertices[j];
 
         if (distances[u][v] == std::numeric_limits<EdgeWeight>::max())
         {
@@ -411,16 +422,16 @@ void RandomGraph::random_graph_with_eulerian_circuits(
         }
         else
         {
-            distances[u][v] = distances[v][u] = random_weight(rng);
+            distances[u][v] = distances[v][u] = std::numeric_limits<EdgeWeight>::max();
             deg[u]--, deg[v]--;
         }
 
-        std::swap(odd_deg_vertices[u], odd_deg_vertices[cnt-1]);
+        std::swap(odd_deg_vertices[i], odd_deg_vertices[cnt-1]);
         cnt--;
-        std::swap(odd_deg_vertices[v], odd_deg_vertices[cnt-1]);
+        std::swap(odd_deg_vertices[j], odd_deg_vertices[cnt-1]);
         cnt--;
     }
-
+    
     // Build the graph
     for (int i = 0; i < number_of_vertices; i++)
     {
