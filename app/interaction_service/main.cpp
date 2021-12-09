@@ -4,7 +4,7 @@
 
 #include <QApplication>
 
-#define TESTING 1
+#define TESTING 0
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);

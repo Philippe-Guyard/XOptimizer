@@ -15,6 +15,7 @@ find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS QuickWidgets REQUIRED)
 
 set(PROJECT_SOURCES
     main.cpp
@@ -34,7 +35,6 @@ set(PROJECT_SOURCES
     file_storage.h
 )
 
-
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(interaction_service
         MANUAL_FINALIZATION
@@ -53,12 +53,12 @@ else()
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(interaction_service
-            ${PROJECT_SOURCES}
+            ${PROJECT_SOURCES} qml.qrc
         )
     endif()
 endif()
 
-target_link_libraries(interaction_service PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(interaction_service PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::QuickWidgets)
 
 set_target_properties(interaction_service PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
@@ -80,7 +80,7 @@ target_link_libraries(interaction_service PRIVATE pbf_parser)
 
 add_subdirectory(${CORE_ALGO} "${CMAKE_BINARY_DIR}/libs/build/core-algo")
 target_include_directories(interaction_service PUBLIC ${CORE_ALGO} )
-target_link_libraries(interaction_service PRIVATE Source)
+target_link_libraries(interaction_service PUBLIC Source)
 
 
 if(QT_VERSION_MAJOR EQUAL 6)

@@ -4,7 +4,7 @@
 
 Testing::Testing(XOptimizer::InteractionService* s){
 	service = s;
-	QDir::setCurrent("/Users/markdaychman/Documents/GitHub/XOptimizer/app/interaction_service/resources");
+    //QDir::setCurrent("/Users/markdaychman/Documents/GitHub/XOptimizer/app/interaction_service/resources");
 }
 
 void Testing::test_download(){
