@@ -100,17 +100,17 @@ void best_path_brute_force_aux
  *
  */
 
-    int m = chosen.size();
+    int m = path.size();
 
     int a = path[0];
     int b = path.back();
 
-    if( m+1 == current_path.size() ){
+    if( m-1 == current_path.size() ){
 
         current_path.push_back(b);
         double cost = cost_of_path(adjacency_matrix, current_path);
 
-        if(min_cost == -1 || cost < min_cost){
+        if( cost < min_cost ){
             best_path = current_path;
             min_cost = cost;
         }
@@ -120,7 +120,7 @@ void best_path_brute_force_aux
         return;
     }
 
-    for(int i=0; i<m; ++i){
+    for(int i=0; i < m-2; ++i){
         if( chosen[i] ){
             continue;
         }
@@ -153,13 +153,52 @@ std::vector<int> best_path_brute_force(const std::vector<std::vector<double>> &a
     std::vector<int> current_path;
     current_path.push_back(a);
 
-    double min_cost = -1;
-
-    std::vector<int> best_path;
+    std::vector<int> best_path = path;
+    double min_cost = cost_of_path(adjacency_matrix, path);
 
     best_path_brute_force_aux(adjacency_matrix, path, current_path, chosen, min_cost, best_path);
 
     return best_path;
 }
+
+std::vector<int> improve_path_locally(const std::vector<std::vector<double>> &adjacency_matrix, const std::vector<int> &path,
+                                        int improvement_radius, int shift)
+ {
+    
+    if(improvement_radius <= 0){
+        throw std::exception();
+    }
+
+    else if(improvement_radius == 1){
+        return path;
+    }
+
+    shift = shift%improvement_radius;
+
+    int curr = shift;
+    std::vector<int> improved_path;
+
+    while( curr < path.size() ){
+
+        std::vector<int> local_path;
+        for(int i=0; i < improvement_radius; ++i){
+            
+            if(curr >= path.size()){
+                break;
+            }
+
+            local_path.push_back( path[curr] );
+            curr++;
+        }
+
+        for(auto v : best_path_brute_force(adjacency_matrix, local_path)){
+            improved_path.push_back(v);
+        }
+    }
+
+    return improved_path;
+
+}
+
 
 }

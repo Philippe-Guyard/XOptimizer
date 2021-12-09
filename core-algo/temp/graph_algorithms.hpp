@@ -18,4 +18,6 @@ double cost_of_path(const std::vector<std::vector<double>> &adjacency_matrix, st
 
 std::vector<int> best_path_brute_force(const std::vector<std::vector<double>> &adjacency_matrix, std::vector<int> path);
 
+std::vector<int> improve_path_locally(const std::vector<std::vector<double>> &adjacency_matrix, const std::vector<int> &path, int improvement_radius=8, int shift=0);
+
 }

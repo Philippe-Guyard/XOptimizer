@@ -31,6 +31,17 @@ std::vector<int> Graph::best_path_brute_force(const std::vector<int>& path_verti
     return graph_algorithms::best_path_brute_force(
         this->build_adjacency_matrix(),
         path_vertices
-        );
+    );
+
+}
+
+std::vector<int> Graph::improve_path_locally(const std::vector<int>& path, int improvement_radius, int shift)  const{
+
+    return graph_algorithms::improve_path_locally(
+        this->build_adjacency_matrix(),
+        path,
+        improvement_radius,
+        shift
+    );
 
 }

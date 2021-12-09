@@ -2,13 +2,37 @@
 #include "Vec3.hpp"
 #include "graph_algorithms.hpp"
 
+#include <bits/stdc++.h>
+
 using namespace std;
 
-#define TEST1 true
-#define TEST2 true
-#define TEST3 true
-#define TEST4 true
-#define TEST5 true
+#define TEST1 0 
+#define TEST2 0
+#define TEST3 0
+#define TEST4 0
+#define TEST5 0
+#define TEST6 0
+#define TEST7 1
+
+Graph random_graph(int N=9){
+
+    srand(time(0));
+
+    Graph g = Graph();
+
+    for(int i=0; i<N; ++i){
+        VertexData vdata = VertexData({i,i});
+
+        vector< pair<VertexData, double> > dis(i);
+        for(int j=0; j<i; ++j){
+            dis[j] = {VertexData({j,j}), max(1, rand())/(double) 1000};
+        }
+
+        g.add_vertex(vdata, dis);
+    }
+
+    return g;
+}
 
 Graph graph_example(int N=15){
 
@@ -116,11 +140,13 @@ void test_TSP_approximation(){
 
 }
 
+// TEST 5
 void test_brute_force_path(){
 
-    int N = 9;
+    int N = 11;
 
-    Graph g = graph_example(N);
+    //Graph g = graph_example(N);
+    Graph g = random_graph(N);
 
     vector<int> arange;
     for(int i=0; i<N; ++i){
@@ -129,8 +155,8 @@ void test_brute_force_path(){
 
     vector<int> res = g.best_path_brute_force(arange);
 
-    for(auto i: res){
-        cout << i << " ";
+    for(int i=0; i<N; ++i){
+        cout << res[i] << " ";
     }
 
     cout << "Cost of path: " << g.cost_of_path(res) << endl;
@@ -138,10 +164,66 @@ void test_brute_force_path(){
 
 }
 
+void test_optimal_routing(){
+
+    int N = 10;
+
+    Graph g = random_graph(N);
+
+    int inventory_index = 0;
+    vector<int> client_indices;
+
+    for(int i=1; i<N; ++i){
+        client_indices.push_back(i);
+    }
+
+    vector<int> optimal_routing = g.optimal_routing(inventory_index, client_indices);
+
+    for(int i=0; i<N; ++i){
+        cout << optimal_routing[i] << " ";
+    }
+
+
+    cout << "Cost of path: " << g.cost_of_path(optimal_routing) << endl;
+    
+    if( N <= 10)
+        cout << "Cost of best path: " << g.cost_of_path( g.best_path_brute_force(optimal_routing) );
+
+
+}
+
+//TEST 7
+void test_improve_path_locally(){
+
+    int N = 5000;
+    Graph g = random_graph(N);
+
+    vector<int> trivial_path;
+    for(int i=0; i<N; ++i){
+        trivial_path.push_back(i);
+    }
+
+    cout << "Cost trivial path: " << g.cost_of_path(trivial_path) << endl;
+
+    trivial_path = g.TSP();
+    cout << "Cost of TSP: " << g.cost_of_path(trivial_path) << endl;
+
+    trivial_path = g.improve_path_locally(trivial_path);
+    cout << "Cost after local improvement: " << g.cost_of_path(trivial_path) << endl;
+
+    for(int j=0; j<5; ++j){
+        for(int i=1; i<8; ++i){
+            trivial_path = g.improve_path_locally(trivial_path, 8, 2*i); 
+        }
+    }
+    cout << "Cost after extreme local improvement: " << g.cost_of_path(trivial_path) << endl;
+
+
+}
 
 int main(){
 
-#ifdef TEST1
+#if TEST1
 
 try{
 
@@ -156,7 +238,7 @@ catch(int e){
 
 #endif
 
-#ifdef TEST2
+#if TEST2
 
 try{
     cout << "Running Test2" << endl;
@@ -171,7 +253,7 @@ catch(int e){
 
 #endif
 
-#ifdef TEST3
+#if TEST3
 
 try{
     cout << "Running Test3" << endl;
@@ -183,7 +265,7 @@ catch(int e){
 
 #endif
 
-#ifdef TEST4
+#if TEST4
 
 try{
 
@@ -197,7 +279,7 @@ catch(exception &e){
 
 #endif
 
-#ifdef TEST5
+#if TEST5
 
 try{
 
@@ -212,6 +294,19 @@ catch(exception &e){
 
 #endif
 
-    return 0;
+#if TEST6
+
+cout << "Running Test6" << endl;
+test_optimal_routing();
+
+#endif
+
+#if TEST7
+
+test_improve_path_locally();
+
+#endif
+    
+return 0;
 
 }

@@ -3,10 +3,12 @@
 // Case for one inventory
 
 std::vector<int> Graph::optimal_routing(int inventory_index, std::vector<int> client_indices){
+    
     int m = client_indices.size();
 
     std::vector<int> to_visit = client_indices;
     to_visit.push_back(inventory_index);
+
     std::vector<int> path_indices = this->TSP(to_visit);
 
     int inventory_position;
