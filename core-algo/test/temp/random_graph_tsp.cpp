@@ -39,7 +39,6 @@ EdgeWeight RandomGraph::random_tsp(
         vertex_data_array[i] = VertexData({random_coordinate(rng), random_coordinate(rng)});
         distances[i].assign(number_of_vertices, std::numeric_limits<EdgeWeight>::max());
     }
-    return 0;
 
     // Generate random_permutation
     int permu[number_of_vertices];
@@ -53,7 +52,6 @@ EdgeWeight RandomGraph::random_tsp(
         gamma = std::min(gamma, 2*alpha[i]);
     }
     std::random_shuffle(permu, permu + number_of_vertices);
-    return 0;
     
     std::uniform_real_distribution<EdgeWeight> random_pertubation(0.0, gamma);
     for (int u : permu)
