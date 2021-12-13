@@ -38,8 +38,10 @@ namespace
                     weight_limit, 
                     seed, 
                     true);
-                
-            EXPECT_IN_RANGE(result, random_tsp.cost_of_path(random_tsp.TSP()), result * 1.5)
+            
+            EdgeWeight computed = random_tsp.cost_of_path(random_tsp.TSP());
+
+            EXPECT_IN_RANGE(result, computed, result * 1.5)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
@@ -48,7 +50,11 @@ namespace
                 << density
                 << ", seed = "
                 << seed
-                << ", the expected and computed minimum cost do not follow thereotical result.\n"; 
+                << ", the expected and computed minimum cost do not follow thereotical result: Expected "
+                << result 
+                << ", found" 
+                << computed 
+                << "\n"; 
         }
     }
 
@@ -68,8 +74,9 @@ namespace
                     weight_limit, 
                     seed, 
                     true);
+            EdgeWeight computed = random_tsp.cost_of_path(random_tsp.TSP());
                 
-            EXPECT_IN_RANGE(result, random_tsp.cost_of_path(random_tsp.TSP()), result + 0.00001)
+            EXPECT_IN_RANGE(result, computed, result + 0.00001)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
@@ -78,7 +85,11 @@ namespace
                 << density
                 << ", seed = "
                 << seed
-                << ", the expected and computed minimum cost do not match.\n"; 
+                << ", the expected and computed minimum cost do not follow thereotical result: Expected "
+                << result 
+                << ", found" 
+                << computed 
+                << "\n"; 
         }
     }
 }
