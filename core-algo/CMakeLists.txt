@@ -5,7 +5,8 @@ project(LogistiX_CoreAlgo                               # Set the project name
 set(CMAKE_CXX_STANDARD 14)                              # Enable C++14 standard. Note GoogleTest requires at least C++11
 set(CMAKE_CXX_STANDARD_REQUIRED ON)                     # Enforce C++14 standard.        
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")                # Enforce use of GNU Compiler for expected behaviours
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR              # Enforce use of GNU Compiler for expected behaviours
+    CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
     option(TEST "Testing: " OFF)
 
     if(TEST)                                            # In case of testing
