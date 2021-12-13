@@ -28,7 +28,7 @@ namespace
         {
             int number_of_vertices = rng() % 1000 + 1;
             EdgeWeight weight_limit = 6000.0;
-            double density = random_density(rng);
+            double density = 1.0; //random_density(rng);
             long long seed = rng();
             
             RandomGraph random_tsp = RandomGraph();
@@ -41,7 +41,7 @@ namespace
             
             EdgeWeight computed = random_tsp.cost_of_path(random_tsp.TSP());
 
-            EXPECT_IN_RANGE(result, computed, result * 1.5)
+            EXPECT_IN_RANGE(computed, result, result * 1.5)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
@@ -50,9 +50,9 @@ namespace
                 << density
                 << ", seed = "
                 << seed
-                << ", the expected and computed minimum cost do not follow thereotical result: Expected "
+                << ", the expected and computed minimum cost \ndo not follow thereotical result: Expected "
                 << result 
-                << ", found" 
+                << ", found " 
                 << computed 
                 << "\n"; 
         }
@@ -76,7 +76,7 @@ namespace
                     true);
             EdgeWeight computed = random_tsp.cost_of_path(random_tsp.TSP());
                 
-            EXPECT_IN_RANGE(result, computed, result + 0.00001)
+            EXPECT_IN_RANGE(computed, result, result + 0.00001)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
@@ -85,9 +85,9 @@ namespace
                 << density
                 << ", seed = "
                 << seed
-                << ", the expected and computed minimum cost do not follow thereotical result: Expected "
+                << ", the expected and computed minimum cost \ndo not follow thereotical result: Expected "
                 << result 
-                << ", found" 
+                << ", found " 
                 << computed 
                 << "\n"; 
         }
