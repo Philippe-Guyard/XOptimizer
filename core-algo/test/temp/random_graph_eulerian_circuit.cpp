@@ -16,6 +16,14 @@
 // External libraries
 #include "random_graph.hpp"
 
+/**
+ * Initialize to a random undirected weighted graph, with given density and weight limit, and guaranteed to have Eulerian circuits.
+ * 
+ * @param {int}         number_of_vertices  : Number of vertices.
+ * @param {EdgeWeight}  weight_limit        : Upper limit for ranom weight. The lower bound is set by default to 0. Default set to be 6000.0
+ * @param {double}      density             : Density of random graph from 0 to 1, e.g. 0 corresponds to a tree, and 1 corresponds to complete graph. Default set to be 0.5
+ * @param {int}         seed                : Seed fed into random number generator. Default set to be the EPOCH time at runtime.
+ */
 void RandomGraph::random_graph_with_eulerian_circuits(
     int number_of_vertices, 
     EdgeWeight weight_limit = 6000.0, 

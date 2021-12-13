@@ -16,6 +16,18 @@
 // External libraries
 #include "random_graph.hpp"
 
+/**
+ * Initialize to a random undirected weighted graph, with given density, weight limit and known solution to Travelling Salesman Problem.
+ * This is implemented based on:
+ * Generating Travelling-Salesman Problems with Known Optimal Tours, 
+ * Jeffrey L. Arthur and James O. Frendewey, 
+ * Journal of the Operational Research Society, 39, 153-159 (1988).
+ * 
+ * @param {int}         number_of_vertices  : Number of vertices.
+ * @param {EdgeWeight}  weight_limit        : Upper limit for ranom weight. The lower bound is set by default to 0. Default set to be 6000.0
+ * @param {double}      density             : Density of random graph from 0 to 1, e.g. 0 corresponds to a tree, and 1 corresponds to complete graph. Default set to be 0.5
+ * @param {int}         seed                : Seed fed into random number generator. Default set to be the EPOCH time at runtime.
+ */
 EdgeWeight RandomGraph::random_tsp(
     int number_of_vertices,
     EdgeWeight weight_limit = 6000.0,
@@ -54,9 +66,9 @@ EdgeWeight RandomGraph::random_tsp(
     std::random_shuffle(permu, permu + number_of_vertices);
     
     std::uniform_real_distribution<EdgeWeight> random_pertubation(0.0, gamma);
-    for (int u : permu)
+    for (u = 0; u < number_of_vertices; u++)
     {
-        for (int v : permu)
+        for (v = 0; v < number_of_vertices; v++)
         {
             if (u < v)
             {
