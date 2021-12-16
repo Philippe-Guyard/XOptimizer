@@ -19,7 +19,7 @@ namespace XOptimizer {
 
     }
 
-    void InteractionService::download_and_parse_map(const std::string &region, const std::string &department, std::optional<std::function<void(qint64, qint64)>> download_callback = {}) {
+    void InteractionService::download_and_parse_map(const std::string &region, const std::string &department, std::optional<std::function<void(qint64, qint64)>> download_callback) {
         qDebug() << "Download and parse started.";
 
         //TODO: This doesn't work

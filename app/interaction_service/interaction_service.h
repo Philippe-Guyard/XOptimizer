@@ -18,6 +18,7 @@ namespace XOptimizer {
 
         void download_and_parse_map(const std::string& region, const std::string& department, std::optional<std::function<void(qint64, qint64)>> download_callback = {});
         void read_csv(QFile* file);
+        void parse_map();
         OpenStreetMapWrapper* get_api_wrapper();
         QVector<Order> orders;
     private:
