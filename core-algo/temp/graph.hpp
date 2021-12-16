@@ -109,6 +109,8 @@ public:
     Graph();
     ~Graph();
 
+    int get_num_vertices()  const;
+
     void add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances );
     void delete_vertex(VertexData& data);
     void update_vertex_data(VertexData& data);
@@ -145,7 +147,7 @@ public:
 
     double cost_of_path(const std::vector<int>& path) const;
     std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
-
+    std::vector<int> improve_path_locally(const std::vector<int>& path, int improvement_radius=8, int shift=0)  const;
 
     // File TSP_approximation.cpp
     // Eulerian Path
@@ -162,7 +164,7 @@ public:
     // Functions for optimal routing
     // File algo_interface.cpp
     std::vector<int> optimal_routing(int inventory_index, std::vector<int> client_indices); //one inventory
-    std::vector<int> optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
+    std::vector< std::vector<int> > optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
 
 
 

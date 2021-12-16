@@ -28,27 +28,35 @@ namespace
         {
             int number_of_vertices = rng() % 1000 + 1;
             EdgeWeight weight_limit = 6000.0;
-            double density = random_density(rng);
             long long seed = rng();
             
             RandomGraph random_tsp = RandomGraph();
-            std::EdgeWeight result = 
+            EdgeWeight result = 
                 random_tsp.random_tsp(
                     number_of_vertices, 
                     weight_limit, 
                     seed, 
                     true);
-                
-            EXPECT_IN_RANGE(result, random_tsp.TSP(), result.first * 1.5)
+            
+            std::vector<int> tsp_solution = random_tsp.TSP();
+            if (number_of_vertices > 1)
+            {
+                tsp_solution.push_back(tsp_solution[0]);
+            }
+            EdgeWeight computed = random_tsp.cost_of_path(tsp_solution);
+
+            EXPECT_IN_RANGE(computed, result, result * 1.5)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
                 << weight_limit
-                << ", density = "
-                << density
                 << ", seed = "
                 << seed
-                << ", the expected and computed minimum cost do not follow thereotical result.\n"; 
+                << ", the expected and computed minimum cost \ndo not follow thereotical result: Expected "
+                << result 
+                << ", found " 
+                << computed 
+                << "\n"; 
         }
     }
 
@@ -56,29 +64,36 @@ namespace
     {
         for (int i = 0; i < NUMBER_OF_TEST; i++)
         {
-            int number_of_vertices = 10;
+            int number_of_vertices = 6;
             EdgeWeight weight_limit = 6000.0;
-            double density = random_density(rng);
             long long seed = rng();
             
             RandomGraph random_tsp = RandomGraph();
-            std::EdgeWeight result = 
+            EdgeWeight result = 
                 random_tsp.random_tsp(
                     number_of_vertices, 
                     weight_limit, 
                     seed, 
                     true);
+            std::vector<int> tsp_solution = random_tsp.TSP_held_karp();
+            if (number_of_vertices > 1)
+            {
+                tsp_solution.push_back(tsp_solution[0]);
+            }
+            EdgeWeight computed = random_tsp.cost_of_path(tsp_solution);
                 
-            EXPECT_IN_RANGE(result, random_tsp.TSP(), result + 0.00001)
+            EXPECT_EQ(computed, result)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
                 << weight_limit
-                << ", density = "
-                << density
                 << ", seed = "
                 << seed
-                << ", the expected and computed minimum cost do not match.\n"; 
+                << ", the expected and computed minimum cost \ndo not follow thereotical result: Expected "
+                << result 
+                << ", found " 
+                << computed 
+                << "\n"; 
         }
     }
 }

@@ -1,5 +1,5 @@
 #include "graph.hpp"
-#include "graph_algorithms.cpp"
+#include "graph_algorithms.hpp"
 
 std::vector<int> Graph::euler_tour(const std::vector<Edge*>& edges_subgraph)    const{
 

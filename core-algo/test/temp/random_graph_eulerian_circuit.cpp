@@ -15,23 +15,26 @@
 
 // External libraries
 #include "random_graph.hpp"
-#include "../../lib/blossom5-v2_05/PerfectMatching.h"
-#include "../../lib/blossom5-v2_05/GEOM/GeomPerfectMatching.h"
 
 /**
- * Initialize to a random undirected weighted graph, with given density and weight limit.
+ * Initialize to a random undirected weighted graph, with given density and weight limit, and guaranteed to have Eulerian circuits.
  * 
  * @param {int}         number_of_vertices  : Number of vertices.
  * @param {EdgeWeight}  weight_limit        : Upper limit for ranom weight. The lower bound is set by default to 0. Default set to be 6000.0
  * @param {double}      density             : Density of random graph from 0 to 1, e.g. 0 corresponds to a tree, and 1 corresponds to complete graph. Default set to be 0.5
  * @param {int}         seed                : Seed fed into random number generator. Default set to be the EPOCH time at runtime.
  */
-void RandomGraph::random_graph(
+void RandomGraph::random_graph_with_eulerian_circuits(
     int number_of_vertices, 
     EdgeWeight weight_limit = 6000.0, 
     double density = 0.5, 
     int seed = -1)
 {
+    if (number_of_vertices < 2)
+    {
+        throw std::invalid_argument("Number of vertices is insufficient.");
+    }
+    
     // Seeding the random number generator
     if (seed == -1)
     {
@@ -52,7 +55,11 @@ void RandomGraph::random_graph(
 
     // Build underlying random spanning tree
     // Ref: Alexey S. Rodionov and Hyunseung Choo, On Generating Random Network Structures: Trees, ICCS 2003, LNCS 2658, pp. 879-887, 2003.
-    int temp[number_of_vertices], added[number_of_vertices];
+    int temp[number_of_vertices],  
+        added[number_of_vertices],  
+        deg[number_of_vertices], 
+        odd_deg_vertices[number_of_vertices];
+    int cnt = 0;
     for (int i = 0; i < number_of_vertices; i++) temp[i] = i;
     std::shuffle(temp, temp + number_of_vertices, rng);
     added[0] = temp[0];
@@ -62,6 +69,7 @@ void RandomGraph::random_graph(
             v = temp[count],
             u = added[index];
         added[count] = v;
+        deg[u]++, deg[v]++;
         distances[u][v] = distances[v][u] = random_weight(rng);
     }
 
@@ -77,7 +85,44 @@ void RandomGraph::random_graph(
             }
         }
     }
+    
+    // Make degrees of all vertices even
+    for (int i = 0; i < number_of_vertices; i++)
+    {
+        if (deg[i] & 1)
+        {
+            odd_deg_vertices[cnt++] = i;
+        }
+    }
+    while (cnt)
+    {
+        std::uniform_int_distribution<int> random_vertices_i(0, cnt-1);
+        std::uniform_int_distribution<int> random_vertices_j(0, cnt-2);
+        int i = random_vertices_i(rng), j = random_vertices_j(rng);
+        if (i <= j)
+        {
+            j++;
+        }
 
+        int u = odd_deg_vertices[i], v = odd_deg_vertices[j];
+
+        if (distances[u][v] == std::numeric_limits<EdgeWeight>::max())
+        {
+            distances[u][v] = distances[v][u] = random_weight(rng);
+            deg[u]++, deg[v]++;
+        }
+        else
+        {
+            distances[u][v] = distances[v][u] = std::numeric_limits<EdgeWeight>::max();
+            deg[u]--, deg[v]--;
+        }
+
+        std::swap(odd_deg_vertices[i], odd_deg_vertices[cnt-1]);
+        cnt--;
+        std::swap(odd_deg_vertices[j], odd_deg_vertices[cnt-1]);
+        cnt--;
+    }
+    
     // Build the graph
     for (int i = 0; i < number_of_vertices; i++)
     {
@@ -88,16 +133,4 @@ void RandomGraph::random_graph(
         }
         add_vertex(vertex_data_array[i], distance);
     }
-
-    /*
-    for (int i = 0; i < number_of_vertices; i++)
-    {
-        for (int j = 0; j < number_of_vertices; j++)
-        {
-            if (i == j) continue;
-            std::cerr << i << ' ' << j << ' ' << distances[i][j] << ' ' << get_edge_weight(i, j) << '\n';
-            assert(distances[i][j] == get_edge_weight(i, j));
-        }
-    }
-    //*/
 }
