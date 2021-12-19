@@ -25,13 +25,13 @@
  */
 namespace
 {
-    const int NUMBER_OF_TESTS = 1;
+    const int NUMBER_OF_TESTS = 20;
     std::mt19937_64 rng(std::chrono::system_clock::now().time_since_epoch().count());
     TEST(Map, Map)
     {
         for (int test = 0; test < NUMBER_OF_TESTS; test++)
         {
-            int number_of_vertices = rng() % 9 + 2;
+            int number_of_vertices = rng() % 99 + 2;
             EdgeWeight weight_limit = 6000.0;
             long long seed = rng();
             std::vector<std::vector<EdgeWeight>> results;
