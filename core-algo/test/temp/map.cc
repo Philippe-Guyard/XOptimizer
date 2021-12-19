@@ -34,6 +34,7 @@ namespace
             int number_of_vertices = rng() % 9 + 2;
             EdgeWeight weight_limit = 6000.0;
             long long seed = rng();
+            std::vector<std::vector<EdgeWeight>> results;
 
             RandomMap random_map = RandomMap(number_of_vertices,
                                              weight_limit,
@@ -46,18 +47,17 @@ namespace
                 vertex_data_array[u] = VertexData({random_coordinate(rng), random_coordinate(rng)});
             }
 
-            std::cerr << "1\n";
             // Testing constructor
             Map test_map = Map(number_of_vertices, vertex_data_array, random_map.random_edge_weights);
 
-            std::cerr << "2\n";
-            // Testing A* shortest paths
+            // Testing all pair shortest path : find_distances_slow()
+            results = test_map.find_distances_slow();
             for (int u = 0; u < number_of_vertices; u++)
             {
                 for (int v = 0; v < number_of_vertices; v++)
                 {
                     EdgeWeight expected_result = random_map.random_shortest_path(u, v),
-                               computed_result = test_map.find_distances_astar(u, v);
+                               computed_result = results[u][v];
 
                     EXPECT_NEAR(expected_result, computed_result, 0.00000001)
                         << "For number_of_vertices = "
@@ -66,14 +66,12 @@ namespace
                         << weight_limit
                         << ", seed = "
                         << seed
-                        << ", the expected and computed shortest path differ.\n";
+                        << ", the expected and computed shortest path from find_distances_slow() differ.\n";
                 }
             }
 
-            std::cerr << "3\n";
-            continue;
             // Testing all pair shortest path : find_distances()
-            std::vector<std::vector<EdgeWeight>> results = test_map.find_distances();
+            results = test_map.find_distances();
             for (int u = 0; u < number_of_vertices; u++)
             {
                 for (int v = 0; v < number_of_vertices; v++)
@@ -92,15 +90,14 @@ namespace
                 }
             }
 
-            std::cerr << "4\n";
-            // Testing all pair shortest path : find_distances_slow()
-            results = test_map.find_distances_slow();
+            continue;
+            // Testing A* shortest paths
             for (int u = 0; u < number_of_vertices; u++)
             {
                 for (int v = 0; v < number_of_vertices; v++)
                 {
                     EdgeWeight expected_result = random_map.random_shortest_path(u, v),
-                               computed_result = results[u][v];
+                               computed_result = test_map.find_distances_astar(u, v);
 
                     EXPECT_NEAR(expected_result, computed_result, 0.00000001)
                         << "For number_of_vertices = "
@@ -109,7 +106,7 @@ namespace
                         << weight_limit
                         << ", seed = "
                         << seed
-                        << ", the expected and computed shortest path from find_distances_slow() differ.\n";
+                        << ", the expected and computed shortest path differ.\n";
                 }
             }
         }
