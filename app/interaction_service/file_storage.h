@@ -4,21 +4,32 @@
 #include<QFile>
 #include<QList>
 #include<QMap>
+#include <QResource>
+#include <QDir>
 
 class FileStorage {
 public:
     //FileStorage();
     FileStorage(){
-                FiledictMaps = QMap<std::string, QFile*>();
-                FiledictCSV = QMap<std::string, QFile*>();
+                FiledictMaps = QMap<std::string, QString>();
+                FiledictCSV = QMap<std::string, QString>();
+
+                QString ms = QString("MAP_storage");
+                QString cs = QString("CSV_storage");
+
+                QDir::home().mkdir(ms);
+                QDir::home().mkdir(cs);
+
                  }
 
     void save_map(std::string map_name, QFile* map);
 
     //For Map/PBF files
-    QMap<std::string, QFile*> FiledictMaps;
+    QMap<std::string, QString> FiledictMaps;
 
-    //std::string get_save_path(std::string region,std::string department);
+
+    QString construct_save_path(QString region, QString department);
+
     QString get_save_path_from_map_name(std::string map_name);
 
 
@@ -29,14 +40,15 @@ public:
     QList<std::string> get_all_map_names();
     //For CSV files
 
-    QMap<std::string, QFile*> FiledictCSV;
+    QMap<std::string, QString> FiledictCSV;
+
+    void save_csv(std::string csv_name, QFile* csv);
 
     QList<std::string> get_all_csv_names();
 
     QFile* read_csv_by_name(std::string name);
 
     QString get_save_path_from_csv_name(std::string name);
-
 };
 
 #endif // FILE_STORAGE_H
