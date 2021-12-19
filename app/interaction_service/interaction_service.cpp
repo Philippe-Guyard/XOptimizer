@@ -19,7 +19,7 @@ namespace XOptimizer {
 
     }
 
-    void InteractionService::download_and_parse_map(const std::string &region, const std::string &department) {
+    void InteractionService::download_and_parse_map(const std::string &region, const std::string &department, std::optional<std::function<void(qint64, qint64)>> download_callback) {
         qDebug() << "Download and parse started.";
 
         //TODO: This doesn't work
@@ -31,6 +31,9 @@ namespace XOptimizer {
             this->parse_map();
             qDebug() << "Download exit.";
         });
+        if (download_callback.has_value()) {
+            QObject::connect(reply, &QNetworkReply::downloadProgress, download_callback.value());
+        }
         qDebug() << "Download and parse ended.";
     }
 
