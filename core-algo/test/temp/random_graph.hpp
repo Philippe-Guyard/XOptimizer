@@ -39,4 +39,6 @@ class RandomGraph : public Graph
             EdgeWeight weight_limit, 
             double density, 
             int seed);
+        
+        bool eulerian_circuit_check();
 };

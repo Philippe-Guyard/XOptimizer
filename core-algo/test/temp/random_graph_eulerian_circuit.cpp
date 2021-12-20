@@ -10,6 +10,8 @@
 #include <limits>                   // std::numeric_limits
 #include <queue>                    // std::priority_queue
 #include <stdexcept>                // std::invalid_argument
+#include <cstring>                  // std::memset
+#include <unordered_set>            // std::unordered_set
 #include <iostream>
 #include <assert.h>
 
@@ -59,8 +61,12 @@ void RandomGraph::random_graph_with_eulerian_circuits(
         added[number_of_vertices],  
         deg[number_of_vertices], 
         odd_deg_vertices[number_of_vertices];
+    memset(deg, 0, sizeof(deg));
     int cnt = 0;
-    for (int i = 0; i < number_of_vertices; i++) temp[i] = i;
+    for (int i = 0; i < number_of_vertices; i++) 
+    {
+        temp[i] = i;
+    }
     std::shuffle(temp, temp + number_of_vertices, rng);
     added[0] = temp[0];
     for (int count = 1; count < number_of_vertices; count++)
@@ -82,6 +88,7 @@ void RandomGraph::random_graph_with_eulerian_circuits(
             if (distances[i][j] == std::numeric_limits<EdgeWeight>::max() && bern_dist(rng))
             {
                 distances[i][j] = distances[j][i] = random_weight(rng);
+                deg[i]++, deg[j]++;
             }
         }
     }
@@ -94,6 +101,11 @@ void RandomGraph::random_graph_with_eulerian_circuits(
             odd_deg_vertices[cnt++] = i;
         }
     }
+    // check that vertices of odd degrees do come in pairs as expected by Handshake lemma.
+    if (cnt & 1)
+    {
+        throw std::runtime_error("Vertices of odd degress do not come in pairs.");
+    }
     while (cnt)
     {
         std::uniform_int_distribution<int> random_vertices_i(0, cnt-1);
@@ -103,9 +115,12 @@ void RandomGraph::random_graph_with_eulerian_circuits(
         {
             j++;
         }
+        if (i > j)
+        {
+            std::swap(i, j);
+        }
 
-        int u = odd_deg_vertices[i], v = odd_deg_vertices[j];
-
+        int &u = odd_deg_vertices[i], &v = odd_deg_vertices[j];
         if (distances[u][v] == std::numeric_limits<EdgeWeight>::max())
         {
             distances[u][v] = distances[v][u] = random_weight(rng);
@@ -117,12 +132,11 @@ void RandomGraph::random_graph_with_eulerian_circuits(
             deg[u]--, deg[v]--;
         }
 
-        std::swap(odd_deg_vertices[i], odd_deg_vertices[cnt-1]);
+        std::swap(v, odd_deg_vertices[cnt-1]);
         cnt--;
-        std::swap(odd_deg_vertices[j], odd_deg_vertices[cnt-1]);
+        std::swap(u, odd_deg_vertices[cnt-1]);
         cnt--;
     }
-    
     // Build the graph
     for (int i = 0; i < number_of_vertices; i++)
     {
@@ -133,4 +147,47 @@ void RandomGraph::random_graph_with_eulerian_circuits(
         }
         add_vertex(vertex_data_array[i], distance);
     }
+}
+
+/**
+ * Checking if the the result returned from method finding eulerian circuits is correct
+ */
+bool RandomGraph::eulerian_circuit_check()
+{
+    std::vector<Edge*> existing_edges;
+    std::unordered_set<int> to_visit_edges;
+    int u, v;
+    for (Edge* e : edges)
+    {
+        if (e->get_weight() < std::numeric_limits<EdgeWeight>::max())
+        {
+            existing_edges.push_back(e);
+            u = (e->get_vertices()).first->get_index();
+            v = (e->get_vertices()).second->get_index();
+            if (u > v)
+            {
+                std::swap(u, v);
+            }
+            to_visit_edges.insert(u * num_edges + v);
+        }
+    }
+    std::vector<int> result = euler_tour(existing_edges);
+    
+    for (int i = 1; i < result.size(); i++)
+    {
+        u = result[i-1], v = result[i];
+        if (u > v)
+        {
+            std::swap(u, v);
+        }
+        if (to_visit_edges.find(u * num_edges + v) == to_visit_edges.end())
+        {
+            return false;
+        }
+        else
+        {
+            to_visit_edges.erase(u * num_edges + v);
+        }
+    }
+    return true;
 }

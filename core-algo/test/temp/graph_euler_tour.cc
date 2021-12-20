@@ -16,36 +16,32 @@ namespace
 {
     const int NUMBER_OF_TEST = 20;
     std::mt19937_64 rng(std::chrono::system_clock::now().time_since_epoch().count());
-    std::bernoulli_distribution random_bit(0.5);
 
     TEST(EulerianCycle, EulerianCycle)
     {
         for (int test = 0; test < NUMBER_OF_TEST; test++)
         {
-            int number_of_vertices = rng() % 5000 + 3;
-            number_of_vertices = 10;
+            int number_of_vertices = rng() % 997 + 3;
             EdgeWeight weight_limit = 6000.0;
-            double density = 1.0;
+            double density = 0.5;
             long long seed = rng();
 
             RandomGraph random_graph = RandomGraph();
-            if (random_bit(rng))
-            {
-                random_graph.random_graph_with_eulerian_circuits(
-                    number_of_vertices,
-                    weight_limit,
-                    density,
-                    seed);
-                
-            }
-            else
-            {
-                random_graph.random_graph(
-                    number_of_vertices,
-                    weight_limit,
-                    density,
-                    seed);
-            }
+            random_graph.random_graph_with_eulerian_circuits(
+                number_of_vertices,
+                weight_limit,
+                density,
+                seed);
+            EXPECT_TRUE(random_graph.eulerian_circuit_check())
+                << "For number_of_vertices = " 
+                << number_of_vertices
+                << ", weight_limit = "
+                << weight_limit
+                << ", density = "
+                << density
+                << ", seed = "
+                << seed
+                << ", the method finding Eulerian circuits fails.\n";
         }
     }
 }
