@@ -12,7 +12,8 @@ using namespace std;
 #define TEST4 0
 #define TEST5 0
 #define TEST6 0
-#define TEST7 1
+#define TEST7 0
+#define TEST8 1
 
 Graph random_graph(int N=9){
 
@@ -307,6 +308,30 @@ test_improve_path_locally();
 
 #endif
     
+
+#if TEST8
+
+cout << "Running Edge index" << endl;
+Graph g = graph_example();
+
+
+cout << "Edge Indices" << endl;
+
+int index = g.get_edge_index(8, 13);
+cout << index << endl;
+cout << g.get_edge(index)->get_vertices().first->get_index() << " " << g.get_edge(index)->get_vertices().second->get_index() << endl;
+
+/*
+for(int i=0; i < g.get_num_vertices(); ++i){
+    for(int j=0; j < g.get_num_vertices(); ++j){
+        cout << g.get_edge_index(i,j) << " ";
+    }
+    cout << endl;
+}
+*/
+
+#endif
+
 return 0;
 
 }
