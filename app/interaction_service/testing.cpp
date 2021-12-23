@@ -52,8 +52,9 @@ void Testing::test_search_csv(){
 };
 */
 void Testing::test_filestorage(){
-    FileStorage store;/*
+    FileStorage store;
     QString s = QDir::separator();
+    /*
     QString path = QDir::homePath() + s + "Desktop" + s +"XOptimizer" + s + "app"+ s+ "interaction_service" +s+"test.csv";
     std::cout << path.toStdString()<< "\n";
     QFile file(path);
