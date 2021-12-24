@@ -110,13 +110,15 @@ public:
     ~Graph();
 
     int get_num_vertices()  const;
+    int get_num_edges() const;
 
     void add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances );
     void delete_vertex(VertexData& data);
     void update_vertex_data(VertexData& data);
 
     int get_vertex_position(VertexData &d) const;
-
+    int get_edge_index(int u, int v)    const;
+    Edge* get_edge(int index) const;
 
     // get edge weight functions
     EdgeWeight get_edge_weight(int i, int j) const;

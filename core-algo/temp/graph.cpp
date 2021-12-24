@@ -104,6 +104,14 @@ int Graph::get_num_vertices()   const{
     return num_vertices;
 }
 
+int Graph::get_num_edges()  const{
+    return edges.size();
+}
+
+Edge* Graph::get_edge(int index)    const{
+    return edges[index];
+}
+
 void Graph::update_vertex_data(VertexData& data){
     return;
 }
@@ -168,6 +176,10 @@ void Graph::add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeW
     num_vertices++;
 }
 
+
+int Graph::get_edge_index(int u, int v) const{
+    return adjacency_list[u][v]->get_index();
+}
 
 int Graph::get_vertex_position(VertexData &d) const{
 
