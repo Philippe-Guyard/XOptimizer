@@ -5,6 +5,7 @@
 #include <utility>                  // std::pair, std::make_pair
 #include <random>                   // std::mt19937_64
 #include <chrono>                   // std::chrono::system_clock::now().time_since_epoch().count()
+#include <iostream>
 
 // External libraries
 #include "gtest/gtest.h"
@@ -64,7 +65,7 @@ namespace
     {
         for (int i = 0; i < NUMBER_OF_TEST; i++)
         {
-            int number_of_vertices = 6;
+            int number_of_vertices = 10;
             EdgeWeight weight_limit = 6000.0;
             long long seed = rng();
             
@@ -82,7 +83,7 @@ namespace
             }
             EdgeWeight computed = random_tsp.cost_of_path(tsp_solution);
                 
-            EXPECT_EQ(computed, result)
+            EXPECT_IN_RANGE(computed, result - 1e-7, result + 1e-7)
                 << "For number_of_vertices = " 
                 << number_of_vertices
                 << ", weight_limit = "
