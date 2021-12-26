@@ -16,8 +16,7 @@
  * Inspired by https://github.com/crvs/KDTree
  */
 
-using pointIndex = typename std::pair< std::vector< double >, size_t >;
-using pointIndexArr = typename std::vector< pointIndex >;
+
 
 template<size_t k> class KdTreeNode{
 public:
@@ -41,8 +40,8 @@ private:
 template<size_t k> using KdTreeNodePtr = std::shared_ptr< KdTreeNode<k> >;
 template<size_t k> KdTreeNodePtr<k> NewKdTreeNodePtr();
 
-using point_t = std::vector< double >;
-using pointVec = std::vector< point_t >;
+//using point_t = std::vector<double>;
+//using pointVec = std::vector< point_t >;
 
 
 template<size_t k> class KdTree {
@@ -50,15 +49,13 @@ template<size_t k> class KdTree {
     using pointIndex = typename std::pair< std::vector< double >, size_t >;
     using pointIndexArr = typename std::vector< pointIndex >;
 public:
-    KdTree(pointVec point_array);
+    KdTree(std::vector < std::array<double, k> > point_array); // pass a vector of points
 private:
     std::shared_ptr<KdTreeNode<k>> root;
-    std::shared_ptr<KdTreeNode<k>> leaf;
+    KDNodePtr make_tree(std::vector<std::array<double, k>> point_array ,  //
+                        const size_t &length,                  //
+                        const size_t &level                    //
 
-    KDNodePtr make_tree(const pointIndexArr::iterator &begin,  //
-                         const pointIndexArr::iterator &end,    //
-                         const size_t &length,                  //
-                         const size_t &level                    //
      );
 };
 
