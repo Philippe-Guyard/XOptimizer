@@ -231,13 +231,13 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
     m = path.size();
     
     std::vector<int> optimized_path;
-    std::pair<EdgeWeight, int> min_costs[1<<m][m];
+    std::pair<double, int> min_costs[1<<m][m];
     for (int mask = 0; mask < (1<<m); mask++)
     {
         for (int last = 0; last < m; last++)
         {
             min_costs[mask][last] = {
-                std::numeric_limits<EdgeWeight>::max(), 
+                std::numeric_limits<double>::max(), 
                 -1};
         }
     }
@@ -250,7 +250,7 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
             if (visited == 1 << last)
             {
                 min_costs[visited][last] = {
-                    get_edge_weight(a, last), 
+                    adjacency_matrix[a][last], 
                     a
                 };
             }
@@ -260,9 +260,9 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
                 for (int prev = 0; prev < m; prev++)
                 {
                     if (!((visited>>prev)&1)) continue;
-                    EdgeWeight possible_cost = 
+                    double possible_cost = 
                         min_costs[prev_visited][prev].first + 
-                        get_edge_weight(last, prev);
+                        adjacency_matrix[last][prev];
                     if (possible_cost < min_costs[visited][last].first)
                     {
                         min_costs[visited][last] = {possible_cost, prev};
@@ -271,13 +271,13 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
             }
         }
     }
-    EdgeWeight min_total_cost = std::numeric_limits<EdgeWeight>::max();
+    double min_total_cost = std::numeric_limits<double>::max();
     int last_vertex, mask = (1<<m)-1;
     for (int last = 0; last < m; last++)
     {
-        EdgeWeight possible_cost = 
+        double possible_cost = 
             min_costs[mask][last].first + 
-            get_edge_weight(last, b);
+            adjacency_matrix[last][b];
         if (possible_cost < min_total_cost)
         {
             last_vertex = last;
