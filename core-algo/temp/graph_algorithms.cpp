@@ -200,5 +200,30 @@ std::vector<int> improve_path_locally(const std::vector<std::vector<double>> &ad
 
 }
 
+std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adjacency_matrix, std::vector<int> path){
+
+/** 
+ * PARAMETERS:
+ * std::vector<std::vector<double>> &adjacency_matrix
+ * 
+ * std::vector<int> path
+ * 
+ * RETURN:
+ * 
+ * std::vector<int> : The optimized version of the path with the first and the last node being the same.
+ * 
+ */
+
+    int m = path.size();
+
+    if( m <= 2 ){
+        return path;
+    }
+
+    int a = path[0];
+    int b = path[m-1];
+    
+    return {};
+}
 
 }
