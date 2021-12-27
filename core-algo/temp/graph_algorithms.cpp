@@ -1,4 +1,7 @@
 #include "graph_algorithms.hpp"
+#include <climits>
+#include <cstring>
+#include <algorithm>
 
 namespace graph_algorithms{
 
@@ -222,8 +225,76 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
 
     int a = path[0];
     int b = path[m-1];
+    std::swap(path[0], path[m-2]);
+    path.pop_back();
+    path.pop_back();
+    m = path.size();
     
-    return {};
+    std::vector<int> optimized_path;
+    std::pair<EdgeWeight, int> min_costs[1<<m][m];
+    for (int mask = 0; mask < (1<<m); mask++)
+    {
+        for (int last = 0; last < m; last++)
+        {
+            min_costs[mask][last] = {
+                std::numeric_limits<EdgeWeight>::max(), 
+                -1};
+        }
+    }
+
+    for (int visited = 1; visited < (1<<m); visited++)
+    {
+        for (int last = 0; last < m; last++)
+        {
+            if (!((visited>>last)&1)) continue;
+            if (visited == 1 << last)
+            {
+                min_costs[visited][last] = {
+                    get_edge_weight(a, last), 
+                    a
+                };
+            }
+            else
+            {
+                int prev_visited = visited ^ 1<<last;
+                for (int prev = 0; prev < m; prev++)
+                {
+                    if (!((visited>>prev)&1)) continue;
+                    EdgeWeight possible_cost = 
+                        min_costs[prev_visited][prev].first + 
+                        get_edge_weight(last, prev);
+                    if (possible_cost < min_costs[visited][last].first)
+                    {
+                        min_costs[visited][last] = {possible_cost, prev};
+                    }
+                }
+            }
+        }
+    }
+    EdgeWeight min_total_cost = std::numeric_limits<EdgeWeight>::max();
+    int last_vertex, mask = (1<<m)-1;
+    for (int last = 0; last < m; last++)
+    {
+        EdgeWeight possible_cost = 
+            min_costs[mask][last].first + 
+            get_edge_weight(last, b);
+        if (possible_cost < min_total_cost)
+        {
+            last_vertex = last;
+            min_total_cost = possible_cost;
+        }
+    }
+    optimized_path.push_back(b);
+    while (mask)
+    {
+        int prev_vertex = min_costs[mask][last_vertex].second;
+        mask ^= 1<<last_vertex;
+        optimized_path.push_back(last_vertex);
+        last_vertex = prev_vertex;
+    }
+    optimized_path.push_back(a);
+    std::reverse(optimized_path.begin(), optimized_path.end());
+    return optimized_path;
 }
 
 }
