@@ -13,11 +13,17 @@ using namespace std;
 #define TEST5 0
 #define TEST6 0
 #define TEST7 0
-#define TEST8 1
+#define TEST8 0
+#define TEST9 1
+
+void cout_vector(vector<int> vec){
+    for(auto x : vec){
+        cout << x << " ";
+    }
+    cout<<endl;
+}
 
 Graph random_graph(int N=9){
-
-    srand(time(0));
 
     Graph g = Graph();
 
@@ -329,6 +335,46 @@ for(int i=0; i < g.get_num_vertices(); ++i){
     cout << endl;
 }
 */
+
+#endif
+
+#if TEST9
+
+srand(time(0));
+
+for (int i_=0; i_<10; ++i_){
+
+    if(true)
+        cout << "TEST9 iteration " << i_ << endl;
+
+    Graph g = random_graph(20);
+    
+    vector<int> path = {0,1,2,3,4,5,6,7};
+
+    vector<int> p_before, p_after;
+
+    if(i_%2 == 0){
+        p_before = g.best_path_brute_force(path);
+        p_after = g.best_path_held_karp(path);
+    }
+
+    else{
+        p_after = g.best_path_held_karp(path);
+        p_before = g.best_path_brute_force(path);
+    }
+
+    if( p_after != p_before ){
+        cout << "FAILED \n";
+
+        cout_vector(p_before);
+        cout << g.cost_of_path(p_before) << endl;
+
+        cout_vector(p_after);
+        cout << g.cost_of_path(p_after) << endl;
+        cout << "\n";
+    }
+
+}
 
 #endif
 
