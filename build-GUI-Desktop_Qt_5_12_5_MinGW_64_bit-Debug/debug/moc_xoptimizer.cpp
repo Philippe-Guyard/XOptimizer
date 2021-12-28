@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_XOptimizer_t {
-    QByteArrayData data[13];
-    char stringdata0[227];
+    QByteArrayData data[14];
+    char stringdata0[240];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -43,7 +43,8 @@ QT_MOC_LITERAL(8, 122, 36), // "on_CitycomboBox_2_currentText..."
 QT_MOC_LITERAL(9, 159, 21), // "on_NextButton_clicked"
 QT_MOC_LITERAL(10, 181, 31), // "on_stackedWidget_currentChanged"
 QT_MOC_LITERAL(11, 213, 11), // "change_page"
-QT_MOC_LITERAL(12, 225, 1) // "a"
+QT_MOC_LITERAL(12, 225, 1), // "a"
+QT_MOC_LITERAL(13, 227, 12) // "load_regions"
 
     },
     "XOptimizer\0on_DepartmentcomboBox_currentTextChanged\0"
@@ -52,7 +53,7 @@ QT_MOC_LITERAL(12, 225, 1) // "a"
     "on_CitycomboBox_2_currentTextChanged\0"
     "on_NextButton_clicked\0"
     "on_stackedWidget_currentChanged\0"
-    "change_page\0a"
+    "change_page\0a\0load_regions"
 };
 #undef QT_MOC_LITERAL
 
@@ -62,7 +63,7 @@ static const uint qt_meta_data_XOptimizer[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -70,14 +71,15 @@ static const uint qt_meta_data_XOptimizer[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   54,    2, 0x08 /* Private */,
-       4,    0,   57,    2, 0x08 /* Private */,
-       5,    0,   58,    2, 0x08 /* Private */,
-       6,    1,   59,    2, 0x08 /* Private */,
-       8,    1,   62,    2, 0x08 /* Private */,
-       9,    0,   65,    2, 0x08 /* Private */,
-      10,    1,   66,    2, 0x08 /* Private */,
-      11,    1,   69,    2, 0x08 /* Private */,
+       1,    1,   59,    2, 0x08 /* Private */,
+       4,    0,   62,    2, 0x08 /* Private */,
+       5,    0,   63,    2, 0x08 /* Private */,
+       6,    1,   64,    2, 0x08 /* Private */,
+       8,    1,   67,    2, 0x08 /* Private */,
+       9,    0,   70,    2, 0x08 /* Private */,
+      10,    1,   71,    2, 0x08 /* Private */,
+      11,    1,   74,    2, 0x08 /* Private */,
+      13,    0,   77,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::QString,    3,
@@ -88,6 +90,7 @@ static const uint qt_meta_data_XOptimizer[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,   12,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -106,6 +109,7 @@ void XOptimizer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 5: _t->on_NextButton_clicked(); break;
         case 6: _t->on_stackedWidget_currentChanged((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 7: _t->change_page((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 8: _t->load_regions(); break;
         default: ;
         }
     }
@@ -140,13 +144,13 @@ int XOptimizer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

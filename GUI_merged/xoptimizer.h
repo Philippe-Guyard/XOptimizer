@@ -2,10 +2,12 @@
 #define XOPTIMIZER_H
 #include <QStandardItemModel>
 #include <QMainWindow>
+#include <map>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class XOptimizer; }
 QT_END_NAMESPACE
+
 
 class XOptimizer : public QMainWindow
 {
@@ -31,6 +33,9 @@ private slots:
     void on_stackedWidget_currentChanged(int arg1);
 
     void change_page(int a);
+
+    void load_regions();
+
 
 private:
     Ui::XOptimizer *ui;

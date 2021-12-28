@@ -9,8 +9,9 @@
 #include <QStandardItemModel>
 #include <QMovie>
 #include <QTimer>
-
-
+#include <fstream>
+#include <QtDebug>
+#include <QTextCodec>
 using namespace std;
 
 QString chosenCity;
@@ -25,10 +26,52 @@ map<QString, QStringList> cities ={
     {"Centre-Val de Loire", { "Cher ", "Eure-et-Loir", "Indre-et-Loire" "Indre ", "Loiret "}}
 };
 
+
+void XOptimizer::load_regions(){
+
+    map<QString, QStringList> regions_list;
+    QStringList departments_list;
+    QDir dir(".");
+    QString path = dir.absolutePath() + "/departements-region.csv";
+
+    QFile file(path);
+
+    if(!file.open(QFile::ReadOnly | QFile::Text)){
+
+        QMessageBox::warning(this, "title", "file not open");
+    }
+
+    QTextStream in(&file);
+    in.setCodec("UTF-8");
+
+    string key, value, number;
+    QString garbage = in.readLine();
+    while (!in.atEnd()) {
+        QString s=in.readLine();
+
+
+        QStringList linesplit = s.split(',');
+        QString qvalue = linesplit[1];
+        QString qkey = linesplit[2];
+
+        departments_list << qkey;
+        regions_list[qkey] << qvalue;
+        }
+
+
+    qDebug().nospace() << departments_list;
+    departments_list.removeDuplicates();
+    departments = departments_list;
+    cities = regions_list;
+
+}
+
 XOptimizer::XOptimizer(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::XOptimizer)
 {
+    load_regions();
+
     ui->setupUi(this);
     //Setting up the drop boxes
     ui->DepartmentcomboBox->addItems(departments);
@@ -73,6 +116,8 @@ void XOptimizer::on_uploadFileButton_clicked()
         QMessageBox::warning(this, "title", "file not open");
     }
     QTextStream in(&file);
+    in.setCodec("UTF-8");
+
 
     int n = 0;
     while (!in.atEnd()){

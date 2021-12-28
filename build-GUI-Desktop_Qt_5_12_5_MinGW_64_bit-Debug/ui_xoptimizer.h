@@ -52,6 +52,7 @@ public:
     QLabel *filelabel;
     QPushButton *uploadFileButton;
     QWidget *page;
+    QWidget *page_5;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -153,10 +154,13 @@ public:
         page = new QWidget();
         page->setObjectName(QString::fromUtf8("page"));
         stackedWidget->addWidget(page);
+        page_5 = new QWidget();
+        page_5->setObjectName(QString::fromUtf8("page_5"));
+        stackedWidget->addWidget(page_5);
         XOptimizer->setCentralWidget(centralwidget);
         menubar = new QMenuBar(XOptimizer);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
+        menubar->setGeometry(QRect(0, 0, 800, 26));
         XOptimizer->setMenuBar(menubar);
         statusbar = new QStatusBar(XOptimizer);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -164,7 +168,7 @@ public:
 
         retranslateUi(XOptimizer);
 
-        stackedWidget->setCurrentIndex(2);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(XOptimizer);
