@@ -54,4 +54,16 @@ namespace
         EXPECT_NE(location_ecole_polytechnique, location_ens_ulm)
             << "Comparator fails to compare different objects.\n";
     }
+
+    TEST(VertexData, GetDistance)
+    {
+        VertexData location_ecole_polytechnique = VertexData(coordinate_ecole_polytechnique);
+        VertexData location_ens_ulm = VertexData(coordinate_ens_ulm);
+
+        EXPECT_EQ(location_ecole_polytechnique.get_distance(location_ens_ulm), location_ens_ulm.get_distance(coordinate_ecole_polytechnique))
+            << "Returned distances are not symmetric.";
+        
+        EXPECT_NEAR(location_ecole_polytechnique.get_distance(location_ens_ulm), 17262, 100)
+            << "Returned distance does not match expected result.";
+    }
 }

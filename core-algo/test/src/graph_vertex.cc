@@ -58,15 +58,4 @@ namespace
         EXPECT_EQ(first_vertex, second_vertex)
             << "Comparator fails to compare equal object.\n";
     }
-
-    
-    TEST(Vertex, NotEqual)
-    {
-        Vertex vertex_ep = Vertex(location_ecole_polytechnique, 
-                                  index_ecole_polytechnique);
-        Vertex vertex_ens = Vertex(location_ens_ulm, 
-                                   index_ens_ulm);
-        EXPECT_NE(vertex_ep, vertex_ens)
-            << "Comparator fails to compare different object.\n";
-    }
 }
