@@ -4,19 +4,21 @@
 #include<unordered_set>
 
 #include<vector>
+#include<stack>
 #include<cstdio>
 #include<assert.h>
 
-using EdgeWeight = long double;
+#include "Vec3.hpp"
+
+using EdgeWeight = double;
 
 class VertexData{
 
 protected:
     std::pair<double, double> geolocation;
 
-    // the geolocation uniquely defines a vertex, i.e. two vertices with the same geolocations have to be equal
-    // TODO: think about the information we might want to hold in a vertex such as
-    // order ids, address information, etc.
+    // Is 1 if is inventory, 0 otherwise
+    int is_inventory = 0;
 
 public:
     VertexData(std::pair<double, double> geolocation);
@@ -24,6 +26,10 @@ public:
     std::pair<double, double> get_geolocation() const;
     bool operator==(const VertexData &other) const;
     bool operator!=(const VertexData &other) const;
+    double get_distance(const VertexData &other) const;
+    std::vector<double> get_coordinates() const;
+
+    Vec3 get_euclidean_coordinates() const;
 };
 
 //overriding stds hash function for the VertexData class
@@ -64,6 +70,8 @@ public:
     bool operator==(const Vertex& other) const;
     bool operator!=(const Vertex &other) const;
 
+    Vec3 get_euclidean_coordinates() const;
+
 };
 
 // Edge should only be used through the Graph Class
@@ -101,25 +109,73 @@ public:
     Graph();
     ~Graph();
 
+    int get_num_vertices()  const;
+    int get_num_edges() const;
+
     void add_vertex(VertexData& data, std::vector<std::pair<VertexData, EdgeWeight>>& distances );
     void delete_vertex(VertexData& data);
     void update_vertex_data(VertexData& data);
 
     int get_vertex_position(VertexData &d) const;
+    int get_edge_index(int u, int v)    const;
+    Edge* get_edge(int index) const;
 
+    // get edge weight functions
     EdgeWeight get_edge_weight(int i, int j) const;
     EdgeWeight get_edge_weight(VertexData di, int j) const;
     EdgeWeight get_edge_weight(int i, VertexData dj) const;
     EdgeWeight get_edge_weight(VertexData di, VertexData dj) const;
 
 
+    std::vector<std::vector<double>> build_adjacency_matrix()    const;
+
+    // minimum spanning tree functions
     std::vector<Edge*> min_spanning();
+    std::vector<Edge*> min_spanning(const std::vector<int> &vertices_in_tree);
+
+
+    // mincost matching functions
     std::vector<std::pair<int,int>> perfect_mincost_matching(std::vector<int> vertex_indices);
     std::vector<std::pair<int,int>> heuristic_perfect_mincost_matching(std::vector<int> vertex_indices);
+
+
+    // vertex clustering functions
+    // File clustering_vertices.cpp
+    std::vector< std::vector<int> >cluster_vertices(const std::vector<int> &vertices_to_cluster, int num_clusters);
+
+
+    // Functions for path analysis
+    // File path_analysis.cpp
+
+    double cost_of_path(const std::vector<int>& path) const;
+    std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
+    std::vector<int> best_path_held_karp(const std::vector<int>& path_vertices) const;
+    std::vector<int> improve_path_locally(const std::vector<int>& path, int improvement_radius=8, int shift=0)  const;
+
+    // File TSP_approximation.cpp
+    // Eulerian Path
+    std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
+
+    std::vector<int> shortcut_path(const std::vector<int> &path) const;
+
+    // TSP = Travelling Salesman Problem
+    std::vector<int> TSP();
+    std::vector<int> TSP(std::vector<int> &vertices_in_tour);
+    std::vector<int> TSP(const std::vector<Vertex*> &vertices_in_tour);
+    std::vector<int> TSP_held_karp(); //only works in 1 inventory case
+
+    // Functions for optimal routing
+    // File algo_interface.cpp
+    std::vector<int> optimal_routing(int inventory_index, std::vector<int> client_indices); //one inventory
+    std::vector< std::vector<int> > optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
+
+
+
 
 protected:
 
     int num_vertices;
+    int num_inventory_vertices;
     int num_edges;
 
     std::vector<Vertex*> vertices;
@@ -130,20 +186,7 @@ protected:
 
     void swap_vertex_indices(int pos1, int pos2);
     void swap_vertex_to_last(int pos);
-    void sort_edges();
-
-    long double cost_of_path(const std::vector<int>& path) const;
-    std::vector<int> best_path_brute_force(const std::vector<int>& path_vertices) const;
-
-    void best_path_brute_force_aux(std::vector<bool> &chosen, std::vector<int>& path, const std::vector<int> &path_vertices,
-                                    int v_initial, int v_final,
-                                    long double &min_cost, std::vector<int>& min_cost_path) const;
-
-    // Eulerian Path
-    std::vector<int> euler_tour(const std::vector<Edge*>& smaller_graph) const;
-
-    // TSP = Travelling Salesman Problem
-    std::vector<int> TSP();
+    void sort_edges();    
 
 };
 
