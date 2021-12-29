@@ -1,41 +1,41 @@
-cmake_minimum_required(VERSION 3.14)                    # CMake version check
+cmake_minimum_required(VERSION 3.14)                        # CMake version check
 
-project(LogistiX_CoreAlgo                               # Set the project name
+project(LogistiX_CoreAlgo                                   # Set the project name
         VERSION 0.1.0)
-set(CMAKE_CXX_STANDARD 14)                              # Enable C++14 standard. Note GoogleTest requires at least C++11
-set(CMAKE_CXX_STANDARD_REQUIRED ON)                     # Enforce C++14 standard.        
+set(CMAKE_CXX_STANDARD 14)                                  # Enable C++14 standard. Note GoogleTest requires at least C++11
+set(CMAKE_CXX_STANDARD_REQUIRED ON)                         # Enforce C++14 standard.        
 
-if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR              # Enforce use of GNU Compiler for expected behaviours
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR                  # Enforce use of GNU Compiler for expected behaviours
     CMAKE_CXX_COMPILER_ID MATCHES "AppleClang")
     option(TEST "Testing: " OFF)
     option(STABLE "Stable: " ON)
 
-    if(NOT TEST)
+    if(NOT TEST)                                            # Without tests
         message("Testing is OFF")
-        if(STABLE)
+        if(STABLE)                                          # From production code base
             message("Build from stable code base")
             file(GLOB_RECURSE 
                 SOURCES 
-                "lib/**.c" 
+                "lib/**.c"                                  # External librarbies source files
                 "lib/**.cpp" 
-                "src/**.cpp")
+                "src/**.cpp")                               # Stable source files
             file(GLOB_RECURSE 
                 HEADERS 
-                "lib/**.h" 
+                "lib/**.h"                                  # External libraries header files
                 "lib/**.hpp" 
-                "src/**.hpp")
-        else()
+                "src/**.hpp")                               # Stable header files
+        else()                                              # From experiment code base
             message("Build from experiment code base")
             file(GLOB_RECURSE 
                 SOURCES 
-                "lib/**.c" 
+                "lib/**.c"                                  # External librarbies source files
                 "lib/**.cpp" 
-                "temp/**.cpp")
+                "temp/**.cpp")                              # Experiment source files
             file(GLOB_RECURSE 
                 HEADERS 
-                "lib/**.h" 
+                "lib/**.h"                                  # External libraries header files
                 "lib/**.hpp" 
-                "temp/**.hpp")
+                "temp/**.hpp")                              # Experiment header files
         endif()
 
         list(REMOVE_ITEM                                    # Exclude example.cpp with main function in blossom v library.s
@@ -43,42 +43,42 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR              # Enforce use of GNU Com
             ${CMAKE_CURRENT_SOURCE_DIR}/lib/blossom5-v2_05/example.cpp)
         
         add_library(CoreAlgo_Source ${SOURCES} ${HEADERS})  # Source files
-    else()
+    else()                                                  # With tests
         message("Testing is ON")
-        if(STABLE)
+        if(STABLE)                                          # From production code base
             message("Build from stable code base")
             file(GLOB_RECURSE 
                 SOURCES 
-                "lib/**.c" 
+                "lib/**.c"                                  # External libraries source files
                 "lib/**.cpp" 
-                "src/**.cpp" 
-                "test/src/**.cpp")
+                "src/**.cpp"                                # Stable source files
+                "test/src/**.cpp")                          # Test cases source files
             file(GLOB_RECURSE 
                 HEADERS 
-                "lib/**.h" 
+                "lib/**.h"                                  # External libraries header files
                 "lib/**.hpp" 
-                "src/**.hpp" 
-                "test/src/**.hpp")
+                "src/**.hpp"                                # Stable header files
+                "test/src/**.hpp")                          # Test cases header files
             file(GLOB_RECURSE 
                 TEST_SOURCES 
-                "test/src/**.cc")
-        else()
+                "test/src/**.cc")                           # Test cases
+        else()                                              # From experiment code base
             message("Build from experiment code base")
             file(GLOB_RECURSE 
                 SOURCES 
-                "lib/**.c" 
+                "lib/**.c"                                  # External libraries source files
                 "lib/**.cpp" 
-                "temp/**.cpp" 
-                "test/temp/**.cpp")
+                "temp/**.cpp"                               # Experiments source files
+                "test/temp/**.cpp")                         # Test cases source files
             file(GLOB_RECURSE 
                 HEADERS 
-                "lib/**.h" 
+                "lib/**.h"                                  # External libraries header files
                 "lib/**.hpp" 
-                "temp/**.hpp" 
-                "test/temp/**.hpp")
+                "temp/**.hpp"                               # experiment header files
+                "test/temp/**.hpp")                         # Test cases header files
             file(GLOB_RECURSE 
                 TEST_SOURCES 
-                "test/temp/**.cc")
+                "test/temp/**.cc")                          # Test cases
         endif()
         
         list(REMOVE_ITEM                                    # Exclude example.cpp with main function in blossom v library.s
@@ -106,5 +106,5 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR              # Enforce use of GNU Com
         gtest_discover_tests(Library)
     endif()
 
-    unset(TEST CACHE)                                   # Reset cached variables
+    unset(TEST CACHE)                                       # Reset cached variables
 endif()
