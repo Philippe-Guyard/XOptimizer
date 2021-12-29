@@ -1,5 +1,5 @@
 #include "graph.hpp"
-#include "../lib/blossom5-v2_05/PerfectMatching.h"
+#include "../../lib/blossom5-v2_05/PerfectMatching.h"
 
 std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int> vertex_indices){
 
