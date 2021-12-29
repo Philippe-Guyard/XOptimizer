@@ -250,7 +250,7 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
             if (visited == 1 << last)
             {
                 min_costs[visited][last] = {
-                    adjacency_matrix[a][last], 
+                    adjacency_matrix[a][path[last]], 
                     a
                 };
             }
@@ -262,7 +262,7 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
                     if (!((visited>>prev)&1)) continue;
                     double possible_cost = 
                         min_costs[prev_visited][prev].first + 
-                        adjacency_matrix[last][prev];
+                        adjacency_matrix[path[last]][path[prev]];
                     if (possible_cost < min_costs[visited][last].first)
                     {
                         min_costs[visited][last] = {possible_cost, prev};
@@ -277,7 +277,7 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
     {
         double possible_cost = 
             min_costs[mask][last].first + 
-            adjacency_matrix[last][b];
+            adjacency_matrix[path[last]][b];
         if (possible_cost < min_total_cost)
         {
             last_vertex = last;
@@ -289,7 +289,7 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
     {
         int prev_vertex = min_costs[mask][last_vertex].second;
         mask ^= 1<<last_vertex;
-        optimized_path.push_back(last_vertex);
+        optimized_path.push_back(path[last_vertex]);
         last_vertex = prev_vertex;
     }
     optimized_path.push_back(a);
