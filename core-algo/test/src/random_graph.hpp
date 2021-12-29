@@ -4,7 +4,7 @@
 // Standard libraries
 
 // External libraries
-#include "../../src/graph.hpp"
+#include "../../src/graph/graph.hpp"
 
 /**
  * Generete random undirected weight.

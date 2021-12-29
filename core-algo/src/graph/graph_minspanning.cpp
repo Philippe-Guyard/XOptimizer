@@ -1,4 +1,4 @@
-#include"disjointset.hpp"
+#include"../disjointset/disjointset.hpp"
 #include"graph.hpp"
 
 std::vector<Edge*> Graph::min_spanning(){
