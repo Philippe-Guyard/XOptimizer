@@ -11,7 +11,7 @@
 #include "gtest/gtest.h"
 
 // Main files to be tested
-#include "../../temp/disjointset.hpp"
+#include "../../temp/disjointset/disjointset.hpp"
 
 /**
  * Independent implementation of Disjoint Set (Union-Find), for testing purpose.

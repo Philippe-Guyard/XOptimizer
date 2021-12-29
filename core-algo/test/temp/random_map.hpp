@@ -6,7 +6,7 @@
 #include <utility> // std::pair, std::make_pair
 
 // External libraries
-#include "../../temp/map.hpp"
+#include "../../temp/map/map.hpp"
 
 /**
  * Generate random map

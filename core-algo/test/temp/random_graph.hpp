@@ -5,7 +5,7 @@
 #include <utility>                  // std::pair, std::make_pair
 
 // External libraries
-#include "../../temp/graph.hpp"
+#include "../../temp/graph/graph.hpp"
 
 /**
  * Generete random undirected weight.
