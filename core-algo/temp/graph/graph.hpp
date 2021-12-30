@@ -9,6 +9,7 @@
 #include<assert.h>
 
 #include "../Vec3/Vec3.hpp"
+#pragma once
 
 using EdgeWeight = double;
 

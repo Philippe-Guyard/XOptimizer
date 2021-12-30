@@ -674,6 +674,7 @@ void Matching::initial_matching()
 
     for(int i = 0; i<n_vertices; i++)
     {
+        if(match[outer[i]] > -1){continue;}
         for(int j = 0; j<n_vertices; j++)
         {
             if (is_blocked(i, j)) {edge_weights[j] = BIG;}
@@ -683,7 +684,8 @@ void Matching::initial_matching()
         mate = std::min_element(edge_weights.begin(), edge_weights.end()) - edge_weights.begin();
         if(edge_weights[mate] < BIG-1)
         {
-            match[i] = mate;
+            match[outer[i]] = mate;
+            match[outer[mate]] = i;
         }
     }
 

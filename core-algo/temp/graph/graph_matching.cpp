@@ -1,9 +1,10 @@
 #include "graph.hpp"
 #include "../../lib/blossom5-v2_05/PerfectMatching.h"
-#include "../../blossom/blossom.hpp"
+#include "../blossom/blossom.hpp"
 
-std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int> vertex_indices){
+std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(){
 
+    std::vector<int> vertex_indices;
     std::vector<std::pair<int,int>> solution;
     int n_vertices = vertex_indices.size();
     // by the assumption that graph is complete
@@ -44,7 +45,9 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
 
 
 
-std::vector<std::pair<int,int>> Graph::heuristic_perfect_mincost_matching(std::vector<int> vertex_indices){
+std::vector<std::pair<int,int>> Graph::heuristic_perfect_mincost_matching(std::vector<int>vertex_indices){
+
+
 
 std::vector<std::pair<int,int>> solution;
 std::vector<int> exposed_vertices = vertex_indices; // Exposed = Not in the matching M
@@ -100,8 +103,8 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
 
 
     // Initialize the Matching
-    Matching M = Matching(this);
-    int n_edges= this->num_edges;
+    Matching M = Matching(new_graph);
+    int n_edges= new_graph->num_edges;
     std::vector<double> weight;
     int weight_i;
     // Create a vector of weights to pass to the solve method
@@ -109,15 +112,24 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
 
     for(int i = 0; i < n_edges; i++)
     {
-        weight_i = get_edge(i)->get_weight();
+        weight_i = new_graph->get_edge(i)->get_weight();
         weight.push_back(weight_i);
     }
     // Solve the matching
     solution = M.solve(weight);
     // Extract the edges
     std::vector<std::pair<int,int>> edges = solution.first;
+    std::vector<std::pair<int,int>> final;
+    int first, second;
+    // returning to the first indeces:
+    for(std::vector<std::pair<int,int>>::iterator i = edges.begin(); i != edges.end(); i++)
+    {
+        first = vertex_indices[(*i).first];
+        second = vertex_indices[(*i).second];
+        final.push_back(std::make_pair(first, second));
+    }
 
-    return edges;
+    return final;
 }
 
 
