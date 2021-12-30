@@ -83,6 +83,23 @@ return solution;
 
 std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(){
 
+    std::vector<int> vertex_indices;
+    int num_vertices = vertex_indices.size();
+    VertexData vertex_data_array[num_vertices];
+    for(int i = 0; i<num_vertices; i++){
+        vertex_data_array[i] = this->vertices[vertex_indices[i]]->get_data();
+    }
+    std::vector<std::vector<EdgeWeight>> distances;
+    for(int i = 0; i<num_vertices; i++){
+        distances[i].push_back({});
+        for(int j = 0; j < num_vertices; j++){
+            distances[i].push_back(this->get_edge_weight(i,j));
+        }
+    }
+
+    Graph new_graph = Graph(num_vertices, vertex_data_array, distances);
+
+
     // Initialize the Matching
     Matching M = Matching(this);
     int n_edges= this->num_edges;
