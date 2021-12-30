@@ -81,9 +81,8 @@ for(int i = 0; i < n_exposed; i++){
 return solution;
     }
 
-std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(){
+std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int> vertex_indices){
 
-    std::vector<int> vertex_indices;
     int num_vertices = vertex_indices.size();
     VertexData vertex_data_array[num_vertices];
     for(int i = 0; i<num_vertices; i++){
@@ -93,11 +92,11 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(){
     for(int i = 0; i<num_vertices; i++){
         distances[i].push_back({});
         for(int j = 0; j < num_vertices; j++){
-            distances[i].push_back(this->get_edge_weight(i,j));
+            distances[i].push_back(this->get_edge_weight(vertex_indices[i],vertex_indices[j]));
         }
     }
 
-    Graph new_graph = Graph(num_vertices, vertex_data_array, distances);
+    Graph* new_graph = new Graph(num_vertices, vertex_data_array, distances);
 
 
     // Initialize the Matching
