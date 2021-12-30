@@ -136,6 +136,7 @@ public:
 
     // mincost matching functions
     std::vector<std::pair<int,int>> perfect_mincost_matching(std::vector<int> vertex_indices);
+    std::vector<std::pair<int,int>> perfect_mincost_matching();
     std::vector<std::pair<int,int>> heuristic_perfect_mincost_matching(std::vector<int> vertex_indices);
 
 

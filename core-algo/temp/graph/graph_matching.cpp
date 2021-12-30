@@ -1,5 +1,6 @@
 #include "graph.hpp"
 #include "../../lib/blossom5-v2_05/PerfectMatching.h"
+#include "../../blossom/blossom.hpp"
 
 std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int> vertex_indices){
 
@@ -80,8 +81,28 @@ for(int i = 0; i < n_exposed; i++){
 return solution;
     }
 
+std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(){
 
+    // Initialize the Matching
+    Matching M = Matching(this);
+    int n_edges= this->num_edges;
+    std::vector<double> weight;
+    int weight_i;
+    // Create a vector of weights to pass to the solve method
+    std::pair< std::vector<std::pair<int,int>>, double > solution;
 
+    for(int i = 0; i < n_edges; i++)
+    {
+        weight_i = get_edge(i)->get_weight();
+        weight.push_back(weight_i);
+    }
+    // Solve the matching
+    solution = M.solve(weight);
+    // Extract the edges
+    std::vector<std::pair<int,int>> edges = solution.first;
+
+    return edges;
+}
 
 
 
