@@ -17,10 +17,12 @@ class VertexData{
 protected:
     std::pair<double, double> geolocation;
 
+    int type = -1; // -1 placeholder value, 0: client, 1: inventory
     // Is 1 if is inventory, 0 otherwise
     int is_inventory = 0;
 
 public:
+    VertexData(std::pair<double, double> geolocation, int type);
     VertexData(std::pair<double, double> geolocation);
     VertexData();
     std::pair<double, double> get_geolocation() const;
