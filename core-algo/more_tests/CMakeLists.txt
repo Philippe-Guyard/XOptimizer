@@ -8,8 +8,8 @@ option(TEST "Testing: " ON)
 
 if(TEST)                                                # In case of testing
     message("Testing is ON")
-    file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "temp/*.cpp")
-    file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "temp/*.hpp")
+    file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "src/*.cpp")
+    file(GLOB_RECURSE HEADERS "lib/**.h" "lib/**.hpp" "src/*.hpp")
 else()                                                  #In case of releasing
     message("Testing is OFF")
     file(GLOB_RECURSE SOURCES "lib/**.c" "lib/**.cpp" "src/**.cpp" "test/**.cpp")
@@ -21,7 +21,7 @@ list(REMOVE_ITEM                                        # Exclude example.cpp wi
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/blossom5-v2_05/example.cpp)
 
 add_library(Source ${SOURCES} ${HEADERS})                # Source files
-add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/temp/autotest.cpp)         # Test files
+add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/src/test_routing.cpp)         # Test files
 target_link_libraries(test Source)    
 
 unset(TEST CACHE)                                             # Reset cached variables

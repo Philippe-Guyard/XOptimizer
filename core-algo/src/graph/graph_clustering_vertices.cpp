@@ -11,6 +11,16 @@ std::vector< std::vector<int> >Graph::cluster_vertices(const std::vector<int> &v
     
     std::vector< std::vector<int> > clusters = vertex_coordinates.k_means(num_clusters);
 
-    return clusters;
+    std::vector< std::vector<int> > res(num_clusters);
+    int i = 0;
+
+    for(auto c : clusters){
+        for(auto idx : c){
+            res[i].push_back( vertices_to_cluster[idx] );
+        }
+        i++;
+    }
+
+    return res;
 
 }
