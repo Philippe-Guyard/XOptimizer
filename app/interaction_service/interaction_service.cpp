@@ -12,7 +12,7 @@
 
 namespace XOptimizer {
     InteractionService::InteractionService() {
-
+        m_file_storage = std::make_unique<FileStorage>();
     }
 
     InteractionService::~InteractionService() {
@@ -22,9 +22,7 @@ namespace XOptimizer {
     void InteractionService::download_and_parse_map(const std::string &region, const std::string &department, std::optional<std::function<void(qint64, qint64)>> download_callback) {
         qDebug() << "Download and parse started.";
 
-        //TODO: This doesn't work
-        //map_file_path = m_file_storage.get_save_path_from_map_name(region + "_" + department);
-        map_file_path = QString::fromStdString("./" + region + "_" + department);
+        map_file_path = m_file_storage->get_save_path_from_map_name(QString::fromStdString(region), QString::fromStdString(department));
         auto reply = api_wrapper.download(region, department, map_file_path);
         QObject::connect(reply, &QNetworkReply::finished, [this]() {
             qDebug() << "Download finished.";

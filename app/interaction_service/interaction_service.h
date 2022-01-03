@@ -25,7 +25,7 @@ namespace XOptimizer {
         QString map_file_path;
         OpenStreetMapWrapper api_wrapper;
         std::shared_ptr<PBFParser::PBFFile> map_file_ptr;
-        FileStorage m_file_storage;
+        std::unique_ptr<FileStorage> m_file_storage;
     };
 };
 
