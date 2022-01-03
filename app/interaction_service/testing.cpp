@@ -1,9 +1,9 @@
-//#include "interaction_service.h"
+#include "interaction_service.h"
 #include "testing.h"
 #include <QDir>
 #include "file_storage.h"
 #include <iostream>
-/*
+
 Testing::Testing(XOptimizer::InteractionService* s){
 	service = s;
     //QDir::setCurrent("/Users/markdaychman/Documents/GitHub/XOptimizer/app/interaction_service/resources");
@@ -50,124 +50,11 @@ void Testing::test_search_csv(){
 
 	std::cout << "test_search_csv: success ✅" << std::endl;
 };
-*/
-void Testing::test_filestorage(){
-    FileStorage store;
-    QString s = QDir::separator();
-    /*
-    QString path = QDir::homePath() + s + "Desktop" + s +"XOptimizer" + s + "app"+ s+ "interaction_service" +s+"test.csv";
-    std::cout << path.toStdString()<< "\n";
-    QFile file(path);
-    QFile file2(path);*/
-
-   // QFile file("/Users/johannaulin/Desktop/test.csv");
-   // QFile file2("/Users/johannaulin/Desktop/test.csv");
-    QFile file("." + s + "test1.csv");
-    QFile file2("." + s + "test2.csv");
-    //FileStorage store;'
-    store.save_map("mappi", &file);
-    store.save_map("mappi2", &file2);
-
-    //FUNCTION TEST
-    //TEST MAP
-    std::cout << " All following tests are ultimately testing the methos to save and store the csv and pbf map files. OBS! Check if files are empty. Then incorrect path has been given" << "\n";
-    std::cout << "1:is_map_saved and save_map"<< "\n";
-    if (store.is_map_saved("mappi") && store.is_map_saved("mappi2")){
-        std::cout << "test on is_map_saved: success ✅" << "\n";
-
-    }
-    if (store.FiledictMaps.contains("mappi")){
-        QString item = store.FiledictMaps["mappi"];
-        QFile f(item);
-        f.open( QIODevice::WriteOnly|QIODevice::Append );
-        if (f.pos() != 0){std::cout << "mappi saved and non empty: success ✅" << "\n";}
-        else{std::cout << "ERROR: map saved but empty" << "\n";}
-        f.close();
-    }
-
-     if (store.FiledictMaps.contains("mappi2")){
-            QString item = store.FiledictMaps["mappi2"];
-            QFile f(item);
-            f.open( QIODevice::WriteOnly|QIODevice::Append );
-            if (f.pos() != 0){std::cout << "mappi2 saved and non empty: success ✅" << "\n";}
-            else{std::cout << "ERROR: mappi2 saved but empty" << "\n";}
-            f.close();
-     }
-
-
-    std::cout << "2:get_save_path_from_map_name"<< "\n";
-        std::cout << store.get_save_path_from_map_name("mappi").toStdString()<< "\n";
-
-    std::cout << "3:read_map"<< "\n";
-    std::cout << store.read_map("mappi")<< "\n";
-    std::cout << "OBS! test to be implemented" << "\n";
-
-    std::cout << "4:get_all_map_names"<< "\n";
-    int k = 0;
-    foreach( std::string item, store.get_all_map_names()){
-        if (item == "mappi"){
-            k+= 1;
-        }
-
-        if (item == "mappi2"){
-           k+= 1;
-        }
-
-    }
-    if (k == 2) {
-       std::cout << "mappi saved : success ✅" << "\n";
-}
-    else{std::cout << "ERROR" << "\n";
-    }
-
-
-
-
-    std::cout << "5:construct_save_path_from_map_name"<< "\n";
-    QString h= "here";
-    QString t ="there";
-    std::cout << store.construct_save_path(h, t).toStdString()<< "\n";
-
-    //TEST CSV
-    std::cout << "6:save csv"<< "\n";
-    store.save_csv("csv1", &file);
-    store.save_csv("csv2", &file2);
-    if (store.FiledictCSV.contains("csv1")){
-        QString item = store.FiledictCSV["csv1"];
-        QFile f(item);
-        f.open( QIODevice::WriteOnly|QIODevice::Append );
-        if (f.pos() != 0){std::cout << "csv saved and non empty: success ✅" << "\n";}
-        else{std::cout << "ERROR: csv saved but empty" << "\n";}
-        f.close();
-    }
-    if (store.FiledictCSV.contains("csv2")){
-        QString item = store.FiledictCSV["csv2"];
-        QFile f(item);
-        f.open( QIODevice::WriteOnly|QIODevice::Append );
-        if (f.pos() != 0){std::cout << "csv2 saved and non empty: success ✅" << "\n";}
-        else{std::cout << "ERROR: csv saved but empty" << "\n";}
-        f.close();
-    }
-
-    std::cout << "7:get_all_csv_names"<< "\n";
-    foreach( std::string item, store.get_all_csv_names()){
-        if (item == "csv1"){
-
-            std::cout << "csv1 saved : success ✅" << "\n";
-        }
-
-        if (item == "csv2"){
-                         std::cout << "csv2 saved : success ✅" << "\n";
-        }
-
-}
-}
 
 void Testing::run_all(){
     test_download();
     test_parse_orders();
     test_search_csv();
-    test_filestorage();
 }
 
 

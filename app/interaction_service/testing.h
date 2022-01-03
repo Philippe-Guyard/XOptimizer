@@ -3,8 +3,9 @@
 
 #endif // TESTING_H
 
-//#include "interaction_service.h"
+#include "interaction_service.h"
 #include "file_storage.h"
+
 class Testing{
 public:
     Testing(XOptimizer::InteractionService*);
