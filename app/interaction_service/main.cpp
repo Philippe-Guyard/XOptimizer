@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     XOptimizer::InteractionService service;
     Testing test(&service);
     test.test_download();
-//    test.run_all();
+    test.run_all();
 #else
     MainWindow w;
     w.show();
