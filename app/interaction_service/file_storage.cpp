@@ -6,35 +6,37 @@
 #include <QDir>
 #include <iostream>
 #include <QResource>
+#include <QTextStream>
 
+bool make_subfolder(QDir base, QString subfolder) {
+    if (base.exists(subfolder)) {
+        return true;
+    }
+    else {
+        base.mkdir(subfolder);
+        return false;
+    }
+}
+
+FileStorage::FileStorage() {
+    QDir home = QDir::home();
+    QString subfolder = "XOptimizer";
+    make_subfolder(home, subfolder);
+    make_subfolder(home, subfolder + "/maps");
+
+
+    base_folder = home.absolutePath() + "/" + subfolder;
+}
+
+QString FileStorage::get_save_path_from_map_name(QString region, QString department) {
+    return QDir::toNativeSeparators(base_folder + "/maps/" + region + "_" + department + ".osm.pbf");
+}
+
+/*
 //this saves a copy of the
 QString construct_build_path(){
     QString s = QDir::separator();
-    return QDir::homePath() + s;
-    /*
-
-    QString p = QDir::currentPath();
-
-    QString s = QDir::separator();
-
-    QList<QString> pathlist = p.split(s);
-    int found = 0;
-    foreach( QString item, pathlist)
-         if(item.contains(QString(".app"))){
-             pathlist.removeOne(item);
-             found = 1;
-         }
-         else if(found ==1){
-             pathlist.removeOne(item);
-
-         }
-    QString path; //(s)
-
-    foreach( QString elem, pathlist)
-        path.append(elem+s);
-
-    return path;
-*/
+    return QDir::homePath() + s + "XOptimizer";
 };
 
 void FileStorage::save_map(std::string map_name, QFile* map){
@@ -166,4 +168,4 @@ QString FileStorage::get_save_path_from_csv_name(std::string name){
     QString path= FiledictMaps[name];
     return path;
 }
-
+*/
