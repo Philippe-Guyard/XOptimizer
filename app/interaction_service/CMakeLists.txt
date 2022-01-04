@@ -71,15 +71,11 @@ set(PARSER_FILES
     parser/pbf-parser.h
 )
 
-set(CORE_ALGO
-    ../../core-algo
-)
-
 add_subdirectory(parser/)
 target_link_libraries(interaction_service PRIVATE pbf_parser)
 
-add_subdirectory(${CORE_ALGO} "${CMAKE_BINARY_DIR}/libs/build/core-algo")
-target_include_directories(interaction_service PUBLIC ${CORE_ALGO} )
+add_subdirectory(core-algo/)
+# target_include_directories(interaction_service PUBLIC ${CORE_ALGO})
 target_link_libraries(interaction_service PUBLIC CoreAlgo_Source)
 
 
