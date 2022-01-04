@@ -5,7 +5,7 @@
 #include <utility>                  // std::pair, std::make_pair
 
 // External libraries
-#include "../../temp/graph.hpp"
+#include "../../temp/graph/graph.hpp"
 
 /**
  * Generete random undirected weight.
@@ -28,7 +28,7 @@ class RandomGraph : public Graph
         std::pair<EdgeWeight, EdgeWeight> maximal_mincost_matching_test(
             std::vector<int>& vertex_indices);
 
-        std::pair<EdgeWeight, EdgeWeight> random_tsp(
+        EdgeWeight random_tsp(
             int number_of_vertices,
             EdgeWeight weight_limit,
             int seed, 
@@ -39,4 +39,6 @@ class RandomGraph : public Graph
             EdgeWeight weight_limit, 
             double density, 
             int seed);
+        
+        bool eulerian_circuit_check();
 };
