@@ -10,6 +10,7 @@ namespace zlib {
 
 #include <istream>
 #include <cmath>
+#include <unordered_map>
 
 using namespace XOptimizer::PBFParser;
 using namespace zlib;
@@ -162,7 +163,7 @@ std::shared_ptr<PBFFile> PBFParser::parse() {
     return std::make_shared<PBFFile>(bbox, required_features, optional_features, writing_program, source, blocks);
 }
 
-inline long double haversine(long double lat1, long double lon1, long double lat2, long double lon2) {
+long double haversine(long double lat1, long double lon1, long double lat2, long double lon2) {
     long double R = 6371e3;
     long double phi1 = lat1 * M_PI/180;
     long double phi2 = lat2 * M_PI/180;
@@ -170,14 +171,13 @@ inline long double haversine(long double lat1, long double lon1, long double lat
     long double deltaLambda = (lon2-lon1) * M_PI/180;
 
     long double a = sin(deltaPhi/2) * sin(deltaPhi/2) +
-              cos(phi1) * cos(phi2) *
-              sin(deltaLambda/2) * sin(deltaLambda/2);
+                    cos(phi1) * cos(phi2) *
+                    sin(deltaLambda/2) * sin(deltaLambda/2);
     long double c = 2 * atan2(sqrt(a), sqrt(1-a));
 
     return R * c;
 }
 
-//TODO: Take care of this later
 std::shared_ptr<Map> PBFFile::to_map() const {
     std::vector<long long> indices;
     std::unordered_map<long long, int> indicesMap;
@@ -211,17 +211,65 @@ std::shared_ptr<Map> PBFFile::to_map() const {
                                 indicesMap[way->get_refs()[i+1]],
                                 dist
                         );
+                        adjacencyList[indicesMap[way->get_refs()[i+1]]].emplace_back(
+                                indicesMap[way->get_refs()[i]],
+                                dist
+                        );
                     }
                 }
             }
         }
     }
-    VertexData* vertexData = new VertexData[data.size()];
-    std::copy(data.begin(), data.end(), vertexData);
+    std::unordered_map<int, int> map;
+    int count = 0;
+    for (int i = 0; i < data.size(); i++) {
+        // std::cout << i << "/" << data.size() << "\r" << std::flush; // uncommit for "amusing" output while you are waiting
+        int neighbor_count = adjacencyList[i].size();
+        if (neighbor_count == 0) {
+            continue;
+        } else if (neighbor_count == 2) {
+            int neighbor1 = adjacencyList[i][0].first, neighbor2 = adjacencyList[i][1].first;
+            long double dist1 = adjacencyList[i][0].second, dist2 = adjacencyList[i][1].second;
+            auto list = adjacencyList[neighbor1];
+            if (std::find_if(list.begin(), list.end(),[&](auto e) { return e.first == neighbor2; }) == list.end()) {
+                adjacencyList[neighbor1].emplace_back(
+                        neighbor2,
+                        dist1 + dist2
+                );
+                adjacencyList[neighbor2].emplace_back(
+                        neighbor1,
+                        dist1 + dist2
+                );
+                continue;
+            }
+        }
+        map[i] = count;
+        count++;
+    }
+    auto vertexData = new VertexData[count];
+    std::vector<std::vector<std::pair<int, EdgeWeight>>> newAdjacency;
+    for (auto pair : map) {
+        int i = pair.first, j = pair.second;
+        // std::cout << j << " " << i << "\r" << std::flush;
+        vertexData[j] = data[i];
+        newAdjacency.emplace_back();
+    }
+    for (auto pair : map) {
+        int i = pair.first, j = pair.second;
+        std::vector<std::pair<int, EdgeWeight>> newAdjacencies;
+        for (auto edge: adjacencyList[i]) {
+            if (edge.first != 0 && map.find(edge.first) != map.end()) {
+                // std::cout << edge.first << " " << map.at(edge.first) << "\r" << std::flush;
+                newAdjacencies.emplace_back(map.at(edge.first), edge.second);
+            }
+        }
+        newAdjacency[j] = newAdjacencies;
+    }
+
+    // std::cout << data.size() << " " << count << std::endl;
     return std::make_shared<Map>(
-            data.size(),
-            vertexData,
-            std::move(adjacencyList)
+            count, vertexData,
+            std::move(newAdjacency)
     );
 }
 

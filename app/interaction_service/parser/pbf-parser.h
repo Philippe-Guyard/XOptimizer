@@ -21,16 +21,14 @@
 #include <vector>
 #include "generated/fileformat.pb.h"
 #include "generated/osmformat.pb.h"
-//TODO: How to link core-algo to our project?
-//#include "temp/map.hpp"
-#include "../core-algo/src/map/map.hpp"
+#include "map.hpp"
 
 namespace XOptimizer::PBFParser {
     class BBox {
         long double left, bottom, right, top;
     public:
         BBox(long double left, long double bottom, long double right, long double top)
-        : left(left), bottom(bottom), right(right), top(top) {}
+                : left(left), bottom(bottom), right(right), top(top) {}
 
         [[nodiscard]] long double get_left() const {
             return left;
@@ -123,12 +121,12 @@ namespace XOptimizer::PBFParser {
         PrimitiveBlock(std::vector<std::string> stringTable, int granularity, long double latOffset,
                        long double lonOffset, int dateGranularity,
                        std::vector<std::shared_ptr<PrimitiveGroup>> primitiveGroups)
-                       :  string_table(std::move(stringTable)),
-                          granularity(granularity),
-                          lat_offset(latOffset),
-                          lon_offset(lonOffset),
-                          date_granularity(dateGranularity),
-                          primitive_groups(std::move(primitiveGroups)) {}
+                :  string_table(std::move(stringTable)),
+                   granularity(granularity),
+                   lat_offset(latOffset),
+                   lon_offset(lonOffset),
+                   date_granularity(dateGranularity),
+                   primitive_groups(std::move(primitiveGroups)) {}
 
         [[nodiscard]] const std::vector<std::string> &get_string_table() const {
             return string_table;
@@ -165,11 +163,11 @@ namespace XOptimizer::PBFParser {
                 std::vector<std::string> optionalFeatures, std::optional<std::string> writingProgram,
                 std::optional<std::string> source, std::vector<std::shared_ptr<PrimitiveBlock>> blocks)
                 : bbox(std::move(bbox)),
-                required_features(std::move(requiredFeatures)),
-                optional_features(std::move(optionalFeatures)),
-                writing_program(std::move(writingProgram)),
-                source(std::move(source)),
-                blocks(std::move(blocks)) {}
+                  required_features(std::move(requiredFeatures)),
+                  optional_features(std::move(optionalFeatures)),
+                  writing_program(std::move(writingProgram)),
+                  source(std::move(source)),
+                  blocks(std::move(blocks)) {}
 
         [[nodiscard]] const std::shared_ptr<BBox> &get_bbox() const {
             return bbox;
@@ -195,7 +193,6 @@ namespace XOptimizer::PBFParser {
             return blocks;
         }
 
-        //TODO: Take care of this later
         [[nodiscard]] std::shared_ptr<Map> to_map() const;
     };
 
