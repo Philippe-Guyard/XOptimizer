@@ -124,7 +124,6 @@ void MainWindow::on_pushButton_clicked()
     saveFile(file_name); //To this file the edited data is saved and then we give this file to Marten
 
     QFile file(file_name);
-    file.open(QIODevice::ReadWrite);
     interaction_service->optimize_csv(&file);
     //interaction_service->read_csv(&file);
     ui->stackedWidget->setCurrentIndex(3);

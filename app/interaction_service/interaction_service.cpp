@@ -48,14 +48,15 @@ namespace XOptimizer {
     void InteractionService::optimize_csv(QFile* file) {
         QString new_path = m_file_storage->get_save_path_from_csv(file->fileName());
         QFile new_file(new_path);
+        /*
         if (!new_file.open(QIODevice::ReadWrite)) {
             //TODO: Handle unknown error
             return;
         }
+        */
 
-        //api_wrapper.searchCSV(file, &new_file);
-
-        file_to_order(file, orders);
+        api_wrapper.searchCSV(file, &new_file);
+        //file_to_order(file, orders);
     }
 
     void InteractionService::read_csv_as_table(QFile *file, QVector<QVector<QString>> &output) {
