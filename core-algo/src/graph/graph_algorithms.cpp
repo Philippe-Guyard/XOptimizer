@@ -48,7 +48,13 @@ std::vector<int> euler_tour(const std::vector<std::vector<int>> &adjacency_list 
     }
 
     std::stack<int> st;
-    st.push(0);
+
+    for(int i=0; i<n; ++i){
+        if( degrees[i] != 0 ){
+            st.push(i);
+            break;
+        }
+    }
 
     std::vector<int> eulerian_cycle;
 
@@ -144,7 +150,7 @@ std::vector<int> best_path_brute_force(const std::vector<std::vector<double>> &a
 
     int m = path.size();
 
-    if( m <= 2 ){
+    if( m <= 2 || m >=10 ){
         return path;
     }
 
@@ -181,6 +187,9 @@ std::vector<int> improve_path_locally(const std::vector<std::vector<double>> &ad
     int curr = shift;
     std::vector<int> improved_path;
 
+    for(int i=0; i< std::min( (int) curr, (int) path.size()); ++i)
+        improved_path.push_back( path[i] );
+
     while( curr < path.size() ){
 
         std::vector<int> local_path;
@@ -194,7 +203,7 @@ std::vector<int> improve_path_locally(const std::vector<std::vector<double>> &ad
             curr++;
         }
 
-        for(auto v : best_path_brute_force(adjacency_matrix, local_path)){
+        for(auto v : best_path_held_karp(adjacency_matrix, local_path)){
             improved_path.push_back(v);
         }
     }
@@ -219,7 +228,7 @@ std::vector<int> best_path_held_karp(const std::vector<std::vector<double>> &adj
 
     int m = path.size();
 
-    if( m <= 2 ){
+    if( m <= 2 || m>=14 ){
         return path;
     }
 

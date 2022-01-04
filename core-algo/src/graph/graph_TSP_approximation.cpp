@@ -54,9 +54,13 @@ std::vector<int> Graph::TSP(){
 // For the multiple inventories case
 std::vector<int> Graph::TSP(std::vector<int> &vertices_in_tour){
 
+    if(vertices_in_tour.size() <= 2){
+        return vertices_in_tour;
+    }
 
     std::vector<Edge*> MST = min_spanning(vertices_in_tour);
-    
+    assert( MST.size() == vertices_in_tour.size()-1 );
+
     int n = num_vertices;
 
     // Vector with the degrees of vertices in MST

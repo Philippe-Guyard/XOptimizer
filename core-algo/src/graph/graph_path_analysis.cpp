@@ -24,7 +24,7 @@ std::vector<int> Graph::best_path_held_karp(const std::vector<int>& path_vertice
     int m = path_vertices.size();
 
     // If the input is too big or too small, it doesn't change the path
-    if( m <= 2 || m >=10 ){
+    if( m <= 2 || m > 14 ){
         return path_vertices;
     }
 

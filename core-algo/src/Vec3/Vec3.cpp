@@ -298,7 +298,7 @@ std::vector< int > match_function_0(ArrayVec3 arr1, ArrayVec3 arr2){
 
     for(int i=0; i<n; ++i){
 
-        long double min_dist2 = 50*1000;
+        long double min_dist2 = std::numeric_limits<long double>::max();
         int best_index = -1;
 
         for(int j=0; j<n; ++j){
@@ -307,7 +307,7 @@ std::vector< int > match_function_0(ArrayVec3 arr1, ArrayVec3 arr2){
                 continue;
             }
 
-            if( dist2(arr1[i], arr2[j]) < min_dist2 ){
+            if( dist2(arr1[i], arr2[j]) <= min_dist2 ){
                 best_index = j;
                 min_dist2 = dist2(arr1[i], arr2[j]);
             }

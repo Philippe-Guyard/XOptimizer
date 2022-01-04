@@ -30,6 +30,8 @@ public:
     bool operator!=(const VertexData &other) const;
     double get_distance(const VertexData &other) const;
     std::vector<double> get_coordinates() const;
+    int get_type()  const;
+    void set_type(int type);
 
     Vec3 get_euclidean_coordinates() const;
 };
@@ -170,9 +172,11 @@ public:
     // File algo_interface.cpp
     std::vector<int> optimal_routing(int inventory_index, std::vector<int> client_indices); //one inventory
     std::vector< std::vector<int> > optimal_routing(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
+    std::vector< std::vector<int> > optimal_routing_all();
 
-
-
+    std::vector<int> optimal_routing_optimized(int inventory_index, std::vector<int> client_indices); //one inventory
+    std::vector< std::vector<int> > optimal_routing_optimized(std::vector<int> inventory_indices, std::vector<int> client_indices); //multiple inventories
+    std::vector< std::vector<int> > optimal_routing_all_optimized();
 
 protected:
 

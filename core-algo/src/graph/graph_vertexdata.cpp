@@ -6,10 +6,13 @@
 
 VertexData::VertexData(){
     this->geolocation = std::make_pair(-1,-1); //placeholder values 
+    this->type = -1;
 }
 
 VertexData::VertexData(std::pair<double, double> geolocation){
     this->geolocation = geolocation;
+    this->type = -1;
+
 }
 
 VertexData::VertexData(std::pair<double, double> geolocation, int type){
@@ -55,4 +58,12 @@ Vec3 VertexData::get_euclidean_coordinates() const{
     double lambda1 = geolocation.second * (M_PI/180.0);
 
     return Vec3(phi1, lambda1);
+}
+
+int VertexData::get_type()  const{
+    return type;
+}
+
+void VertexData::set_type(int type){
+    this->type = type;
 }
