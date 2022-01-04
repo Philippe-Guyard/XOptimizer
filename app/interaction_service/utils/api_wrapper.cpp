@@ -13,16 +13,16 @@ QNetworkReply* OpenStreetMapWrapper::download(const std::string &region, const s
         return manager.get(request);
 }
 
-void OpenStreetMapWrapper::searchCSV(QFile& file, QFile& outfile){
+void OpenStreetMapWrapper::searchCSV(QFile* file, QFile* outfile){
 		QNetworkRequest request(QUrl("https://api-adresse.data.gouv.fr/search/csv/")); // Free API provided by the French government
-		request.setAttribute(QNetworkRequest::User, outfile.fileName());
+        request.setAttribute(QNetworkRequest::User, outfile->fileName());
 		QHttpMultiPart *multipart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
 		QHttpPart postpart;
 		postpart.setHeader(QNetworkRequest::ContentDispositionHeader,
 											 QString("form-data; name=%1; filename=%2")
-											 .arg("data", file.fileName()));
-		postpart.setBodyDevice(&file);
+                                             .arg("data", file->fileName()));
+        postpart.setBodyDevice(file);
 		multipart->append(postpart);
 
 		QHttpPart longitude, latitude, addresse;
@@ -39,22 +39,25 @@ void OpenStreetMapWrapper::searchCSV(QFile& file, QFile& outfile){
 		latitude.setBody("adresse");
 		multipart->append(latitude);
 
-		file.setParent(multipart);
-		manager.post(request, multipart);
+        file->setParent(multipart);
+        manager.post(request, multipart);
 }
 
 void OpenStreetMapWrapper::handle_finished(QNetworkReply *reply){
         qDebug() << "Download finished.";
-		if(reply->error() == QNetworkReply::NoError){
-				QByteArray read = reply->readAll();
-				QString filename = reply->request().attribute(QNetworkRequest::User).toString();
-				QFile out(filename);
-				if(out.open(QIODevice::ReadWrite)){
-						out.write(read);
-						out.close();
-				}
+        std::cout << "Download finished." << std::endl;
+		if(reply->error() == QNetworkReply::NoError){            
+            QByteArray read = reply->readAll();
+            QString filename = reply->request().attribute(QNetworkRequest::User).toString();
+            std::cout << filename.toStdString() << std::endl;
+            QFile out(filename);
+            if(out.open(QIODevice::ReadWrite)){
+                    out.write(read);
+                    out.close();
+            }
 		}
 		else{
+            std::cout << reply->errorString().toStdString() << std::endl;
 				qDebug() << reply->error() << reply->errorString();
 		}
 		reply->deleteLater();

@@ -13,7 +13,7 @@ class OpenStreetMapWrapper: public QObject{
 public:
 	OpenStreetMapWrapper(QObject* parent=nullptr);
     QNetworkReply* download(const std::string&, const std::string&, const QFile&);
-    void searchCSV(QFile&, QFile&);
+    void searchCSV(QFile*, QFile*);
 	QNetworkAccessManager* get_manager();
 
 private:
