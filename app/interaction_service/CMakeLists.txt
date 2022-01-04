@@ -80,7 +80,7 @@ target_link_libraries(interaction_service PRIVATE pbf_parser)
 
 add_subdirectory(${CORE_ALGO} "${CMAKE_BINARY_DIR}/libs/build/core-algo")
 target_include_directories(interaction_service PUBLIC ${CORE_ALGO} )
-target_link_libraries(interaction_service PUBLIC Source)
+target_link_libraries(interaction_service PUBLIC CoreAlgo_Source)
 
 
 if(QT_VERSION_MAJOR EQUAL 6)
