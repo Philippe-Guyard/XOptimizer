@@ -15,68 +15,76 @@
 
 // External libraries
 #include "random_graph.hpp"
-#include "../../lib/blossom5-v2_05/PerfectMatching.h"
-#include "../../lib/blossom5-v2_05/GEOM/GeomPerfectMatching.h"
 
 /**
- * Initialize to a random undirected weighted graph, with given density and weight limit.
+ * Initialize to a random undirected weighted graph, with given density, weight limit and known solution to Travelling Salesman Problem.
+ * This is implemented based on:
+ * Generating Travelling-Salesman Problems with Known Optimal Tours, 
+ * Jeffrey L. Arthur and James O. Frendewey, 
+ * Journal of the Operational Research Society, 39, 153-159 (1988).
  * 
  * @param {int}         number_of_vertices  : Number of vertices.
  * @param {EdgeWeight}  weight_limit        : Upper limit for ranom weight. The lower bound is set by default to 0. Default set to be 6000.0
  * @param {double}      density             : Density of random graph from 0 to 1, e.g. 0 corresponds to a tree, and 1 corresponds to complete graph. Default set to be 0.5
  * @param {int}         seed                : Seed fed into random number generator. Default set to be the EPOCH time at runtime.
  */
-void RandomGraph::random_graph(
-    int number_of_vertices, 
-    EdgeWeight weight_limit = 6000.0, 
-    double density = 0.5, 
-    int seed = -1)
-{
+EdgeWeight RandomGraph::random_tsp(
+    int number_of_vertices,
+    EdgeWeight weight_limit = 6000.0,
+    int seed = -1, 
+    bool symmetric = true)
+{   
     // Seeding the random number generator
     if (seed == -1)
     {
         seed = std::chrono::system_clock::now().time_since_epoch().count();
     }
     std::mt19937_64 rng(seed);
-    std::uniform_real_distribution<double> random_coordinate(-180.0, 180.0);
-    std::uniform_real_distribution<long double> random_weight(0.0, weight_limit);
+    std::uniform_real_distribution<EdgeWeight> random_coordinate(-180.0, 180.0);
+    std::uniform_real_distribution<EdgeWeight> random_weight(0.0, weight_limit);
 
-    // Generate random vertices
+    // Generate random data for random graph
     VertexData vertex_data_array[number_of_vertices];
-    std::vector<std::vector<EdgeWeight> > distances(number_of_vertices);
+    std::vector<std::vector<EdgeWeight> > distances(number_of_vertices * number_of_vertices);
     for (int i = 0; i < number_of_vertices; i++)
     {
         vertex_data_array[i] = VertexData({random_coordinate(rng), random_coordinate(rng)});
         distances[i].assign(number_of_vertices, std::numeric_limits<EdgeWeight>::max());
     }
 
-    // Build underlying random spanning tree
-    // Ref: Alexey S. Rodionov and Hyunseung Choo, On Generating Random Network Structures: Trees, ICCS 2003, LNCS 2658, pp. 879-887, 2003.
-    int temp[number_of_vertices], added[number_of_vertices];
-    for (int i = 0; i < number_of_vertices; i++) temp[i] = i;
-    std::shuffle(temp, temp + number_of_vertices, rng);
-    added[0] = temp[0];
-    for (int count = 1; count < number_of_vertices; count++)
-    {
-        int index = rng()%count,
-            v = temp[count],
-            u = added[index];
-        added[count] = v;
-        distances[u][v] = distances[v][u] = random_weight(rng);
-    }
-
-    // Generate additional random edges
-    std::bernoulli_distribution bern_dist(density);
+    // Generate random_permutation
+    int permu[number_of_vertices];
+    EdgeWeight alpha[number_of_vertices];
+    EdgeWeight gamma = std::numeric_limits<EdgeWeight>::max(), optimal_cost = 0, d;
+    int u, v;
     for (int i = 0; i < number_of_vertices; i++)
     {
-        for (int j = i+1; j < num_vertices; j++)
+        permu[i] = i;
+        alpha[i] = random_weight(rng);
+        gamma = std::min(gamma, 2*alpha[i]);
+    }
+    std::random_shuffle(permu, permu + number_of_vertices);
+    
+    std::uniform_real_distribution<EdgeWeight> random_pertubation(0.0, gamma);
+    for (u = 0; u < number_of_vertices; u++)
+    {
+        for (v = 0; v < number_of_vertices; v++)
         {
-            if (distances[i][j] == std::numeric_limits<EdgeWeight>::max() && bern_dist(rng))
+            if (u < v)
             {
-                distances[i][j] = distances[j][i] = random_weight(rng);
+                distances[u][v] = distances[v][u] = alpha[u] + alpha[v] + random_pertubation(rng);
             }
         }
     }
+    for (int i = 0; i < number_of_vertices - 1; i++)
+    {
+        u = permu[i], v = permu[i+1], d = alpha[u] + alpha[v];
+        distances[u][v] = distances[v][u] = d;
+        optimal_cost += d;
+    }
+    u = permu[0], v = permu[number_of_vertices - 1], d = alpha[u] + alpha[v];
+    distances[u][v] = distances[v][u] = d;
+    optimal_cost += d; 
 
     // Build the graph
     for (int i = 0; i < number_of_vertices; i++)
@@ -89,15 +97,5 @@ void RandomGraph::random_graph(
         add_vertex(vertex_data_array[i], distance);
     }
 
-    /*
-    for (int i = 0; i < number_of_vertices; i++)
-    {
-        for (int j = 0; j < number_of_vertices; j++)
-        {
-            if (i == j) continue;
-            std::cerr << i << ' ' << j << ' ' << distances[i][j] << ' ' << get_edge_weight(i, j) << '\n';
-            assert(distances[i][j] == get_edge_weight(i, j));
-        }
-    }
-    //*/
+    return optimal_cost;
 }
