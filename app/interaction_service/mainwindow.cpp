@@ -83,14 +83,21 @@ void MainWindow::on_uploadFileButton_clicked()
     ui->uploadFileButton->setText("Upload a different file");
 
     QFile file(file_name);
-
-    if(!file.open(QFile::ReadOnly | QFile::Text)){
-
-        QMessageBox::warning(this, "title", "file not open");
+    QVector<QVector<QString>> table_values;
+    interaction_service->read_csv_as_table(&file, table_values);
+    ui->tableWidget->setColumnCount(table_values[0].size());
+    for(int i = 0; i < table_values.size(); ++i) {
+        ui->tableWidget->insertRow(i);
+        for(int j = 0; j < table_values.size(); ++j) {
+            ui->tableWidget->setItem(i, j, new QTableWidgetItem(table_values[i][j]));
+        }
     }
+
+    file.close();
+
+    /*
     QTextStream in(&file);
     in.setCodec("UTF-8");
-
 
     int n = 0;
     while (!in.atEnd()){
@@ -104,6 +111,8 @@ void MainWindow::on_uploadFileButton_clicked()
         n = n + 1;
     }
 
+    file.close();
+    */
 }
 
 
@@ -111,13 +120,14 @@ void MainWindow::on_uploadFileButton_clicked()
 void MainWindow::on_pushButton_clicked()
 {
     QDir dir(".");
-    QString file_name = dir.absolutePath() + "/writefile.txt";
+    QString file_name = dir.absolutePath() + "/writefile.csv";
     saveFile(file_name); //To this file the edited data is saved and then we give this file to Marten
 
     QFile file(file_name);
-    //Pass it to Marten here
+    file.open(QIODevice::ReadWrite);
+    interaction_service->optimize_csv(&file);
+    //interaction_service->read_csv(&file);
     ui->stackedWidget->setCurrentIndex(3);
-
 }
 
 void MainWindow::saveFile(const QString &name)
@@ -126,8 +136,6 @@ void MainWindow::saveFile(const QString &name)
 
     if (file.open(QFile::WriteOnly | QIODevice::Text))
     {
-
-
         QTextStream data( &file );
         QStringList strList;
         for( int r = 0; r < ui->tableWidget->rowCount(); ++r )

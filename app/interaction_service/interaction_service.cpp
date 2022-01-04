@@ -45,8 +45,45 @@ namespace XOptimizer {
         std::cout << "Parsing took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
     }
 
-    void InteractionService::read_csv(QFile* file) {
+    void InteractionService::optimize_csv(QFile* file) {
+        QString new_path = m_file_storage->get_save_path_from_csv(file->fileName());
+        QFile new_file(new_path);
+        if (!new_file.open(QIODevice::ReadWrite)) {
+            //TODO: Handle unknown error
+            return;
+        }
+
+        //api_wrapper.searchCSV(file, &new_file);
+
         file_to_order(file, orders);
+    }
+
+    void InteractionService::read_csv_as_table(QFile *file, QVector<QVector<QString>> &output) {
+        QVector<Order> temp_orders;
+        file_to_order(file, temp_orders);
+        if (temp_orders.size() == 0)
+            return;
+        //lat long adress id
+        output = QVector<QVector<QString>>(temp_orders.size() + 1, QVector<QString>(4 + temp_orders[0].other_dict.size()));
+        output[0][0] = "id";
+        output[0][1] = "adresse";
+        output[0][2] = "latitude";
+        output[0][3] = "longitude";
+        int j = 4;
+        for(auto it : temp_orders[0].other_dict) {
+            output[0][j++] = it;
+        }
+        for(int i = 0; i < temp_orders.size(); ++i) {
+            output[i + 1][0] = QString::number(temp_orders[i].id);
+            output[i + 1][1] = temp_orders[i].location;
+            output[i + 1][2] = QString::number(temp_orders[i].geolocation.first);
+            output[i + 1][3] = QString::number(temp_orders[i].geolocation.second);
+
+            j = 4;
+            for(auto it = temp_orders[i].other_dict.begin(); it != temp_orders[i].other_dict.end(); it++) {
+                output[i + 1][j++] = it.key();
+            }
+        }
     }
 
     OpenStreetMapWrapper* InteractionService::get_api_wrapper(){

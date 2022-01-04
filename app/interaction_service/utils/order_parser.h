@@ -15,7 +15,7 @@ class Order{
     void set_location(QString location);
     void set_longitude(double longitude);
     void set_latitude(double latitude);
-    void set_other(QString header,QString value);
+    void set_other(QString header, QString value);
 		int id; //order ID
 		QString location; //order adress
 		std::pair<double, double> geolocation;
