@@ -43,6 +43,16 @@ namespace XOptimizer {
         map_file_ptr = parser.parse();
         auto end = std::chrono::high_resolution_clock::now();
         std::cout << "Parsing took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+
+        start = std::chrono::high_resolution_clock::now();
+        map = map_file_ptr->to_map();
+        end = std::chrono::high_resolution_clock::now();
+        std::cout << "to_map took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+
+        start = std::chrono::high_resolution_clock::now();
+        //map->find_distances();
+        end = std::chrono::high_resolution_clock::now();
+        std::cout << "find_distances took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
     }
 
     void InteractionService::optimize_csv(QFile* file) {

@@ -17,9 +17,10 @@ using namespace std;
 QString chosenCity;
 QString chosenDepartment;
 //QStringList departments = { "Auvergne-Rhône-Alpes", "Bourgogne-Franche-Comté", "Bretagne", "Centre-Val de Loire",};
-QStringList departments = {"Corse"};
+QStringList departments = {"Corse", "Auvergne"};
 map<QString, QStringList> cities = {
-    {"Corse", {"Haute Corse", "Corse Du Sud"}}
+    {"Corse", {"Haute Corse", "Corse Du Sud"}},
+    {"Auvergne", {"Haute Loire"}}
 };
 
 std::string to_api_string(const QString& human) {

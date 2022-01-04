@@ -23,6 +23,7 @@
 #include "generated/osmformat.pb.h"
 //TODO: How to link core-algo to our project?
 //#include "temp/map.hpp"
+#include "../core-algo/src/map/map.hpp"
 
 namespace XOptimizer::PBFParser {
     class BBox {
@@ -195,7 +196,7 @@ namespace XOptimizer::PBFParser {
         }
 
         //TODO: Take care of this later
-        //[[nodiscard]] std::shared_ptr<Map> to_map() const;
+        [[nodiscard]] std::shared_ptr<Map> to_map() const;
     };
 
     class PBFParser {

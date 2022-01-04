@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef INTERACTION_SERVICE_H
 #define INTERACTION_SERVICE_H
 #endif
@@ -8,7 +10,6 @@
 #include <utils/api_wrapper.h>
 #include "file_storage.h"
 #include <string>
-#pragma once
 
 namespace XOptimizer {
     class InteractionService {
@@ -26,6 +27,7 @@ namespace XOptimizer {
         QString map_file_path;
         OpenStreetMapWrapper api_wrapper;
         std::shared_ptr<PBFParser::PBFFile> map_file_ptr;
+        std::shared_ptr<Map> map;
         std::unique_ptr<FileStorage> m_file_storage;
     };
 };

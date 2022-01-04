@@ -162,7 +162,7 @@ std::shared_ptr<PBFFile> PBFParser::parse() {
     return std::make_shared<PBFFile>(bbox, required_features, optional_features, writing_program, source, blocks);
 }
 
-long double haversine(long double lat1, long double lon1, long double lat2, long double lon2) {
+inline long double haversine(long double lat1, long double lon1, long double lat2, long double lon2) {
     long double R = 6371e3;
     long double phi1 = lat1 * M_PI/180;
     long double phi2 = lat2 * M_PI/180;
@@ -177,8 +177,7 @@ long double haversine(long double lat1, long double lon1, long double lat2, long
     return R * c;
 }
 
-/*
- * TODO: Take care of this later
+//TODO: Take care of this later
 std::shared_ptr<Map> PBFFile::to_map() const {
     std::vector<long long> indices;
     std::unordered_map<long long, int> indicesMap;
@@ -225,4 +224,4 @@ std::shared_ptr<Map> PBFFile::to_map() const {
             std::move(adjacencyList)
     );
 }
-*/
+
