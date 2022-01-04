@@ -12,6 +12,11 @@ VertexData::VertexData(std::pair<double, double> geolocation){
     this->geolocation = geolocation;
 }
 
+VertexData::VertexData(std::pair<double, double> geolocation, int type){
+    this->geolocation = geolocation;
+    this->type = type;
+}
+
 std::pair<double, double> VertexData::get_geolocation() const{
     return this->geolocation;
 }
