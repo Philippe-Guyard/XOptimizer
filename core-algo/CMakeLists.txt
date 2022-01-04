@@ -107,4 +107,5 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR                  # Enforce use of GNU
     endif()
 
     unset(TEST CACHE)                                       # Reset cached variables
+    unset(STABLE CACHE)                                     # Reset cached variables
 endif()
