@@ -23,6 +23,7 @@ FileStorage::FileStorage() {
     QString subfolder = "XOptimizer";
     make_subfolder(home, subfolder);
     make_subfolder(home, subfolder + "/maps");
+    make_subfolder(home, subfolder + "/orders");
 
 
     base_folder = home.absolutePath() + "/" + subfolder;
@@ -30,6 +31,11 @@ FileStorage::FileStorage() {
 
 QString FileStorage::get_save_path_from_map_name(QString region, QString department) {
     return QDir::toNativeSeparators(base_folder + "/maps/" + region + "_" + department + ".osm.pbf");
+}
+
+QString FileStorage::get_save_path_from_csv(QString path) {
+    QFileInfo f_info(path);
+    return QDir::toNativeSeparators(base_folder + "/orders/" + f_info.fileName());
 }
 
 /*
