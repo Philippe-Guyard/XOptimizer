@@ -89,7 +89,7 @@ void MainWindow::on_uploadFileButton_clicked()
     ui->tableWidget->setColumnCount(table_values[0].size());
     for(int i = 0; i < table_values.size(); ++i) {
         ui->tableWidget->insertRow(i);
-        for(int j = 0; j < table_values.size(); ++j) {
+        for(int j = 0; j < table_values[i].size(); ++j) {
             ui->tableWidget->setItem(i, j, new QTableWidgetItem(table_values[i][j]));
         }
     }
@@ -126,7 +126,6 @@ void MainWindow::on_pushButton_clicked()
 
     QFile file(file_name);
     interaction_service->optimize_csv(&file);
-    //interaction_service->read_csv(&file);
     ui->stackedWidget->setCurrentIndex(3);
 }
 
