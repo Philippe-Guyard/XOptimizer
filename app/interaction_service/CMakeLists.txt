@@ -25,7 +25,6 @@ set(PROJECT_SOURCES
     mainwindow.h
     mainwindow.ui
     utils/api_wrapper.cpp
-    utils/api_wrapper.moc
     utils/api_wrapper.h
     utils/order_parser.cpp
     interaction_service.cpp
@@ -33,7 +32,10 @@ set(PROJECT_SOURCES
     utils/order_parser.h
     file_storage.cpp
     file_storage.h
+    qml.qrc
 )
+
+FILE(COPY loader.gif DESTINATION "${CMAKE_BINARY_DIR}")
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(interaction_service
@@ -53,7 +55,7 @@ else()
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
         add_executable(interaction_service
-            ${PROJECT_SOURCES} qml.qrc
+            ${PROJECT_SOURCES}
         )
     endif()
 endif()
