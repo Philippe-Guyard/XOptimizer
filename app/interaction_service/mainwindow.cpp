@@ -166,7 +166,7 @@ void MainWindow::on_NextButton_clicked()
     interaction_service->download_and_parse_map(to_api_string(chosenDepartment), to_api_string(chosenCity));
 
     ui->stackedWidget->setCurrentIndex(1);
-    QTimer::singleShot(1000, this, [this]() { ui->stackedWidget->setCurrentIndex(2); } );
+    QTimer::singleShot(5000, this, [this]() { ui->stackedWidget->setCurrentIndex(2); } );
 }
 
 void MainWindow::change_page(int a){
