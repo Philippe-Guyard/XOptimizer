@@ -43,19 +43,22 @@ Order line_to_order(QString line, QVector<QString> header){
 				cur_header.replace(" ", "");
 
 				if (cur_header.toLower() == "id"){
-						order->set_id(cur_item.toInt());
+                    order->set_id(cur_item.toInt());
 				}
 				else if(cur_header.toLower() == "adresse"){
-						order->set_location(cur_item);
+                    order->set_location(cur_item);
 				}
 				else if(cur_header.toLower() == "longitude"){
-                        order->set_longitude(cur_item.toDouble());
+                    order->set_longitude(cur_item.toDouble());
 				}
 				else if(cur_header.toLower() == "latitude"){
-						order->set_latitude(cur_item.toDouble());
+                    order->set_latitude(cur_item.toDouble());
 				}
+                else if (cur_header.toLower() == "type") {
+                    order->is_inventory = cur_item == "1";
+                }
 				else{ // if none of the other statements work just put the data into data dictionary
-						order->set_other(cur_header,cur_item);
+                    order->set_other(cur_header,cur_item);
 				}
 		}
 		return *order;
