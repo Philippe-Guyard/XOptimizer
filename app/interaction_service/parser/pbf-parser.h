@@ -21,7 +21,7 @@
 #include <vector>
 #include "generated/fileformat.pb.h"
 #include "generated/osmformat.pb.h"
-#include "map.hpp"
+#include "../core-algo/src/map/map.hpp"
 
 namespace XOptimizer::PBFParser {
     class BBox {
