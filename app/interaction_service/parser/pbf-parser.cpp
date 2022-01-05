@@ -220,6 +220,10 @@ std::shared_ptr<Map> PBFFile::to_map() const {
             }
         }
     }
+
+    indicesMap.clear();
+    indices.clear();
+
     std::unordered_map<int, int> map;
     int count = 0;
     for (int i = 0; i < data.size(); i++) {
