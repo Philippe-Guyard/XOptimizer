@@ -26,3 +26,4 @@ public:
 
 Order line_to_order(QString line, QVector<QString> header);
 void file_to_order(QFile *file, QVector<Order>& order_list);
+void orders_to_table(const QVector<Order>& orders, QVector<QVector<QString>>& out_table);
