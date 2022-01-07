@@ -38,7 +38,10 @@ private slots:
     void load_regions();
 
 
+    void on_pushButton_2_clicked();
+
 private:
+    QTimer *loading_timer;
     Ui::MainWindow *ui;
     std::unique_ptr<XOptimizer::InteractionService> interaction_service;
 };

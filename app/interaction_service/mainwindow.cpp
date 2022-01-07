@@ -17,14 +17,15 @@ using namespace std;
 QString chosenCity;
 QString chosenDepartment;
 //QStringList departments = { "Auvergne-Rhône-Alpes", "Bourgogne-Franche-Comté", "Bretagne", "Centre-Val de Loire",};
-QStringList departments = {"Corse", "Auvergne"};
+QStringList departments = {"Corse", "Auvergne", "Ile-de-France"};
 map<QString, QStringList> cities = {
     {"Corse", {"Haute Corse", "Corse Du Sud"}},
-    {"Auvergne", {"Haute Loire"}}
+    {"Auvergne", {"Haute Loire"}},
+    {"Ile-de-France", {"Paris", "Essonne"}}
 };
 
 std::string to_api_string(const QString& human) {
-    return human.toLower().replace(" ", "_").toStdString();
+    return human.toLower().replace(" ", "_").replace("-", "_").toStdString();
 }
 
 /*
@@ -46,8 +47,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     //Setting up the drop boxes
     ui->DepartmentcomboBox->addItems(departments);
-    //    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
-    //    ui->quickWidget->show();
 
     QDir dir(".");
     QString movielocation = dir.absolutePath() + "/loader.gif";
@@ -56,12 +55,15 @@ MainWindow::MainWindow(QWidget *parent)
     movie->start();
 
     interaction_service = std::make_unique<XOptimizer::InteractionService>();
+    loading_timer = new QTimer(this);
+    change_page(0);
 }
 
 
 
 MainWindow::~MainWindow()
 {
+    delete loading_timer;
     delete ui;
 }
 
@@ -95,25 +97,6 @@ void MainWindow::on_uploadFileButton_clicked()
     }
 
     file.close();
-
-    /*
-    QTextStream in(&file);
-    in.setCodec("UTF-8");
-
-    int n = 0;
-    while (!in.atEnd()){
-        ui->tableWidget->insertRow(n);
-        QString s=in.readLine(); // reads line from file
-        QStringList linesplit = s.split(',');
-        ui->tableWidget->setColumnCount(linesplit.length());
-        for( int i = 0; i<linesplit.length(); i++){
-            ui->tableWidget->setItem(n, i, new QTableWidgetItem(linesplit[i]));
-        }
-        n = n + 1;
-    }
-
-    file.close();
-    */
 }
 
 
@@ -126,7 +109,24 @@ void MainWindow::on_pushButton_clicked()
 
     QFile file(file_name);
     interaction_service->optimize_csv(&file);
-    ui->stackedWidget->setCurrentIndex(3);
+
+    ui->stackedWidget->setCurrentIndex(1);
+    loading_timer->setInterval(500);
+    connect(loading_timer, &QTimer::timeout, [this] () {
+        QVector<QVector<QString>> table_values;
+        if (this->interaction_service->get_optimized_orders(table_values)) {
+            this->ui->tableWidget_2->setColumnCount(table_values[0].size());
+            for(int i = 0; i < table_values.size(); ++i) {
+                this->ui->tableWidget_2->insertRow(i);
+                for(int j = 0; j < table_values[i].size(); ++j) {
+                    this->ui->tableWidget_2->setItem(i, j, new QTableWidgetItem(table_values[i][j]));
+                }
+            }
+            this->ui->stackedWidget->setCurrentIndex(3);
+            this->loading_timer->stop();
+        }
+    });
+    loading_timer->start();
 }
 
 void MainWindow::saveFile(const QString &name)
@@ -152,9 +152,11 @@ void MainWindow::saveFile(const QString &name)
             QString a = strList.join(",")+"\n";
             data << a;
         }
+
+        file.close();
     }
 
-    file.close();
+
 }
 
 
@@ -170,15 +172,18 @@ void MainWindow::on_NextButton_clicked()
 }
 
 void MainWindow::change_page(int a){
-
     ui->stackedWidget->setCurrentIndex(a);
-
 }
 
 
 void MainWindow::on_stackedWidget_currentChanged(int arg1)
 {
-    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
-    ui->quickWidget->show();
+
+}
+
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    ui->tableWidget->insertRow(ui->tableWidget->rowCount());
 }
 
