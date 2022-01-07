@@ -1,0 +1,19 @@
+#Cmake gitignore
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+#ignore protobuf and zlib
+libs
+
+parser/pbf_parser_autogen
+parser/pbf_parser_generated_autogen
+core-algo
