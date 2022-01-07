@@ -82,49 +82,42 @@ void InteractionService::start_optimization_thread() {
         while (!is_ready(this->parsing_thread))
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        VertexData* orders_vdata = new VertexData[this->orders.size()];
+        VertexData* orders_vdata = new VertexData[this->orders.size()];       
         std::vector<int> orders_indices;
+        std::unordered_map<int, int> node_to_order;
         for(int i = 0; i < this->orders.size(); ++i) {
             orders_vdata[i] = VertexData(this->orders[i].geolocation, static_cast<int>(this->orders[i].is_inventory));
-            orders_indices.push_back(map->brute_force_closest_vertex_index(orders_vdata[i]));
+            int node_idx = map->brute_force_closest_vertex_index(orders_vdata[i]);
+            orders_indices.push_back(node_idx);
+            node_to_order[node_idx] = i;
         }
 
         auto distances = this->map->find_distances(orders_indices);
         auto g = Graph(this->orders.size(), orders_vdata, distances);
         auto optimal_circuit = g.optimal_routing_all();
+        //For now we assume only 1 inventory
+        assert(optimal_circuit.size() == 1);
+        for(auto it = optimal_circuit[0].begin(); it != optimal_circuit[0].end(); it++) {
+            this->optimized_orders.push_back(this->orders[node_to_order[*it]]);
+        }
 
         delete[] orders_vdata;
     });
 }
 
+bool InteractionService::get_optimized_orders(QVector<QVector<QString>> &output_table) {
+    if (is_ready(this->optimization_thread)) {
+        orders_to_table(this->optimized_orders, output_table);
+        return true;
+    }
+    else
+        return false;
+}
+
 void InteractionService::read_csv_as_table(QFile *file, QVector<QVector<QString>> &output) {
     QVector<Order> temp_orders;
     file_to_order(file, temp_orders);
-    if (temp_orders.size() == 0)
-        return;
-    //lat long adress id
-    output = QVector<QVector<QString>>(temp_orders.size() + 1, QVector<QString>(5 + temp_orders[0].other_dict.size()));
-    output[0][0] = "id";
-    output[0][1] = "adresse";
-    output[0][2] = "latitude";
-    output[0][3] = "longitude";
-    output[0][4] = "type";
-    int j = 5;
-    for(auto it : temp_orders[0].other_dict) {
-        output[0][j++] = it;
-    }
-    for(int i = 0; i < temp_orders.size(); ++i) {
-        output[i + 1][0] = QString::number(temp_orders[i].id);
-        output[i + 1][1] = temp_orders[i].location;
-        output[i + 1][2] = QString::number(temp_orders[i].geolocation.first);
-        output[i + 1][3] = QString::number(temp_orders[i].geolocation.second);
-        output[i + 1][4] = temp_orders[i].is_inventory ? "1" : "0";
-
-        j = 5;
-        for(auto it = temp_orders[i].other_dict.begin(); it != temp_orders[i].other_dict.end(); it++) {
-            output[i + 1][j++] = it.key();
-        }
-    }
+    orders_to_table(temp_orders, output);
 }
 
 OpenStreetMapWrapper* InteractionService::get_api_wrapper(){
