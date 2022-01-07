@@ -84,12 +84,12 @@ void InteractionService::start_optimization_thread() {
 
         VertexData* orders_vdata = new VertexData[this->orders.size()];       
         std::vector<int> orders_indices;
-        std::unordered_map<int, int> node_to_order;
+        //std::unordered_map<int, int> node_to_order;
         for(int i = 0; i < this->orders.size(); ++i) {
             orders_vdata[i] = VertexData(this->orders[i].geolocation, static_cast<int>(this->orders[i].is_inventory));
             int node_idx = map->brute_force_closest_vertex_index(orders_vdata[i]);
             orders_indices.push_back(node_idx);
-            node_to_order[node_idx] = i;
+            //node_to_order[node_idx] = i;
         }
 
         auto distances = this->map->find_distances(orders_indices);
@@ -98,7 +98,7 @@ void InteractionService::start_optimization_thread() {
         //For now we assume only 1 inventory
         assert(optimal_circuit.size() == 1);
         for(auto it = optimal_circuit[0].begin(); it != optimal_circuit[0].end(); it++) {
-            this->optimized_orders.push_back(this->orders[node_to_order[*it]]);
+            this->optimized_orders.push_back(this->orders[*it]);
         }
 
         delete[] orders_vdata;
