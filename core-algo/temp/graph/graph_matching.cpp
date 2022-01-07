@@ -93,7 +93,7 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
     }
     std::vector<std::vector<EdgeWeight>> distances;
     for(int i = 0; i<num_vertices; i++){
-        distances[i].push_back({});
+        distances.push_back({});
         for(int j = 0; j < num_vertices; j++){
             distances[i].push_back(this->get_edge_weight(vertex_indices[i],vertex_indices[j]));
         }
@@ -102,8 +102,9 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
     Graph* new_graph = new Graph(num_vertices, vertex_data_array, distances);
 
 
+
     // Initialize the Matching
-    Matching M = Matching(new_graph);
+    Matching *M = new Matching(new_graph);
     int n_edges= new_graph->num_edges;
     std::vector<double> weight;
     int weight_i;
@@ -115,8 +116,9 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
         weight_i = new_graph->get_edge(i)->get_weight();
         weight.push_back(weight_i);
     }
+
     // Solve the matching
-    solution = M.solve(weight);
+    solution = (*M).solve(weight);
     // Extract the edges
     std::vector<std::pair<int,int>> edges = solution.first;
     std::vector<std::pair<int,int>> final;
@@ -128,7 +130,8 @@ std::vector<std::pair<int,int>> Graph::perfect_mincost_matching(std::vector<int>
         second = vertex_indices[(*i).second];
         final.push_back(std::make_pair(first, second));
     }
-
+    delete M;
+    delete new_graph;
     return final;
 }
 
