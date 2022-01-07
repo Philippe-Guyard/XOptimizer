@@ -1,5 +1,5 @@
 #include "graph_algorithms.hpp"
-#include <climits>
+#include <limits>
 #include <cstring>
 #include <algorithm>
 
