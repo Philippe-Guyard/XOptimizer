@@ -60,6 +60,10 @@ void InteractionService::start_parsing_thread() {
 
         start = std::chrono::high_resolution_clock::now();
         this->map = this->map_file_ptr->to_map();
+        /*
+        //Tried to optimize for RAM usage but did not work
+        this->map_file_ptr.reset();
+        */
         end = std::chrono::high_resolution_clock::now();
         std::cout << "to_map took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
@@ -79,21 +83,28 @@ void InteractionService::optimize_csv(QFile* file) {
 
 void InteractionService::start_optimization_thread() {
     this->optimization_thread = std::async(std::launch::async, [this]() {
+        std::cout << "Optimization thread started" << '\n';
         while (!is_ready(this->parsing_thread))
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
         VertexData* orders_vdata = new VertexData[this->orders.size()];       
         std::vector<int> orders_indices;
         //std::unordered_map<int, int> node_to_order;
+        std::cout << "Loop started\n";
         for(int i = 0; i < this->orders.size(); ++i) {
             orders_vdata[i] = VertexData(this->orders[i].geolocation, static_cast<int>(this->orders[i].is_inventory));
             int node_idx = map->brute_force_closest_vertex_index(orders_vdata[i]);
+            std::cout << node_idx << ' ';
             orders_indices.push_back(node_idx);
             //node_to_order[node_idx] = i;
         }
+        std::cout << "\nOrders indices:\n";
+        std::cout << orders_indices[0] << ' ' << orders_indices[1] << ' ' << orders_indices[2] << '\n';
 
         auto distances = this->map->find_distances(orders_indices);
+        std::cout << "Find distances completed" << '\n';
         auto g = Graph(this->orders.size(), orders_vdata, distances);
+        std::cout << "Graph created\n";
         auto optimal_circuit = g.optimal_routing_all();
         //For now we assume only 1 inventory
         assert(optimal_circuit.size() == 1);
