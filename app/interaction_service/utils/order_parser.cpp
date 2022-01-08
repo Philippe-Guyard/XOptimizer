@@ -98,8 +98,8 @@ void orders_to_table(const QVector<Order>& orders, QVector<QVector<QString>>& ou
     out_table[0][3] = "longitude";
     out_table[0][4] = "type";
     int j = 5;
-    for(auto it : orders[0].other_dict) {
-        out_table[0][j++] = it;
+    for(auto it = orders[0].other_dict.begin(); it != orders[0].other_dict.end(); it++) {
+        out_table[0][j++] = it.key();
     }
     for(int i = 0; i < orders.size(); ++i) {
         out_table[i + 1][0] = QString::number(orders[i].id);
@@ -110,7 +110,7 @@ void orders_to_table(const QVector<Order>& orders, QVector<QVector<QString>>& ou
 
         j = 5;
         for(auto it = orders[i].other_dict.begin(); it != orders[i].other_dict.end(); it++) {
-            out_table[i + 1][j++] = it.key();
+            out_table[i + 1][j++] = it.value();
         }
     }
 }
