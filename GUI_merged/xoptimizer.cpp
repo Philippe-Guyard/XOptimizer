@@ -11,6 +11,7 @@
 #include <QTimer>
 #include <fstream>
 #include <QtDebug>
+#include <QtQuick>
 #include <QTextCodec>
 using namespace std;
 
@@ -69,14 +70,26 @@ void XOptimizer::load_regions(){
 XOptimizer::XOptimizer(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::XOptimizer)
+    , data_out()
+    , click_times(0)
 {
     load_regions();
 
     ui->setupUi(this);
     //Setting up the drop boxes
     ui->DepartmentcomboBox->addItems(departments);
-//    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
-//    ui->quickWidget->show();
+
+    // Set up the map
+    data_out.setGnssPosition(QGeoCoordinate(59.91273, 10.74609));
+    data_out.clearPath();
+    ui->quickWidget->engine()->rootContext()->setContextProperty("data_out", &data_out);
+
+    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
+    // QQuickItem* mapView = ui->quickWidget->rootObject()->childItems().first();
+
+    // Set property
+    // mapView->setProperty("center", QVariant::fromValue(QGeoCoordinate(0, 0)));
+    ui->quickWidget->show();
 
     QDir dir(".");
     QString movielocation = dir.absolutePath() + "/loader.gif";
@@ -85,6 +98,8 @@ XOptimizer::XOptimizer(QWidget *parent)
     movie->start();
 
 }
+
+
 
 XOptimizer::~XOptimizer()
 {
@@ -145,6 +160,39 @@ void XOptimizer::on_pushButton_clicked()
     //Pass it to Marten here
     ui->stackedWidget->setCurrentIndex(3);
 
+/*
+{ latitude: 48.71252662171624,longitude:  2.216211108304493 },
+            { latitude: 48.712845188636074,longitude: 2.21278860962126 },
+             { latitude:48.71455833614268, longitude:  2.212852982636907},
+            { latitude: 48.71472823188787, longitude:  2.2098381797195574 },
+            { latitude: 48.71382374153752,longitude:  2.2016154192405604 }
+*/
+
+    switch (click_times)
+    {
+        case 1:
+            data_out.setGnssPosition(QGeoCoordinate(48.71250170132551, 2.2163675687909805));
+            data_out.addCoordinateToPath(48.71252662171624, 2.216211108304493);
+            break;
+        case 2:
+            data_out.addCoordinateToPath(48.712845188636074, 2.21278860962126);
+            break;
+        case 3:
+            data_out.addCoordinateToPath(48.71455833614268, 2.212852982636907);
+            data_out.addCoordinateToPath(48.71472823188787, 2.2098381797195574);
+            data_out.addCoordinateToPath(48.71382374153752, 2.2016154192405604);
+            break;
+        case 4:
+            data_out.clearPath();
+            break;
+    }        
+
+    click_times++;
+}
+
+void XOptimizer::on_page3_goBack_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
 }
 
 void XOptimizer::saveFile(const QString &name)
@@ -197,7 +245,8 @@ void XOptimizer::change_page(int a){
 
 
 void XOptimizer::on_stackedWidget_currentChanged(int arg1)
-{
+{   ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
+    ui->quickWidget->show();
 
 }
 
