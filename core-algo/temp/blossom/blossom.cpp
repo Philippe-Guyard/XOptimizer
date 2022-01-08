@@ -16,7 +16,7 @@ Matching::Matching(Graph *G)
     forest.assign(2*n_vertices, 0);
     tip.assign(2*n_vertices, 0);
     active.assign(2*n_vertices, 0);
-    match.assign(2*n_edges, 0);
+    match.assign(2*n_vertices, 0);
     parity.assign(2*n_vertices, 0);
     root.assign(2*n_vertices, 0);
 
@@ -24,6 +24,12 @@ Matching::Matching(Graph *G)
     slack.assign(n_edges, 0);
     dual.assign(2*n_vertices, 0);
 
+    for(int i = 0; i<n_vertices; i++){
+        shallow.push_back({});
+    }
+    for(int i = 0; i<n_vertices; i++){
+        deep.push_back({});
+    }
 }
 
 
@@ -81,10 +87,10 @@ while(!forest_list.empty())
     }
 
 }
-    perfect = true;
+    this->perfect = true;
     for(int i = 0; i < n_vertices; i++)
         if(match[outer[i]] == -1)
-            perfect = false;
+            this->perfect = false;
 }
 
 
@@ -668,25 +674,29 @@ std::pair<std::vector<std::pair<int,int>>, double > Matching::solve(const std::v
 
 void Matching::initial_matching()
 {
-    long BIG = 900000;
-    std::vector<long> edge_weights;
+    int BIG = std::numeric_limits<int>::max()/2;
+    std::vector<int> edge_weights;
     int mate;
 
     for(int i = 0; i<n_vertices; i++)
     {
+        edge_weights.clear();
         if(match[outer[i]] > -1){continue;}
+
         for(int j = 0; j<n_vertices; j++)
         {
-            if (is_blocked(i, j)) {edge_weights[j] = BIG;}
-            else if(outer[i] == outer[j] || match[j] >= 0){edge_weights[j] = BIG;}
-            else {edge_weights[j] = G.get_edge_weight(i, j);}
+            if(outer[i] == outer[j] || match[j] >= 0){edge_weights.push_back(BIG);}
+            else if (is_blocked(i, j)){edge_weights.push_back(BIG);}
+            else {edge_weights.push_back(G.get_edge_weight(i, j));}
         }
+
         mate = std::min_element(edge_weights.begin(), edge_weights.end()) - edge_weights.begin();
         if(edge_weights[mate] < BIG-1)
         {
             match[outer[i]] = mate;
             match[outer[mate]] = i;
         }
+
     }
 
 }
