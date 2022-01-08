@@ -3,32 +3,56 @@ import QtLocation 5.6
 import QtPositioning 5.6
 
 Rectangle {
+    id: mapRectangle
+
+//    property pathToShow: pathProvider.createObject()
+//
+//    property Component pathProvider:
+//
+//    function addToPath(coordinate) {
+//        pathToShow.addCoordinate(coordinate)
+//    }
+//
+//    function showPath() {
+//        mapView.addMapItem(pathToShow)
+//    }
+//
+//    function clearMapItems() {
+//        mapView.clearMapItems()
+//    }
+//
+//    function clearMapPath() {
+//        mapView.clearMapItems()
+//        pathToShow.setPath([])
+//    }
+
     Plugin {
         id: mapPlugin
         name: "osm"
     }
     Map {
-    id: mapView
-    anchors.fill: parent
-    plugin: mapPlugin
-    center: QtPositioning.coordinate(48.7133, 2.2105);
-    //center: QtPositioning.coordinate( );
-    //48.71250170132551, 2.2163675687909805
-    //{ latitude: 48.71250170132551, longitude:  2.2163675687909805 }
-    zoomLevel: 16
-    MapPolyline {
-        line.width: 4
-        line.color: 'blue'
-        path: [
-            { latitude: 48.71252662171624,longitude:  2.216211108304493 },
-            { latitude: 48.712845188636074,longitude: 2.21278860962126 },
-             { latitude:48.71455833614268, longitude:  2.212852982636907},
-            { latitude: 48.71472823188787, longitude:  2.2098381797195574 },
-            { latitude: 48.71382374153752,longitude:  2.2016154192405604 }
-        ]
+        id: mapView
+        anchors.fill: parent
+        plugin: mapPlugin
+        center: data_out.gnssPosition
+        //center: QtPositioning.coordinate( );
+        //48.71250170132551, 2.2163675687909805
+        //{ latitude: 48.71250170132551, longitude:  2.2163675687909805 }
+        zoomLevel: 16
+
+        MapPolyline {
+            line.width: 4
+            line.color: 'blue'
+            path: data_out.path
+        }
+
     }
-    }
+
+//    Connections {
+//        target: data_out
+//        function onGnssPositionChanged() {
+//
+//        }
+//    }
 
 }
-
-

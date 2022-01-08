@@ -12,6 +12,7 @@
 #include <fstream>
 #include <QtDebug>
 #include <QTextCodec>
+#include <QtQuick>
 using namespace std;
 
 QString chosenCity;
@@ -43,7 +44,8 @@ void MainWindow::load_regions() {
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow) {
+    , ui(new Ui::MainWindow)
+    , map_data() {
     ui->setupUi(this);
     //Setting up the drop boxes
     ui->DepartmentcomboBox->addItems(departments);
@@ -53,6 +55,17 @@ MainWindow::MainWindow(QWidget *parent)
     QMovie *movie = new QMovie(movielocation);
     ui-> loaderlabel ->setMovie(movie);
     movie->start();
+
+    map_data.setGnssPosition(QGeoCoordinate(48.73, 2.24383));
+    map_data.clearPath();
+    ui->quickWidget->engine()->rootContext()->setContextProperty("data_out", &map_data);
+
+    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
+    // QQuickItem* mapView = ui->quickWidget->rootObject()->childItems().first();
+
+    // Set property
+    // mapView->setProperty("center", QVariant::fromValue(QGeoCoordinate(0, 0)));
+    ui->quickWidget->show();
 
     interaction_service = std::make_unique<XOptimizer::InteractionService>();
     loading_timer = new QTimer(this);
@@ -81,6 +94,7 @@ void MainWindow::on_CitycomboBox_2_currentTextChanged(const QString &arg1)
 
 void MainWindow::on_uploadFileButton_clicked()
 {
+    ui->tableWidget->clearContents();
     QString file_name = QFileDialog::getOpenFileName(this, "Choose a file", QDir::homePath(), "All files (*.*);;Data files (*.csv)");
     ui->filelabel->setText(file_name);
     ui->uploadFileButton->setText("Upload a different file");
@@ -88,9 +102,9 @@ void MainWindow::on_uploadFileButton_clicked()
     QFile file(file_name);
     QVector<QVector<QString>> table_values;
     interaction_service->read_csv_as_table(&file, table_values);
+    ui->tableWidget->setRowCount(table_values.size());
     ui->tableWidget->setColumnCount(table_values[0].size());
     for(int i = 0; i < table_values.size(); ++i) {
-        ui->tableWidget->insertRow(i);
         for(int j = 0; j < table_values[i].size(); ++j) {
             ui->tableWidget->setItem(i, j, new QTableWidgetItem(table_values[i][j]));
         }
@@ -114,16 +128,22 @@ void MainWindow::on_pushButton_clicked()
     loading_timer->setInterval(500);
     connect(loading_timer, &QTimer::timeout, [this] () {
         QVector<QVector<QString>> table_values;
-        if (this->interaction_service->get_optimized_orders(table_values)) {
+        QVector<std::pair<double, double>> path;
+        if (this->interaction_service->get_optimized_orders(table_values, path)) {
             this->ui->tableWidget_2->setColumnCount(table_values[0].size());
+            this->ui->tableWidget_2->setRowCount(table_values.size());
             for(int i = 0; i < table_values.size(); ++i) {
-                this->ui->tableWidget_2->insertRow(i);
                 for(int j = 0; j < table_values[i].size(); ++j) {
                     this->ui->tableWidget_2->setItem(i, j, new QTableWidgetItem(table_values[i][j]));
                 }
             }
+
             this->ui->stackedWidget->setCurrentIndex(3);
             this->loading_timer->stop();
+
+            for(auto point : path) {
+                this->map_data.addCoordinateToPath(point.first, point.second);
+            }
         }
     });
     loading_timer->start();

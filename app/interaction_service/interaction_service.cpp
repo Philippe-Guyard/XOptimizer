@@ -105,9 +105,12 @@ void InteractionService::start_optimization_thread() {
     });
 }
 
-bool InteractionService::get_optimized_orders(QVector<QVector<QString>> &output_table) {
+bool InteractionService::get_optimized_orders(QVector<QVector<QString>> &output_table, QVector<std::pair<double, double>>& output_path) {
     if (is_ready(this->optimization_thread)) {
         orders_to_table(this->optimized_orders, output_table);
+        for(auto order : this->optimized_orders)
+            output_path.push_back(order.geolocation);
+
         return true;
     }
     else

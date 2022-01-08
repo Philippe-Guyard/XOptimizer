@@ -16,6 +16,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS QuickWidgets REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Positioning REQUIRED)
 
 set(PROJECT_SOURCES
     main.cpp
@@ -60,7 +61,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(interaction_service PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::QuickWidgets)
+target_link_libraries(interaction_service PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::QuickWidgets Qt${QT_VERSION_MAJOR}::Positioning)
 
 set_target_properties(interaction_service PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
