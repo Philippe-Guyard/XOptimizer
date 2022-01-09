@@ -53,53 +53,55 @@ void InteractionService::start_parsing_thread() {
         std::shared_ptr<std::ifstream> map_stream = std::make_shared<std::ifstream>(map_file_path.toStdString());
         PBFParser::PBFParser parser(map_stream);
 
-        auto start = std::chrono::high_resolution_clock::now();
-        this->map_file_ptr = parser.parse();
-        auto end = std::chrono::high_resolution_clock::now();
-        std::cout << "Parsing took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+//        auto start = std::chrono::high_resolution_clock::now();
+        //this->map_file_ptr = parser.parse();
+//        auto end = std::chrono::high_resolution_clock::now();
+//        std::cout << "Parsing took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
-        start = std::chrono::high_resolution_clock::now();
-        this->map = this->map_file_ptr->to_map();
+//        start = std::chrono::high_resolution_clock::now();
+        //this->map = this->map_file_ptr->to_map();
         /*
         //Tried to optimize for RAM usage but did not work
         this->map_file_ptr.reset();
         */
-        end = std::chrono::high_resolution_clock::now();
-        std::cout << "to_map took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+//        end = std::chrono::high_resolution_clock::now();
+//        std::cout << "to_map took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
         map_stream->close();
     });
 }
 
-void InteractionService::optimize_csv(QFile* file) {
+bool InteractionService::optimize_csv(QFile* file) {
     QString new_path = m_file_storage->get_save_path_from_csv(file->fileName());
     QFile new_file(new_path);
 
     //TODO: Uncomment this
     //api_wrapper.searchCSV(file, &new_file);
     file_to_order(file, orders);
+    if (orders.size() == 0)
+        return false;
+    if (std::count_if(orders.begin(), orders.end(), [](const Order& o) {return o.is_inventory; }) != 1) {
+        return false;
+    }
+
     start_optimization_thread();
+    return true;
 }
 
 void InteractionService::start_optimization_thread() {
     this->optimization_thread = std::async(std::launch::async, [this]() {
-        std::cout << "Optimization thread started" << '\n';
         while (!is_ready(this->parsing_thread))
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
         VertexData* orders_vdata = new VertexData[this->orders.size()];       
-        std::vector<int> orders_indices;
+        //std::vector<int> orders_indices;
         //std::unordered_map<int, int> node_to_order;
-        std::cout << "Loop started\n";
         for(int i = 0; i < this->orders.size(); ++i) {
             orders_vdata[i] = VertexData(this->orders[i].geolocation, static_cast<int>(this->orders[i].is_inventory));
-            int node_idx = map->brute_force_closest_vertex_index(orders_vdata[i]);
-            std::cout << node_idx << ' ';
-            orders_indices.push_back(node_idx);
+            //int node_idx = map->brute_force_closest_vertex_index(orders_vdata[i]);
+            //orders_indices.push_back(node_idx);
             //node_to_order[node_idx] = i;
         }
-        std::cout << "\nOrders indices:" << std::endl;
-        std::cout << orders_indices[0] << ' ' << orders_indices[1] << ' ' << orders_indices[2] << std::endl;
 
         //auto distances = this->map->find_distances(orders_indices);
         std::vector<std::vector<double>> distances;
@@ -108,12 +110,10 @@ void InteractionService::start_optimization_thread() {
             distances[i].resize(this->orders.size());
             for(int j = 0; j<this->orders.size(); j++){
                 distances[i][j] = orders_vdata[i].get_distance(orders_vdata[j]);
-                std::cout << i << " " << j << " " << distances[i][j] << std::endl;
             }
         }
-        std::cout << "Find distances completed" << std::endl;
+
         auto g = Graph(this->orders.size(), orders_vdata, distances);
-        std::cout << "Graph created" << std::endl;
         auto optimal_circuit = g.optimal_routing_all_optimized();
         //For now we assume only 1 inventory
         assert(optimal_circuit.size() == 1);

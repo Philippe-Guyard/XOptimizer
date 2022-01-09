@@ -122,7 +122,11 @@ void MainWindow::on_pushButton_clicked()
     saveFile(file_name); //To this file the edited data is saved and then we give this file to Marten
 
     QFile file(file_name);
-    interaction_service->optimize_csv(&file);
+    bool can_optimize = interaction_service->optimize_csv(&file);
+    if (!can_optimize) {
+        QMessageBox::warning(this, "Invalid input", "There is a problem in your input");
+        return;
+    }
 
     ui->stackedWidget->setCurrentIndex(1);
     loading_timer->setInterval(500);
