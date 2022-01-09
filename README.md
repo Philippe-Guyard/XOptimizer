@@ -4,7 +4,7 @@ XOptimizer is a software providing logistics companies a fast and reliable way t
 
 # How to Run?
 
-After cloning the project, open QT application, click Open File or Project in the File tab and select the `CMakeLists.txt` in the folder '/app/interaction_service/'.
+After cloning the project, open QT application, click Open File or Project in the File tab and select the `CMakeLists.txt` in the folder `/app/interaction_service/`.
 
 ## Members
 
