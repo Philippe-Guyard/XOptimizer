@@ -152,6 +152,9 @@ void MainWindow::on_pushButton_clicked()
             for(auto point : path) {
                 this->map_data.addCoordinateToPath(point.first, point.second);
             }
+
+            //Complete the cycle since we take that into account to
+            this->map_data.addCoordinateToPath(path[0].first, path[0].second);
         }
     });
     loading_timer->start();
