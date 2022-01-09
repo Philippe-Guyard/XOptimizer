@@ -14,7 +14,7 @@ std::vector<std::vector<EdgeWeight>> Map::find_distances(std::vector<int> start_
 
     for(int i = 0; i < n; i++){
         for(int j = 0; j < num_vertices; j++){
-            if(i == j){
+            if(start_nodes[i] == j){
                 distances[i].push_back(0);
             } 
             else{

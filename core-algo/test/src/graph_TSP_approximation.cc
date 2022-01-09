@@ -65,7 +65,7 @@ namespace
     {
         for (int i = 0; i < NUMBER_OF_TEST; i++)
         {
-            int number_of_vertices = 10;
+            int number_of_vertices = rng() % 10 + 1;
             EdgeWeight weight_limit = 6000.0;
             long long seed = rng();
             
@@ -82,7 +82,6 @@ namespace
                 tsp_solution.push_back(tsp_solution[0]);
             }
             EdgeWeight computed = random_tsp.cost_of_path(tsp_solution);
-                
             EXPECT_IN_RANGE(computed, result - 1e-7, result + 1e-7)
                 << "For number_of_vertices = " 
                 << number_of_vertices
