@@ -1,16 +1,17 @@
-#include <interaction_service.h>
+#include "interaction_service.h"
 #include "testing.h"
 #include <QDir>
+#include "file_storage.h"
+#include <iostream>
 
 Testing::Testing(XOptimizer::InteractionService* s){
 	service = s;
-	QDir::setCurrent("/Users/markdaychman/Documents/GitHub/XOptimizer/app/interaction_service/resources");
+    //QDir::setCurrent("/Users/markdaychman/Documents/GitHub/XOptimizer/app/interaction_service/resources");
 }
 
 void Testing::test_download(){
 	QFile out1("./out.pbf");
-	QFileInfo inf(out1);
-	service->set_map_file_path(inf.absoluteFilePath());
+    QFileInfo inf(out1);
 	QNetworkAccessManager* man = service->get_api_wrapper()->get_manager();
 	service->download_and_parse_map("corse", "haute_corse");
 	QObject::connect(man, &QNetworkAccessManager::finished, [&](QNetworkReply* reply){
@@ -30,6 +31,7 @@ void Testing::test_parse_orders(){
 	std::cout << "test_parse_order: success ✅" << std::endl;
 };
 
+/*
 void Testing::test_search_csv(){
 	// Can be done better with Qt resource system
 	QFile test1("./test1.csv");
@@ -49,9 +51,12 @@ void Testing::test_search_csv(){
 
 	std::cout << "test_search_csv: success ✅" << std::endl;
 };
+*/
 
 void Testing::run_all(){
-	test_download();
-	test_parse_orders();
-	test_search_csv();
+    test_download();
+    test_parse_orders();
+    //test_search_csv();
 }
+
+

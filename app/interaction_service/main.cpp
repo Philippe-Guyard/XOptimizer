@@ -4,15 +4,20 @@
 
 #include <QApplication>
 
+#define TESTING 0
+
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-		XOptimizer::InteractionService service;
-		Testing test(&service);
-		test.run_all();
-//    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg, true);
-//    MainWindow w;
-//    w.show();
-
+    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg, true);
+#if TESTING
+    XOptimizer::InteractionService service;
+    Testing test(&service);
+    test.test_download();
+    test.run_all();
+#else
+    MainWindow w;
+    w.show();
+#endif
     return a.exec();
 }
 
