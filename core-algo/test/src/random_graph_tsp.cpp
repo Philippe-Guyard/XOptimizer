@@ -84,7 +84,10 @@ EdgeWeight RandomGraph::random_tsp(
     }
     u = permu[0], v = permu[number_of_vertices - 1], d = alpha[u] + alpha[v];
     distances[u][v] = distances[v][u] = d;
-    optimal_cost += d; 
+    if (number_of_vertices > 1)
+    {
+        optimal_cost += d;
+    } 
 
     // Build the graph
     for (int i = 0; i < number_of_vertices; i++)
