@@ -98,13 +98,13 @@ void InteractionService::start_optimization_thread() {
             orders_indices.push_back(node_idx);
             //node_to_order[node_idx] = i;
         }
-        std::cout << "\nOrders indices:\n";
-        std::cout << orders_indices[0] << ' ' << orders_indices[1] << ' ' << orders_indices[2] << '\n';
+        std::cout << "\nOrders indices:" << std::endl;
+        std::cout << orders_indices[0] << ' ' << orders_indices[1] << ' ' << orders_indices[2] << std::endl;
 
         auto distances = this->map->find_distances(orders_indices);
-        std::cout << "Find distances completed" << '\n';
+        std::cout << "Find distances completed" << std::endl;
         auto g = Graph(this->orders.size(), orders_vdata, distances);
-        std::cout << "Graph created\n";
+        std::cout << "Graph created" << std::endl;
         auto optimal_circuit = g.optimal_routing_all();
         //For now we assume only 1 inventory
         assert(optimal_circuit.size() == 1);
