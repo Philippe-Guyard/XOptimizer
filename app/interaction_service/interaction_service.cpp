@@ -101,11 +101,20 @@ void InteractionService::start_optimization_thread() {
         std::cout << "\nOrders indices:" << std::endl;
         std::cout << orders_indices[0] << ' ' << orders_indices[1] << ' ' << orders_indices[2] << std::endl;
 
-        auto distances = this->map->find_distances(orders_indices);
+        //auto distances = this->map->find_distances(orders_indices);
+        std::vector<std::vector<double>> distances;
+        distances.resize(this->orders.size());
+        for(int i = 0; i<this->orders.size(); i++){
+            distances[i].resize(this->orders.size());
+            for(int j = 0; j<this->orders.size(); j++){
+                distances[i][j] = orders_vdata[i].get_distance(orders_vdata[j]);
+                std::cout << i << " " << j << " " << distances[i][j] << std::endl;
+            }
+        }
         std::cout << "Find distances completed" << std::endl;
         auto g = Graph(this->orders.size(), orders_vdata, distances);
         std::cout << "Graph created" << std::endl;
-        auto optimal_circuit = g.optimal_routing_all();
+        auto optimal_circuit = g.optimal_routing_all_optimized();
         //For now we assume only 1 inventory
         assert(optimal_circuit.size() == 1);
         for(auto it = optimal_circuit[0].begin(); it != optimal_circuit[0].end(); it++) {
