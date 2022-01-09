@@ -16,4 +16,4 @@ libs
 
 parser/pbf_parser_autogen
 parser/pbf_parser_generated_autogen
-core-algo
+#core-algo
