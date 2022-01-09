@@ -2,7 +2,7 @@
 
 XOptimizer is a software providing logistics companies a fast and reliable way to optimize their routes while delivering products to their customers. The software utilizes graph based optimization algorithms in order to find the best route for the delivery vehicles such that the costs are minimized and provides an interface on which the user can easily upload their data and view the results.
 
-# How to Run?
+## How to Run?
 
 After cloning the project, open QT application, click Open File or Project in the File tab and select the `CMakeLists.txt` in the folder `/app/interaction_service/`.
 
