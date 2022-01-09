@@ -1,0 +1,11 @@
+var x: nat, y: int, z: real, u: real = 5x + 4y * 3z;
+
+
+maximize u;
+minimise x - (y + z);
+
+subject to {
+    1 <= x < 2;
+    constraint1: 1 < x < 9;
+    3 < x < 4;
+}
