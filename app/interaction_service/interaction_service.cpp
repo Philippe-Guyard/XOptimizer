@@ -53,19 +53,19 @@ void InteractionService::start_parsing_thread() {
         std::shared_ptr<std::ifstream> map_stream = std::make_shared<std::ifstream>(map_file_path.toStdString());
         PBFParser::PBFParser parser(map_stream);
 
-//        auto start = std::chrono::high_resolution_clock::now();
-        //this->map_file_ptr = parser.parse();
-//        auto end = std::chrono::high_resolution_clock::now();
-//        std::cout << "Parsing took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+        auto start = std::chrono::high_resolution_clock::now();
+        this->map_file_ptr = parser.parse();
+        auto end = std::chrono::high_resolution_clock::now();
+        std::cout << "Parsing took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
-//        start = std::chrono::high_resolution_clock::now();
-        //this->map = this->map_file_ptr->to_map();
+        start = std::chrono::high_resolution_clock::now();
+        this->map = this->map_file_ptr->to_map();
         /*
         //Tried to optimize for RAM usage but did not work
         this->map_file_ptr.reset();
         */
-//        end = std::chrono::high_resolution_clock::now();
-//        std::cout << "to_map took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
+        end = std::chrono::high_resolution_clock::now();
+        std::cout << "to_map took: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << std::endl;
 
         map_stream->close();
     });
@@ -93,14 +93,14 @@ void InteractionService::start_optimization_thread() {
         while (!is_ready(this->parsing_thread))
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        VertexData* orders_vdata = new VertexData[this->orders.size()];       
-        //std::vector<int> orders_indices;
-        //std::unordered_map<int, int> node_to_order;
+        VertexData* orders_vdata = new VertexData[this->orders.size()];
+        std::vector<int> orders_indices;
+        std::unordered_map<int, int> node_to_order;
         for(int i = 0; i < this->orders.size(); ++i) {
             orders_vdata[i] = VertexData(this->orders[i].geolocation, static_cast<int>(this->orders[i].is_inventory));
-            //int node_idx = map->brute_force_closest_vertex_index(orders_vdata[i]);
-            //orders_indices.push_back(node_idx);
-            //node_to_order[node_idx] = i;
+            int node_idx = map->brute_force_closest_vertex_index(orders_vdata[i]);
+            orders_indices.push_back(node_idx);
+            node_to_order[node_idx] = i;
         }
 
         //auto distances = this->map->find_distances(orders_indices);

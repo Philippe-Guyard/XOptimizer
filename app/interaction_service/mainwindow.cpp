@@ -22,7 +22,7 @@ QStringList departments = {"Corse", "Auvergne", "Ile-de-France"};
 map<QString, QStringList> cities = {
     {"Corse", {"Haute Corse", "Corse Du Sud"}},
     {"Auvergne", {"Haute Loire"}},
-    {"Ile-de-France", {"Paris", "Essonne"}}
+    {"Ile-de-France", {"Paris"}}
 };
 
 std::string to_api_string(const QString& human) {
@@ -56,7 +56,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui-> loaderlabel ->setMovie(movie);
     movie->start();
 
-    map_data.setGnssPosition(QGeoCoordinate(48.73, 2.24383));
     map_data.clearPath();
     ui->quickWidget->engine()->rootContext()->setContextProperty("data_out", &map_data);
 
@@ -128,7 +127,9 @@ void MainWindow::on_pushButton_clicked()
         return;
     }
 
+    ui->label_4->setText("Optimizing...");
     ui->stackedWidget->setCurrentIndex(1);
+
     loading_timer->setInterval(500);
     connect(loading_timer, &QTimer::timeout, [this] () {
         QVector<QVector<QString>> table_values;
@@ -144,6 +145,9 @@ void MainWindow::on_pushButton_clicked()
 
             this->ui->stackedWidget->setCurrentIndex(3);
             this->loading_timer->stop();
+
+            this->map_data.setGnssLatitude(path[0].first);
+            this->map_data.setGnssLongitude(path[0].second);
 
             for(auto point : path) {
                 this->map_data.addCoordinateToPath(point.first, point.second);
