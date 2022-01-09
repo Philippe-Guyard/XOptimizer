@@ -32,10 +32,10 @@ std::vector<std::vector<EdgeWeight>> Map::find_distances(std::vector<int> start_
 
     for(int k = 0; k<n; k++){
 
-        source = start_nodes[k];
+        source = k;
 
         Set.clear();
-        Set.insert(source);
+        Set.insert(start_nodes[k]);
 
         while(!Set.empty()){
             vertex = *Set.begin();
