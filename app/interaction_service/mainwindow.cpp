@@ -133,8 +133,8 @@ void MainWindow::on_pushButton_clicked()
     loading_timer->setInterval(500);
     connect(loading_timer, &QTimer::timeout, [this] () {
         QVector<QVector<QString>> table_values;
-        QVector<std::pair<double, double>> path;
-        if (this->interaction_service->get_optimized_orders(table_values, path)) {
+        QVector<QVector<std::pair<double, double>>> cycles;
+        if (this->interaction_service->get_optimized_orders(table_values, cycles)) {
             this->ui->tableWidget_2->setColumnCount(table_values[0].size());
             this->ui->tableWidget_2->setRowCount(table_values.size());
             for(int i = 0; i < table_values.size(); ++i) {
@@ -146,15 +146,18 @@ void MainWindow::on_pushButton_clicked()
             this->ui->stackedWidget->setCurrentIndex(3);
             this->loading_timer->stop();
 
-            this->map_data.setGnssLatitude(path[0].first);
-            this->map_data.setGnssLongitude(path[0].second);
+            this->map_data.setGnssLatitude(cycles[0][0].first);
+            this->map_data.setGnssLongitude(cycles[0][0].second);
+            this->map_data.setGnssPosition(QGeoCoordinate(cycles[0][0].first, cycles[0][0].second));
 
-            for(auto point : path) {
-                this->map_data.addCoordinateToPath(point.first, point.second);
+            for (auto path : cycles) {
+                for(auto point : path) {
+                    this->map_data.addCoordinateToPath(point.first, point.second);
+                }
+
+                //Complete the cycle since we take that into account too
+                this->map_data.addCoordinateToPath(path[0].first, path[0].second);
             }
-
-            //Complete the cycle since we take that into account to
-            this->map_data.addCoordinateToPath(path[0].first, path[0].second);
         }
     });
     loading_timer->start();

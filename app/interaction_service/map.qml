@@ -38,7 +38,7 @@ Rectangle {
         //center: QtPositioning.coordinate( );
         //48.71250170132551, 2.2163675687909805
         //{ latitude: 48.71250170132551, longitude:  2.2163675687909805 }
-        zoomLevel: 16
+        zoomLevel: 12
 
         MapPolyline {
             line.width: 4

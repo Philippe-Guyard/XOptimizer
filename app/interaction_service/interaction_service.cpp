@@ -80,7 +80,7 @@ bool InteractionService::optimize_csv(QFile* file) {
     file_to_order(file, orders);
     if (orders.size() == 0)
         return false;
-    if (std::count_if(orders.begin(), orders.end(), [](const Order& o) {return o.is_inventory; }) != 1) {
+    if (std::count_if(orders.begin(), orders.end(), [](const Order& o) {return o.is_inventory; }) == 0) {
         return false;
     }
 
@@ -115,21 +115,28 @@ void InteractionService::start_optimization_thread() {
 
         auto g = Graph(this->orders.size(), orders_vdata, distances);
         auto optimal_circuit = g.optimal_routing_all_optimized();
+        //Don't assume thhis anymore
         //For now we assume only 1 inventory
-        assert(optimal_circuit.size() == 1);
-        for(auto it = optimal_circuit[0].begin(); it != optimal_circuit[0].end(); it++) {
-            this->optimized_orders.push_back(this->orders[*it]);
+        //assert(optimal_circuit.size() == 1);
+        for(auto vec = optimal_circuit.begin(); vec != optimal_circuit.end(); vec++) {
+            for(auto it = vec->begin(); it != vec->end(); it++) {
+                this->optimized_orders.push_back(this->orders[*it]);
+            }
         }
 
         delete[] orders_vdata;
     });
 }
 
-bool InteractionService::get_optimized_orders(QVector<QVector<QString>> &output_table, QVector<std::pair<double, double>>& output_path) {
+bool InteractionService::get_optimized_orders(QVector<QVector<QString>> &output_table, QVector<QVector<std::pair<double, double>>>& output_cycles) {
     if (is_ready(this->optimization_thread)) {
-        orders_to_table(this->optimized_orders, output_table);
-        for(auto order : this->optimized_orders)
-            output_path.push_back(order.geolocation);
+        orders_to_table(this->optimized_orders, output_table);        
+        for(auto order : this->optimized_orders) {
+            if (order.is_inventory)
+                output_cycles.push_back({});
+
+            output_cycles.back().push_back(order.geolocation);
+        }
 
         return true;
     }

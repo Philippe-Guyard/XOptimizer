@@ -21,7 +21,7 @@ namespace XOptimizer {
         void download_and_parse_map(const std::string& region, const std::string& department, std::optional<std::function<void(qint64, qint64)>> download_callback = {});
         bool optimize_csv(QFile* file);
         void read_csv_as_table(QFile* file, QVector<QVector<QString>>& output);
-        bool get_optimized_orders(QVector<QVector<QString>>& output_table, QVector<std::pair<double, double>>& path);
+        bool get_optimized_orders(QVector<QVector<QString>>& output_table, QVector<QVector<std::pair<double, double>>>& output_cycles);
         OpenStreetMapWrapper* get_api_wrapper();
     private:
         void start_parsing_thread();
