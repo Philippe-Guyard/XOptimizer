@@ -43,7 +43,7 @@ void InteractionService::download_and_parse_map(const std::string &region, const
         });
         if (download_callback.has_value()) {
             QObject::connect(reply, &QNetworkReply::downloadProgress, download_callback.value());
-        }
+        }//For now we assume only 1 inventory
         qDebug() << "Download and parse ended.";
     }
 }
