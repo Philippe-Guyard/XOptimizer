@@ -1,10 +1,11 @@
 #include "../graph/graph.hpp"
-
 class Map{
 
     public:
 
         Map(int num_vertices, VertexData* vertex_data_array, std::vector<std::vector<std::pair<int, EdgeWeight>>> adjacency_list);
+				void save(std::fstream&);
+				void load(std::fstream&);
         ~Map();
         int brute_force_closest_vertex_index(VertexData& vertex_data);
         
@@ -16,7 +17,7 @@ class Map{
 
         // functions with a* search algorithm
         EdgeWeight find_distances_astar(int i, int j); //here i and j are indices of source and destination in the vertices array
-        
+				std::vector<std::vector<double>> distance_matrix;
 
 
     protected:
@@ -27,6 +28,7 @@ class Map{
         std::vector<Vertex*> vertices;
         std::vector<Edge*> edges;
         std::vector<std::vector<Edge*>> adjacency_list;
+
         std::unordered_map< VertexData, int, std::hash<VertexData> > vertex_position;
         std::vector<std::unordered_map<int, EdgeWeight>> edge_weights;
 
